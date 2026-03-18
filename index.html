@@ -1233,25 +1233,6 @@ function populateCategorySelect() {
   sel.innerHTML = CATEGORIES.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
 }
 
-/* PASSWORD SETUP */
-function requireAdmin() {
-  if (isAdmin) return true;
-
-  const input = prompt("Enter admin password to modify entries:");
-  if (input === ADMIN_PASSWORD) {
-    isAdmin = true;
-    alert("Admin mode unlocked.");
-    return true;
-  }
-
-  alert("Incorrect password.");
-  return false;
-}
-
-function adminOnly(action) {
-  if (!requireAdmin()) return false;
-  return true;
-}
 /* ── MODAL ── */
 function openModal(prefillCat) {
   editingId = null;
