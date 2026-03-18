@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chiltern Capital — Company Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#080808; --off:#0f0f0f; --panel:#141414; --panel2:#1a1a1a; --panel3:#202020;
+  --b1:#252525; --b2:#303030; --b3:#3a3a3a;
+  --org:#f56a00; --org-p:rgba(245,106,0,.12); --org-pp:rgba(245,106,0,.05);
+  --wh:#f0ede8; --wh2:#c4c0b8; --wh3:#888580; --wh4:#454240;
+  --grn:#00c875; --grn-p:rgba(0,200,117,.09); --grn-b:rgba(0,200,117,.28);
+  --red:#ff4455; --red-p:rgba(255,68,85,.09); --red-b:rgba(255,68,85,.28);
+  --blu:#3d8ef0; --blu-p:rgba(61,142,240,.09);
+  --yel:#f0b429; --yel-p:rgba(240,180,41,.09);
+  --pur:#8b5cf6;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--wh);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--org);z-index:9999;width:0;transition:width .08s linear;pointer-events:none}
+
+/* NAV */
+.topnav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nb{display:flex;align-items:center;gap:14px}
+.nlogo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--wh);letter-spacing:-.02em;text-decoration:none}
+.nlogo span{color:var(--org)}
+.ndiv{width:1px;height:18px;background:var(--b2)}
+.ntag{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--wh3)}
+.nlinks{display:flex;align-items:stretch}
+.nlink{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--wh3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nlink:hover{color:var(--wh)}
+.nlink.active{color:var(--org);border-bottom-color:var(--org)}
+
+/* HERO */
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--b1);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(245,106,0,.065) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:3.5rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--org);display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--org)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.5vw,52px);font-weight:900;line-height:1.06;letter-spacing:-.02em;margin-bottom:.75rem}
+h1 em{font-style:italic;color:var(--org)}
+.hero-sub{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--org);margin-bottom:1rem;text-transform:uppercase;font-style:normal}
+.hero-lead{font-size:14px;color:var(--wh2);line-height:1.8;max-width:520px;margin-bottom:1.5rem}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem}
+.chip{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--b2);color:var(--wh3);background:var(--panel)}
+.chip.org{border-color:rgba(245,106,0,.4);color:var(--org);background:var(--org-p)}
+.hero-byline{display:flex;gap:20px;font-family:var(--mono);font-size:10px;color:var(--wh3);letter-spacing:.05em;flex-wrap:wrap}
+.hero-byline span{display:flex;align-items:center;gap:6px}
+.hero-byline span::before{content:'◆';font-size:5px;color:var(--org)}
+
+/* FACT CARD */
+.fc{background:var(--panel);border:1px solid var(--b2);border-top:2px solid var(--org)}
+.fc-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--wh3);padding:.85rem 1.4rem;border-bottom:1px solid var(--b1)}
+.fc-row{display:flex;justify-content:space-between;align-items:baseline;padding:.75rem 1.4rem;border-bottom:1px solid var(--b1);gap:.5rem}
+.fc-row:last-child{border-bottom:none}
+.fc-lbl{font-size:11.5px;color:var(--wh3);flex:1}
+.fc-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--wh2);text-align:right;flex-shrink:0}
+.fc-val.org{color:var(--org)}
+
+/* SECTION */
+.sw{padding:3.5rem 2.5rem;border-bottom:1px solid var(--b1)}
+.sw.dark{background:var(--off)}
+.si{max-width:1140px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.sn{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--org);background:var(--org-p);border:1px solid var(--org);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+.bt{font-size:14px;color:var(--wh2);line-height:1.82;margin-bottom:1.25rem}
+.bt strong{color:var(--wh);font-weight:600}
+.bt:last-child{margin-bottom:0}
+
+/* PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b1);margin-bottom:1.5rem}
+.pillar{background:var(--off);padding:1.6rem;position:relative;overflow:hidden}
+.sw.dark .pillar{background:var(--black)}
+.pillar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--p-c,var(--org));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.pillar:hover::after{transform:scaleX(1)}
+.pillar-num{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--p-c,var(--org));line-height:1;margin-bottom:.5rem;opacity:.9}
+.pillar-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--wh3);margin-bottom:.5rem}
+.pillar-body{font-size:12px;color:var(--wh3);line-height:1.6}
+
+/* APPROACH CARDS */
+.ap-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.ap{background:var(--panel);border:1px solid var(--b2);padding:1.5rem;border-top:2px solid var(--ap-c,var(--org))}
+.ap-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ap-c,var(--org));margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid var(--b1)}
+.ap-body{font-size:13px;color:var(--wh2);line-height:1.7}
+.ap-body strong{color:var(--wh)}
+
+/* INVESTMENT CRITERIA */
+.crit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--b1);margin-bottom:1.5rem}
+.crit{background:var(--panel2);padding:1.4rem;text-align:center}
+.sw.dark .crit{background:var(--panel)}
+.crit-val{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--org);line-height:1;margin-bottom:.4rem}
+.crit-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--wh3);margin-bottom:.3rem}
+.crit-sub{font-size:11px;color:var(--wh4);line-height:1.4}
+
+/* SITUATION CARDS */
+.sit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--b1);margin-bottom:1.5rem}
+.sit{background:var(--off);padding:1.5rem}
+.sw.dark .sit{background:var(--black)}
+.sit-icon{font-size:22px;margin-bottom:.75rem}
+.sit-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--wh);margin-bottom:.5rem}
+.sit-body{font-size:12px;color:var(--wh3);line-height:1.6}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b1)}
+.member{background:var(--off);padding:1.4rem;cursor:pointer;transition:background .15s;position:relative}
+.sw.dark .member{background:var(--black)}
+.member:hover{background:var(--panel2)}
+.member::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--org);opacity:0;transition:opacity .15s}
+.member:hover::before{opacity:1}
+.member-init{width:44px;height:44px;border-radius:50%;background:var(--org-p);border:1px solid rgba(245,106,0,.35);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--org);margin-bottom:.85rem;flex-shrink:0}
+.member-name{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--wh);margin-bottom:2px}
+.member-role{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--org);margin-bottom:.6rem}
+.member-bg{font-size:11.5px;color:var(--wh3);line-height:1.55}
+.member-detail{display:none;font-size:11.5px;color:var(--wh2);line-height:1.6;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--b1)}
+.member.open .member-detail{display:block}
+.member-toggle{font-family:var(--mono);font-size:9px;color:var(--wh3);margin-top:.5rem;letter-spacing:.06em}
+
+/* PORTFOLIO */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--b2);margin-bottom:2rem}
+.tab{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--wh3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--wh)}
+.tab.on{color:var(--org);border-bottom-color:var(--org)}
+.tp{display:none}
+.tp.on{display:block}
+
+.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b1)}
+.pc{background:var(--off);padding:1.4rem;position:relative;overflow:hidden;transition:background .15s;cursor:default}
+.sw.dark .pc{background:var(--black)}
+.pc:hover{background:var(--panel2)}
+.pc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--pc-c,var(--org));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.pc:hover::after{transform:scaleX(1)}
+.pc-sector{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid;margin-bottom:.65rem;display:inline-block}
+.pc-name{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--wh);margin-bottom:.35rem}
+.pc-type{font-family:var(--mono);font-size:9px;color:var(--wh4);letter-spacing:.06em;margin-bottom:.6rem}
+.pc-desc{font-size:12px;color:var(--wh3);line-height:1.55}
+
+/* DEAL TYPE LEGEND */
+.dtype-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem}
+.dtype{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--b2);color:var(--wh3);background:var(--panel)}
+
+/* CALLOUT */
+.callout{background:var(--org-p);border:1px solid rgba(245,106,0,.3);border-left:3px solid var(--org);padding:1.25rem 1.5rem;margin:1.5rem 0}
+.cl-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--org);margin-bottom:.5rem}
+.cl-body{font-size:13px;color:var(--wh2);line-height:1.7}
+.cl-body strong{color:var(--wh)}
+
+/* DIFF GRID */
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.diff{background:var(--panel);border:1px solid var(--b2);padding:1.4rem;border-top:2px solid var(--d-c,var(--org))}
+.diff-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--d-c,var(--org));margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid var(--b1)}
+.diff-list{list-style:none;font-size:12.5px;color:var(--wh2);line-height:1}
+.diff-list li{padding:6px 0;border-bottom:1px solid var(--b1);display:flex;gap:8px;line-height:1.5}
+.diff-list li:last-child{border-bottom:none}
+.diff-list li::before{content:'→';font-family:var(--mono);font-size:10px;flex-shrink:0;margin-top:2px;color:var(--d-c,var(--org))}
+
+/* SECTOR CHART */
+.chart-card{background:var(--panel);border:1px solid var(--b2);padding:1.6rem;margin-bottom:1.5rem}
+.ch-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.ch-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--wh3)}
+.ch-src{font-family:var(--mono);font-size:9px;color:var(--wh4);letter-spacing:.05em}
+.cw{position:relative}
+
+/* EDITORIAL */
+.editorial{background:var(--panel);border:1px solid var(--b2);border-left:3px solid var(--org);padding:1.75rem 2rem;margin-top:1.5rem}
+.ed-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--org);margin-bottom:.75rem}
+.ed-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--wh);line-height:1.7}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
+.cbox{background:var(--panel);border:1px solid var(--b2);padding:1.4rem}
+.cbox-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--wh3);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--b1)}
+.cbox-val{font-size:13px;color:var(--wh2);line-height:1.7}
+.cbox-val a{color:var(--org);text-decoration:none}
+.cbox-val a:hover{text-decoration:underline}
+
+/* FOOTER */
+footer{background:var(--off);border-top:1px solid var(--b1);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.fl{font-family:var(--serif);font-size:14px;font-weight:900;color:var(--wh3)}
+.fl span{color:var(--org)}
+.fr{font-family:var(--mono);font-size:9px;color:var(--wh4);letter-spacing:.05em;text-align:right;line-height:1.6}
+
+/* FADE */
+.fi{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.fi.vis{opacity:1;transform:translateY(0)}
+
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr}
+  .fc{display:none}
+  .pillars,.crit-grid,.sit-grid{grid-template-columns:1fr}
+  .ap-grid,.diff-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .port-grid{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .nlinks{display:none}
+  .sw{padding:2.5rem 1.25rem}
+  .hero{padding:3rem 1.25rem}
+}
+@media(max-width:580px){
+  .team-grid{grid-template-columns:1fr}
+  .port-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<header class="topnav">
+  <div class="nb">
+    <span class="nlogo">PRIV<span>●</span>MRKTS</span>
+    <div class="ndiv"></div>
+    <span class="ntag">Company Profile</span>
+  </div>
+  <nav class="nlinks">
+    <a class="nlink active" href="#overview">Overview</a>
+    <a class="nlink" href="#approach">Approach</a>
+    <a class="nlink" href="#criteria">Criteria</a>
+    <a class="nlink" href="#team">Team</a>
+    <a class="nlink" href="#portfolio">Portfolio</a>
+    <a class="nlink" href="#differentiation">Edge</a>
+    <a class="nlink" href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">UK Lower Mid-Market · Private Equity · London</div>
+      <h1>Chiltern <em>Capital</em></h1>
+      <div class="hero-sub">Backing founders & management teams to build market leaders</div>
+      <p class="hero-lead">Founded in 2015 and based in London, Chiltern Capital is an active, entrepreneurial private equity firm specialising in lower mid-market investments across the UK and Ireland. Unlike traditional PE firms, Chiltern invests its own permanent capital — creating genuine alignment with management teams from day one.</p>
+      <div class="hero-chips">
+        <span class="chip org">Founded 2015</span>
+        <span class="chip org">Permanent Capital</span>
+        <span class="chip org">No Set Exit Horizon</span>
+        <span class="chip">£10m–£40m Equity</span>
+        <span class="chip">UK & Ireland</span>
+        <span class="chip">B2B Focus</span>
+        <span class="chip">22-Person Team</span>
+        <span class="chip">FCA Regulated</span>
+      </div>
+      <div class="hero-byline">
+        <span>Lion Court, 25 Procter St, London WC1V 6NY</span>
+        <span>Reg. OC402587 · Active LLP</span>
+        <span>53+ investments to date</span>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="fc-head">Company facts</div>
+      <div class="fc-row"><span class="fc-lbl">Founded</span><span class="fc-val org">2015</span></div>
+      <div class="fc-row"><span class="fc-lbl">Co-founders</span><span class="fc-val">Tom Phipps · Alex Sheffield</span></div>
+      <div class="fc-row"><span class="fc-lbl">Headquarters</span><span class="fc-val">London, England</span></div>
+      <div class="fc-row"><span class="fc-lbl">Registered address</span><span class="fc-val">80 Cheapside, EC2V 6EE</span></div>
+      <div class="fc-row"><span class="fc-lbl">Company number</span><span class="fc-val">OC402587</span></div>
+      <div class="fc-row"><span class="fc-lbl">Company type</span><span class="fc-val">Limited Liability Partnership</span></div>
+      <div class="fc-row"><span class="fc-lbl">Regulated by</span><span class="fc-val">FCA (Financial Conduct Authority)</span></div>
+      <div class="fc-row"><span class="fc-lbl">Capital type</span><span class="fc-val org">Own / Permanent Capital</span></div>
+      <div class="fc-row"><span class="fc-lbl">Investment range</span><span class="fc-val">£10m – £40m equity</span></div>
+      <div class="fc-row"><span class="fc-lbl">Target profit</span><span class="fc-val">£2m – £10m+ EBITDA</span></div>
+      <div class="fc-row"><span class="fc-lbl">Geography</span><span class="fc-val">UK & Ireland</span></div>
+      <div class="fc-row"><span class="fc-lbl">Team size</span><span class="fc-val">~22 people · 5 Partners</span></div>
+      <div class="fc-row"><span class="fc-lbl">Total investments</span><span class="fc-val org">53+</span></div>
+      <div class="fc-row"><span class="fc-lbl">Current portfolio</span><span class="fc-val">12 active companies</span></div>
+      <div class="fc-row"><span class="fc-lbl">Realised investments</span><span class="fc-val">8+ exits</span></div>
+      <div class="fc-row"><span class="fc-lbl">Phone</span><span class="fc-val">0203 637 5620</span></div>
+      <div class="fc-row"><span class="fc-lbl">Email</span><span class="fc-val">enquiry@chilterncapital.co.uk</span></div>
+      <div class="fc-row"><span class="fc-lbl">Website</span><span class="fc-val">chilterncapital.co.uk</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<div class="sw dark">
+<div class="si fi">
+  <p class="bt">Chiltern Capital LLP was incorporated in October 2015 and is co-founded by <strong>Tom Phipps</strong> (formerly Livingstone Partners) and <strong>Alex Sheffield</strong> (formerly COO/CFO of a PE-backed business and CFO of a listed buy-and-build group). The firm takes a deliberately differentiated approach in a crowded lower mid-market: it <strong>invests its own funds</strong> rather than managing third-party LP capital, creating an unusually clear alignment of interest between the Chiltern team and the management teams it backs.</p>
+  <p class="bt">The firm targets <strong>profitable UK and Ireland businesses with £2m–£10m+ EBIT</strong>, operating across all B2B sectors. It will take minority or majority positions and has <strong>no set time horizon to exit</strong> — an important differentiator from traditional PE funds constrained by 10-year fund lifecycles. Chiltern invests between £10 million and £40 million of equity per deal, with flexibility to invest additional capital to support growth plans.</p>
+
+  <div class="callout">
+    <div class="cl-head">Chiltern's core philosophy</div>
+    <div class="cl-body">"We invest our own funds which sets us apart from typical private equity investors. As it's our capital, there is a clear sense of alignment and commitment between us and the management teams we back. <strong>Every member of our firm personally invests in each deal</strong> — there is a clear sense of being in it together from deal completion through to the eventual exit."</div>
+  </div>
+
+  <div class="pillars fi">
+    <div class="pillar" style="--p-c:var(--org)">
+      <div class="pillar-num">53+</div>
+      <div class="pillar-lbl">Total investments made</div>
+      <div class="pillar-body">Across UK & Ireland since 2015, spanning business services, industrials and technology</div>
+    </div>
+    <div class="pillar" style="--p-c:var(--grn)">
+      <div class="pillar-num">£10–40m</div>
+      <div class="pillar-lbl">Equity per investment</div>
+      <div class="pillar-body">With flexibility to invest additional capital to support organic and inorganic growth plans</div>
+    </div>
+    <div class="pillar" style="--p-c:var(--blu)">
+      <div class="pillar-num">None</div>
+      <div class="pillar-lbl">Set exit horizon</div>
+      <div class="pillar-body">Permanent capital model means Chiltern can hold as long as needed to achieve full potential</div>
+    </div>
+    <div class="pillar" style="--p-c:var(--yel)">
+      <div class="pillar-num">22</div>
+      <div class="pillar-lbl">Team members</div>
+      <div class="pillar-body">Including 5 partners, all of whom personally co-invest in every deal alongside the firm</div>
+    </div>
+    <div class="pillar" style="--p-c:var(--pur)">
+      <div class="pillar-num">100%</div>
+      <div class="pillar-lbl">B2B sector focus</div>
+      <div class="pillar-body">Business services, industrials, technology services — all B2B, no consumer or retail exposure</div>
+    </div>
+    <div class="pillar" style="--p-c:var(--red)">
+      <div class="pillar-num">2015</div>
+      <div class="pillar-lbl">Founded</div>
+      <div class="pillar-body">A decade of continuous activity in the UK lower mid-market, building through all market cycles</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- APPROACH -->
+<div class="sw" id="approach">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">01</div>
+    <h2 class="st">Investment Approach</h2>
+  </div>
+  <p class="bt fi">Chiltern describes itself as having <strong>"the dynamism of an independent investor with the laser focus of a trade player."</strong> The firm is naturally curious and takes deep market knowledge seriously — seeking to understand sectors before investing, then remaining actively involved without interfering in day-to-day operations.</p>
+
+  <div class="ap-grid fi">
+    <div class="ap" style="--ap-c:var(--org)">
+      <div class="ap-head">Active but non-interfering</div>
+      <div class="ap-body">Chiltern takes board seats and plays an active governance role, but <strong>does not interfere in day-to-day operations</strong>. The firm's style is to agree how it can best add value — focusing on M&A origination and execution, strategic guidance, and senior-level team augmentation — then deliver those specific capabilities without overstepping into operational management.</div>
+    </div>
+    <div class="ap" style="--ap-c:var(--grn)">
+      <div class="ap-head">Partnership mentality</div>
+      <div class="ap-body">Every Chiltern team member personally invests in each deal. The firm's approach is explicitly entrepreneurial — it "<strong>thinks like entrepreneurs, not asset managers.</strong>" Communication is described as clear and direct: "we tell it how it is, good or bad." This straight-talking style is intentionally designed to build trust with founders and owner-managers.</div>
+    </div>
+    <div class="ap" style="--ap-c:var(--blu)">
+      <div class="ap-head">M&A-led value creation</div>
+      <div class="ap-body">Buy-and-build is a primary value creation lever. Chiltern's directors and portfolio team work closely with management to identify, structure and execute bolt-on acquisitions. <strong>Alistair Gray</strong> leads inorganic growth strategies across the portfolio. The firm brings deal structuring expertise, financial capacity, and an adviser network to accelerate acquisition programmes.</div>
+    </div>
+    <div class="ap" style="--ap-c:var(--yel)">
+      <div class="ap-head">Permanent capital advantage</div>
+      <div class="ap-body">Unlike fund-managed PE, Chiltern is not constrained by an LP-driven exit timeline. <strong>There is no artificial 10-year clock</strong> forcing portfolio sales at inopportune times. This is an explicit competitive advantage when pitching to founders who want certainty about the quality of long-term ownership rather than a revolving door of PE buyers every 5 years.</div>
+    </div>
+    <div class="ap" style="--ap-c:var(--pur)">
+      <div class="ap-head">Hands-on portfolio support</div>
+      <div class="ap-body">Jon Rawlings and Michael Coupland joined as Portfolio Directors in 2024, bringing dedicated resource specifically focused on <strong>value creation, operational improvement, and strategic delivery</strong> within portfolio companies. They serve directly on boards and work closely with management teams on growth plan execution — not just monitoring.</div>
+    </div>
+    <div class="ap" style="--ap-c:var(--red)">
+      <div class="ap-head">Flexible deal structuring</div>
+      <div class="ap-body">Chiltern considers both <strong>minority and majority positions</strong> and adapts deal structure to fit the situation. It can deploy follow-on capital without fundraising constraints. This flexibility — combined with the ability to move quickly with no LP approval processes — gives the firm a structural advantage in competitive lower mid-market processes.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- INVESTMENT CRITERIA -->
+<div class="sw dark" id="criteria">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">02</div>
+    <h2 class="st">Investment Criteria</h2>
+  </div>
+
+  <div class="crit-grid fi">
+    <div class="crit"><div class="crit-val">£10–40m</div><div class="crit-lbl">Equity per deal</div><div class="crit-sub">Flexible — can deploy follow-on capital beyond initial cheque</div></div>
+    <div class="crit"><div class="crit-val">£2–10m+</div><div class="crit-lbl">Target EBIT / profit</div><div class="crit-sub">Established, profitable businesses — not early stage or pre-revenue</div></div>
+    <div class="crit"><div class="crit-val">UK + IE</div><div class="crit-lbl">Geography</div><div class="crit-sub">Headquartered in the UK or Ireland; portfolio reach extends to Europe & North America</div></div>
+    <div class="crit"><div class="crit-val">B2B</div><div class="crit-lbl">All B2B sectors</div><div class="crit-sub">Business services, industrials, tech services — minority and majority considered</div></div>
+    <div class="crit"><div class="crit-val">Min / Maj</div><div class="crit-lbl">Stake flexibility</div><div class="crit-sub">Will take minority shareholdings or full buyouts depending on situation</div></div>
+    <div class="crit"><div class="crit-val">None</div><div class="crit-lbl">Set exit horizon</div><div class="crit-sub">Permanent capital means no forced sale — Chiltern holds until the right time</div></div>
+  </div>
+
+  <p class="bt fi" style="margin-bottom:1.25rem">Chiltern engages in three primary types of investment situations:</p>
+
+  <div class="sit-grid fi">
+    <div class="sit">
+      <div class="sit-icon">👨‍👩‍👧‍👦</div>
+      <div class="sit-title">Founder / family exit</div>
+      <div class="sit-body">Working with a founder or family shareholders seeking a smooth exit who want to transition ownership to a team they trust — either in full or partially while retaining a stake. Succession planning is a key theme in Chiltern's origination activity.</div>
+    </div>
+    <div class="sit">
+      <div class="sit-icon">⚖️</div>
+      <div class="sit-title">Shareholder misalignment</div>
+      <div class="sit-body">Where shareholders have different timescales or ambitions and ultimately want different outcomes. Chiltern provides capital and structure to resolve the misalignment without disrupting the business — a common situation in family businesses and partnerships.</div>
+    </div>
+    <div class="sit">
+      <div class="sit-icon">🏢</div>
+      <div class="sit-title">Corporate carve-out</div>
+      <div class="sit-body">Corporates or groups looking to sell a non-core business unit. Chiltern backs the incumbent management team to run the business independently, providing capital and strategic support. The Strata Products carve-out from Berry Global Inc. (2024) is a flagship example.</div>
+    </div>
+    <div class="sit">
+      <div class="sit-icon">🚀</div>
+      <div class="sit-title">Management buy-out (MBO)</div>
+      <div class="sit-body">Backing management teams who wish to buy their own business — providing the capital structure for the MBO and then supporting the team to accelerate growth organically or via acquisition. Chiltern actively partners with management on the buy-out thesis from day one.</div>
+    </div>
+    <div class="sit">
+      <div class="sit-icon">📈</div>
+      <div class="sit-title">Growth capital</div>
+      <div class="sit-body">Providing minority or majority growth capital to support teams developing their business — organically, through roll-out, or via targeted bolt-on acquisitions. Chiltern specifically aims to support companies with significant growth and development potential that are already established and profitable.</div>
+    </div>
+    <div class="sit">
+      <div class="sit-icon">🔄</div>
+      <div class="sit-title">Replacement / de-risking</div>
+      <div class="sit-body">Entrepreneurs who want to de-risk and crystallise value but still have the ambition to achieve more. Chiltern can buy out a portion of the founder's stake while leaving them with meaningful equity in the next phase of growth — aligning interests for the continued journey.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TEAM -->
+<div class="sw" id="team">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">03</div>
+    <h2 class="st">Leadership Team</h2>
+  </div>
+  <p class="bt fi">Chiltern's team of 22 is drawn from a blend of private equity, corporate finance, and operational backgrounds. All team members personally co-invest in every deal. Click any team member to expand their full profile.</p>
+
+  <div class="team-grid fi" id="teamGrid">
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">TP</div>
+      <div class="member-name">Tom Phipps</div>
+      <div class="member-role">Co-Founder & Partner</div>
+      <div class="member-bg">Investment Committee · Co-founded Chiltern in 2015</div>
+      <div class="member-detail">Tom co-founded Chiltern Capital with Alex Sheffield and is a member of the Investment Committee. He focuses much of his time on developing the firm's origination activities and completing new investments in the business services and technology sectors. Recent investments include VIMA and SiXworks. Prior to Chiltern Capital, Tom was a Director at Livingstone Partners.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">AS</div>
+      <div class="member-name">Alex Sheffield</div>
+      <div class="member-role">Co-Founder & Partner</div>
+      <div class="member-bg">Investment Committee · Former COO/CFO operator</div>
+      <div class="member-detail">Alex co-founded Chiltern Capital. He enjoys working with teams to drive growth and innovation. He has led and sat on the boards of a number of investments, including Steer Automotive. He has previously been on the other side of the table as COO and CFO of a PE-backed business, and as CFO of a listed buy-and-build group, prior to leading its successful sale to a strategic acquirer. Alex qualified as a Chartered Accountant with PwC.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">RR</div>
+      <div class="member-name">Ryan Robson</div>
+      <div class="member-role">Chairman</div>
+      <div class="member-bg">Entrepreneur · Global market leader founder</div>
+      <div class="member-detail">Ryan is a successful entrepreneur who founded and ran a business that became a global market leader. He is Chairman of The International Schools Partnership, a fast-growing education group operating in 22 countries. Ryan was previously Chairman of Phenna Group — a successful buy-and-build in Testing, Inspection, Certification and Compliance generating over £450m in revenue with 5,400 employees. He has written three national policy papers on educational disadvantage.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">DB</div>
+      <div class="member-name">David Butler</div>
+      <div class="member-role">Partner</div>
+      <div class="member-bg">Investment Committee · Day-to-day operations lead</div>
+      <div class="member-detail">David manages Chiltern's day-to-day operations and strategic focus, while leading transactions across multiple sectors. He is a member of the Investment Committee. David previously focused on early-stage growth capital investing at Downing LLP. Prior to Downing, David was part of the Corporate Finance team at PwC, where he qualified as a Chartered Accountant.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">MC</div>
+      <div class="member-name">Michael Coupland</div>
+      <div class="member-role">Partner</div>
+      <div class="member-bg">Portfolio Director · Industrials & manufacturing specialist</div>
+      <div class="member-detail">Mike is focused on supporting management teams to deliver their ambitions for growth and brings a wealth of portfolio experience. He serves directly on the board of several investee companies. Formerly an Investment Director at a mid-market PE fund focusing on lower-mid market B2B industrial, manufacturing and distribution businesses. Mike qualified as a Chartered Accountant at KPMG in Corporate Finance and Tax.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">JT</div>
+      <div class="member-name">Jane Traylen</div>
+      <div class="member-role">Finance Director</div>
+      <div class="member-bg">Finance, compliance & operations lead</div>
+      <div class="member-detail">Jane has responsibility for the finance, compliance and operational activities of the firm. Prior to Chiltern, Jane spent over a decade working in financial services. After qualifying as a Chartered Accountant she worked for a private Swiss bank before spending seven years at an alternative asset fund.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">AG</div>
+      <div class="member-name">Alistair Gray</div>
+      <div class="member-role">Director</div>
+      <div class="member-bg">Origination & inorganic growth · KPMG background</div>
+      <div class="member-detail">Ali focuses on originating new investment opportunities and supporting portfolio companies with their inorganic growth strategies. Since joining he has worked closely with Steer Automotive, Intec, Assembuild and Emtez. Ali has nearly 10 years of private investment experience and started his career at KPMG where he qualified as a Chartered Accountant.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">JR</div>
+      <div class="member-name">Jon Rawlings</div>
+      <div class="member-role">Director</div>
+      <div class="member-bg">Portfolio support · Mid-market PE background</div>
+      <div class="member-detail">Jon was previously an Investment Director at a mid-market private equity fund focused on supporting portfolio companies in delivering their growth strategies. Since joining Chiltern, Jon has been involved in supporting Rapid Repair Network in building out its value creation plan as well as providing portfolio support across several other investments.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">BR</div>
+      <div class="member-name">Ben Robinson</div>
+      <div class="member-role">Director</div>
+      <div class="member-bg">Technology & automotive · PwC background</div>
+      <div class="member-detail">Ben leads new investments and plays an active role in supporting portfolio companies to grow, with a particular focus on technology and automotive services. He has worked closely with SiXworks, Steer Automotive, VIMA, Charis and Kerr's Tyres. Prior to joining Chiltern, Ben worked in Transaction Services at PwC, focusing on mid-market deals, having previously qualified as a Chartered Accountant within PwC's Assurance practice.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">CM</div>
+      <div class="member-name">Calum McDonald</div>
+      <div class="member-role">Associate</div>
+      <div class="member-bg">Industrials & technology · Grant Thornton background</div>
+      <div class="member-detail">Calum focuses on new investments, primarily in Industrials and Technology, as well as supporting portfolio companies with M&A, value creation and refinancings. Previously a Manager at Grant Thornton in the Corporate Finance team, focusing on lower mid-market deals across technology, business services and industrials. Qualified as a Chartered Accountant within Grant Thornton's Corporate Finance practice.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">HR</div>
+      <div class="member-name">Harry Reid</div>
+      <div class="member-role">Manager</div>
+      <div class="member-bg">Board roles at Inciner8, RRN & Strata · ACA qualified</div>
+      <div class="member-detail">Harry joined Chiltern after several years advising local and global mid-market PE firms. He is involved in the assessment of new investment opportunities and supporting investee companies as a board member. Specifically involved in Rapid Repair Network, Strata Products and sits on the board of Inciner8. Harry is a qualified Chartered Accountant.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">AR</div>
+      <div class="member-name">Andrew Reid</div>
+      <div class="member-role">Manager</div>
+      <div class="member-bg">Industrials & business services · HMT / EY background</div>
+      <div class="member-detail">Andrew focuses on new investments in Industrials and Business Services, as well as value creation, M&A, and refinancings. Previously a Senior Manager at HMT in Transaction Services, managing financial due diligence for PE firms in the lower mid-market. Started his career at EY where he qualified as a Chartered Accountant.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">GS</div>
+      <div class="member-name">Greg Smith</div>
+      <div class="member-role">Manager</div>
+      <div class="member-bg">Portfolio team · Grant Thornton / White Oak background</div>
+      <div class="member-detail">Greg joined in 2024 to support management teams in delivering growth strategies. Previously Director of Finance and Operations at a fast-growing IT and telecoms managed services provider going through a buy-and-build strategy. Prior to that, Head of Corporate Development at White Oak UK. Greg spent 10 years at Grant Thornton, 7 in the Transaction Services team and Strategy Group.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">AO</div>
+      <div class="member-name">Adam Oakes</div>
+      <div class="member-role">Associate</div>
+      <div class="member-bg">Industrials & B2B services · Board member Kerr's Tyres</div>
+      <div class="member-detail">Adam focuses on new investments in Industrials and Business Services, as well as supporting portfolio companies with M&A, value creation and refinancings. He was involved in the investment into Kerr's Tyres and sits on its board. Prior to Chiltern (joined 2024), Adam worked in Transaction Services at EY Ireland, focusing on mid-market transactions, where he qualified as a Chartered Accountant.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">WE</div>
+      <div class="member-name">Will Entwistle</div>
+      <div class="member-role">Associate</div>
+      <div class="member-bg">Business services & industrials · Deloitte Canada / BDO</div>
+      <div class="member-detail">Will assists on transactions in the Business Services and Industrials sectors. Previously a Manager in the Transaction Services team at Deloitte in Canada, where he worked on large-cap and mid-market deals across North America. Started his career at BDO where he qualified as a Chartered Accountant in Natural Resources, Energy and Shipping Audit.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">LC</div>
+      <div class="member-name">Lotte Carter</div>
+      <div class="member-role">Associate</div>
+      <div class="member-bg">Origination & relationship management</div>
+      <div class="member-detail">Lotte focuses on identifying relevant investment opportunities and establishing relationships with founders, management teams, and advisors. Prior to her role at Chiltern, Lotte worked in market insights supporting PE clients with researching B2B markets in the UK and internationally.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">FS</div>
+      <div class="member-name">Freya Savage</div>
+      <div class="member-role">Associate</div>
+      <div class="member-bg">New opportunities & portfolio support · KPMG background</div>
+      <div class="member-detail">Prior to joining Chiltern, Freya worked at KPMG advising local and global mid-market PE firms. Freya is a qualified Chartered Accountant. She is involved in the assessment of new investment opportunities as well as supporting portfolio companies. Freya was previously a member of the England Senior Women's lacrosse squad.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+    <div class="member" onclick="toggleMember(this)">
+      <div class="member-init">SH</div>
+      <div class="member-name">Samantha Hemsworth</div>
+      <div class="member-role">Executive Assistant</div>
+      <div class="member-bg">20 years in financial services operations</div>
+      <div class="member-detail">With 20 years of experience in financial services, Samantha is an Executive Assistant who specialises in managing busy schedules, juggling multiple tasks, and providing reliable support to the investment team and senior partners.</div>
+      <div class="member-toggle">▼ expand</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="sw dark" id="portfolio">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">04</div>
+    <h2 class="st">Portfolio</h2>
+  </div>
+  <p class="bt fi">Chiltern's portfolio spans business services, industrials and technology services across the UK and Ireland. The firm currently holds 12 active investments and has exited 8+ companies. Deal types include MBOs, buy-and-builds, carve-outs, and minority growth capital investments.</p>
+
+  <div class="tabs fi">
+    <div class="tab on" onclick="switchTab('current')">Current (12)</div>
+    <div class="tab" onclick="switchTab('realised')">Realised / Exits (8)</div>
+  </div>
+
+  <div id="tp-current" class="tp on fi">
+    <div class="port-grid">
+
+      <div class="pc" style="--pc-c:var(--org)">
+        <span class="pc-sector" style="color:var(--org);border-color:rgba(245,106,0,.35);background:var(--org-p)">Automotive</span>
+        <div class="pc-name">Kerr's Tyres & Auto</div>
+        <div class="pc-type">Buy-and-build · Jan 2026</div>
+        <div class="pc-desc">UK tyre and automotive services retailer. Chiltern's most recent investment (January 2026), continuing its buy-and-build strategy in the automotive services sector. Adam Oakes sits on the board.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--blu)">
+        <span class="pc-sector" style="color:var(--blu);border-color:rgba(61,142,240,.35);background:var(--blu-p)">Financial Services</span>
+        <div class="pc-name">Charis Grants</div>
+        <div class="pc-type">Business Services · MBO</div>
+        <div class="pc-desc">Provider of charitable grant management services. Chiltern backed the management team to grow the business through its specialist grants administration and technology platform. Ben Robinson was closely involved.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Agriculture / Distribution</span>
+        <div class="pc-name">Burgess Farms</div>
+        <div class="pc-type">Growth Capital · Agri-business</div>
+        <div class="pc-desc">UK farming and agricultural distribution business. Represents Chiltern's flexible sector approach — beyond traditional B2B services into food and agriculture.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--yel)">
+        <span class="pc-sector" style="color:var(--yel);border-color:rgba(240,180,41,.35);background:var(--yel-p)">Business Services</span>
+        <div class="pc-name">Train'd Up</div>
+        <div class="pc-type">Buy-out · Training & Development</div>
+        <div class="pc-desc">UK training and professional development services business. Chiltern supported management to acquire and build a leading provider in its niche through the firm's buy-and-build playbook.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--org)">
+        <span class="pc-sector" style="color:var(--org);border-color:rgba(245,106,0,.35);background:var(--org-p)">Automotive Services</span>
+        <div class="pc-name">Rapid Repair Network</div>
+        <div class="pc-type">MBO · Feb 2024 · Seed round</div>
+        <div class="pc-desc">Leading provider of same-day accident repair services. Invested February 2024. Jon Rawlings is supporting the build-out of the value creation plan. Harry Reid is involved on the investment side.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--pur)">
+        <span class="pc-sector" style="color:var(--pur);border-color:rgba(139,92,246,.35);background:var(--pur-p)">Industrials / Manufacturing</span>
+        <div class="pc-name">Strata Products</div>
+        <div class="pc-type">Carve-out · Mar 2024 · Berry Global Inc.</div>
+        <div class="pc-desc">Leading UK manufacturer of plastic products, carved out from FTSE 100-listed Berry Global Inc. Chiltern backed incumbent management led by CEO Jay Ilsen. Won Insider Media Deal of the Month award. Harry Reid sits on the board.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--blu)">
+        <span class="pc-sector" style="color:var(--blu);border-color:rgba(61,142,240,.35);background:var(--blu-p)">Technology Services</span>
+        <div class="pc-name">Intec</div>
+        <div class="pc-type">Buy-and-build · Tech Services</div>
+        <div class="pc-desc">Technology services and managed services business. Ali Gray has worked closely with Intec on its inorganic growth strategy since investment. Focuses on the UK SME and mid-market technology services market.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Industrials / Environmental</span>
+        <div class="pc-name">Emtez</div>
+        <div class="pc-type">Buy-out · Environmental Services</div>
+        <div class="pc-desc">Environmental and waste management services business. Ali Gray has supported Emtez's growth alongside the Chiltern portfolio team. Operating in the growing UK environmental services market.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--org)">
+        <span class="pc-sector" style="color:var(--org);border-color:rgba(245,106,0,.35);background:var(--org-p)">Construction / Industrials</span>
+        <div class="pc-name">Assembuild</div>
+        <div class="pc-type">Buy-and-build · Construction Services</div>
+        <div class="pc-desc">Specialist building and construction services group. Ali Gray has worked closely with the Assembuild team on strategy and M&A. Growing through a targeted acquisition programme in the UK construction market.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--yel)">
+        <span class="pc-sector" style="color:var(--yel);border-color:rgba(240,180,41,.35);background:var(--yel-p)">Industrials / Packaging</span>
+        <div class="pc-name">Amerplast</div>
+        <div class="pc-type">Buy-out · Packaging / Plastics</div>
+        <div class="pc-desc">UK specialist plastic printing and packaging business. Part of Chiltern's industrials portfolio — a business with significant growth potential through operational improvement and targeted market expansion.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--red)">
+        <span class="pc-sector" style="color:var(--red);border-color:rgba(255,68,85,.35);background:var(--red-p)">Industrials / Environmental</span>
+        <div class="pc-name">Inciner8</div>
+        <div class="pc-type">Buy-out · Waste Management Equipment</div>
+        <div class="pc-desc">Leading manufacturer and supplier of incineration equipment globally. Harry Reid sits on the board. Inciner8 exports to markets worldwide — a rare international dimension in Chiltern's predominantly UK-focused portfolio.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--blu)">
+        <span class="pc-sector" style="color:var(--blu);border-color:rgba(61,142,240,.35);background:var(--blu-p)">Technology / Automotive</span>
+        <div class="pc-name">Cybit</div>
+        <div class="pc-type">Buy-out · Fleet Technology</div>
+        <div class="pc-desc">Fleet management and vehicle tracking technology business. Operating in the growing connected vehicle and fleet telematics sector — an area where Chiltern's technology and automotive sector experience converge.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="tp-realised" class="tp fi">
+    <div class="port-grid">
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Technology / Cyber</span>
+        <div class="pc-name">SiXworks</div>
+        <div class="pc-type">Exit · Cyber Security Services</div>
+        <div class="pc-desc">Cyber security and IT managed services business. Invested and grown by Tom Phipps and Ben Robinson. Represents a successful exit in the fast-growing UK cyber security services market.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Technology / Telecoms</span>
+        <div class="pc-name">Gradwell</div>
+        <div class="pc-type">Exit · UCaaS / VoIP</div>
+        <div class="pc-desc">UK cloud communications and VoIP business. Chiltern backed the Gradwell team to grow the business, with a successful exit achieved after a period of significant customer and revenue growth.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Automotive Services</span>
+        <div class="pc-name">Steer Automotive Group</div>
+        <div class="pc-type">Exit → Oakley Capital · 2024</div>
+        <div class="pc-desc">Major UK automotive accident repair business. Chiltern exited to Oakley Capital in early 2024 — a successful realisation. Alex Sheffield led the investment and sat on the board. Ben Robinson also closely involved.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Industrials / Construction</span>
+        <div class="pc-name">Doby Verrolec</div>
+        <div class="pc-type">Exit · Specialist Construction</div>
+        <div class="pc-desc">Specialist construction and engineering services business. A successful realisation from Chiltern's industrials portfolio — evidence of the firm's ability to create value in complex B2B industrial businesses.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Business Services</span>
+        <div class="pc-name">VIMA</div>
+        <div class="pc-type">Exit · Professional Services</div>
+        <div class="pc-desc">Business services company grown through the Chiltern partnership. Tom Phipps and Ben Robinson worked closely with the VIMA management team. Alistair Gray also involved in the investment's development.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Business Services</span>
+        <div class="pc-name">Vantage</div>
+        <div class="pc-type">Exit · Professional Services</div>
+        <div class="pc-desc">Professional services business successfully exited from Chiltern's portfolio. Another demonstration of Chiltern's consistent ability to back management teams in UK business services and deliver strong outcomes.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Technology / Cloud</span>
+        <div class="pc-name">Cloud8</div>
+        <div class="pc-type">Exit · Cloud & IT Services</div>
+        <div class="pc-desc">Cloud computing and IT managed services business. Exited by Chiltern following a period of growth under the firm's technology sector investment theme. Demonstrates the firm's tech services track record.</div>
+      </div>
+
+      <div class="pc" style="--pc-c:var(--grn)">
+        <span class="pc-sector" style="color:var(--grn);border-color:rgba(0,200,117,.35);background:var(--grn-p)">Creative / Media</span>
+        <div class="pc-name">I Heart Studios</div>
+        <div class="pc-type">Exit · Creative Services</div>
+        <div class="pc-desc">Creative and media production services business. An example of Chiltern's occasional ventures beyond pure B2B services into adjacent creative economy sectors, successfully grown and exited.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem" class="fi">
+    <div class="chart-card">
+      <div class="ch-head">
+        <div class="ch-title">Portfolio sector distribution — current holdings</div>
+        <div class="ch-src">Chiltern Capital website · March 2026</div>
+      </div>
+      <div class="cw" style="height:260px"><canvas id="sectorChart"></canvas></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DIFFERENTIATION -->
+<div class="sw" id="differentiation">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">05</div>
+    <h2 class="st">What Sets Chiltern Apart</h2>
+  </div>
+  <p class="bt fi">In a lower mid-market PE landscape crowded with fund-managed investors, Chiltern's structural and cultural differentiation is meaningful. The firm's pitch to founders is built on three genuinely distinctive attributes that most lower mid-market PE firms cannot credibly replicate.</p>
+
+  <div class="diff-grid fi">
+    <div class="diff" style="--d-c:var(--org)">
+      <div class="diff-head">✓ Permanent own-capital model</div>
+      <ul class="diff-list">
+        <li>Invests from its own balance sheet — not managing third-party LP capital with fund lifecycle constraints</li>
+        <li>No artificial 10-year fund exit deadline forcing portfolio company sales at the wrong time</li>
+        <li>Every Chiltern team member personally co-invests in every deal — genuine skin in the game at all levels</li>
+        <li>Full alignment with management: Chiltern only makes money when the business succeeds, not from management fees</li>
+        <li>Can deploy follow-on capital without a fundraising process or LP approval — faster, simpler execution</li>
+      </ul>
+    </div>
+    <div class="diff" style="--d-c:var(--blu)">
+      <div class="diff-head">✓ Founder-centric partnership approach</div>
+      <ul class="diff-list">
+        <li>Non-interfering: actively supports strategy, M&A and governance but does not run portfolio companies</li>
+        <li>Direct, honest communication — described explicitly as "we tell it how it is, good or bad"</li>
+        <li>Dedicated Portfolio Directors (Jon Rawlings, Michael Coupland) who sit on boards and execute growth plans</li>
+        <li>Ryan Robson (Chairman) brings founder and large-scale buy-and-build experience beyond financial PE background</li>
+        <li>Flexible on minority or majority — can structure around founder's specific goals, not a one-size-fits-all buyout</li>
+      </ul>
+    </div>
+    <div class="diff" style="--d-c:var(--grn)">
+      <div class="diff-head">✓ Deep B2B sector expertise</div>
+      <ul class="diff-list">
+        <li>Consistent focus on business services, industrials and technology services — not a generalist fund with scattered bets</li>
+        <li>Team backgrounds across Transaction Services (PwC, Deloitte, EY, KPMG, Grant Thornton) and operational roles</li>
+        <li>Alex Sheffield's COO/CFO operating background gives Chiltern credibility in conversations with management teams</li>
+        <li>10-year track record of consistent activity in the lower mid-market provides deep relationship networks with advisers</li>
+        <li>Buy-and-build execution capability — dedicated inorganic growth support from Alistair Gray and the portfolio team</li>
+      </ul>
+    </div>
+    <div class="diff" style="--d-c:var(--red)">
+      <div class="diff-head">⚠ Limitations to acknowledge</div>
+      <ul class="diff-list">
+        <li>Smaller team (22 people) limits simultaneous deal capacity vs larger PE houses with deeper origination resource</li>
+        <li>Own-capital model means no "dry powder" announcements or headline fund sizes — may appear smaller to market</li>
+        <li>Purely UK & Ireland focused — no international PE network for cross-border deals or international buy-and-build</li>
+        <li>Lower-mid market focus (£2–10m EBIT) limits addressable deal universe and may constrain scale of platform exits</li>
+        <li>Minority stakes in some situations may limit governance influence compared to majority-only investors</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="editorial fi">
+    <div class="ed-head">Assessment</div>
+    <div class="ed-text">"Chiltern Capital occupies a well-defined and defensible niche in the UK lower mid-market. Its permanent capital model and whole-team co-investment structure create a genuinely differentiated pitch to founders — particularly family business owners and management buy-out teams who have been burned by the 10-year fund exit clock of traditional PE. A decade of consistent activity, 53+ investments and a growing team with dedicated portfolio support resource suggest a firm that has moved well beyond the start-up phase and into an established, repeatable model."</div>
+  </div>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div class="sw dark" id="contact">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">06</div>
+    <h2 class="st">Contact & Details</h2>
+  </div>
+  <div class="contact-grid fi">
+    <div class="cbox">
+      <div class="cbox-lbl">Registered office</div>
+      <div class="cbox-val">80 Cheapside<br>London, England<br>EC2V 6EE<br><br><strong>Company No. OC402587</strong><br>Limited Liability Partnership<br>Incorporated 29 October 2015</div>
+    </div>
+    <div class="cbox">
+      <div class="cbox-lbl">Operating address</div>
+      <div class="cbox-val">Lion Court<br>25 Procter Street<br>London WC1V 6NY<br><br>Tel: <a href="tel:02036375620">0203 637 5620</a><br>Email: <a href="mailto:enquiry@chilterncapital.co.uk">enquiry@chilterncapital.co.uk</a><br>Web: <a href="http://www.chilterncapital.co.uk" target="_blank">chilterncapital.co.uk</a></div>
+    </div>
+    <div class="cbox">
+      <div class="cbox-lbl">Regulatory & key personnel</div>
+      <div class="cbox-val">Authorised and regulated by the <strong>Financial Conduct Authority (FCA)</strong><br><br>Origination contact:<br><a href="mailto:alistair.gray@chilterncapital.co.uk">alistair.gray@chilterncapital.co.uk</a><br><br>Co-founders:<br><a href="mailto:tom.phipps@chilterncapital.co.uk">tom.phipps@chilterncapital.co.uk</a><br><a href="mailto:alex.sheffield@chilterncapital.co.uk">alex.sheffield@chilterncapital.co.uk</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="fl">PRIV<span>●</span>MRKTS</div>
+  <div class="fr">
+    Sources: chilterncapital.co.uk · Companies House OC402587 · LinkedIn · Pitchbook · Tracxn · Private Equity International<br>
+    All information sourced from public records and Chiltern Capital's own website · March 2026 · For research purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* SCROLL PROGRESS */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
+},{passive:true});
+
+/* NAV ACTIVE */
+const secs=['overview','approach','criteria','team','portfolio','differentiation','contact'];
+const nls=document.querySelectorAll('.nlink');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;
+  let cur='overview';
+  secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+/* FADE IN */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+
+/* TEAM TOGGLE */
+function toggleMember(el){
+  el.classList.toggle('open');
+  const tog=el.querySelector('.member-toggle');
+  if(tog) tog.textContent=el.classList.contains('open')?'▲ collapse':'▼ expand';
+}
+
+/* PORTFOLIO TABS */
+function switchTab(id){
+  document.querySelectorAll('.tabs .tab').forEach((t,i)=>t.classList.toggle('on',['current','realised'][i]===id));
+  document.querySelectorAll('.tp').forEach(p=>p.classList.toggle('on',p.id==='tp-'+id));
+}
+
+/* SECTOR CHART */
+new Chart(document.getElementById('sectorChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Industrials / Manufacturing','Technology Services','Automotive Services','Business Services','Agriculture / Distribution','Financial Services','Environmental'],
+    datasets:[{
+      data:[4,3,2,1,1,1,2],
+      backgroundColor:['#f0b429','#3d8ef0','#f56a00','#8b5cf6','#00c875','#00c8c8','#ff4455'],
+      borderColor:'#141414',
+      borderWidth:3,
+      hoverBorderWidth:3,
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    cutout:'62%',
+    plugins:{
+      legend:{
+        display:true,
+        position:'right',
+        labels:{color:'#888580',font:{size:11,family:'IBM Plex Mono'},padding:14,boxWidth:12}
+      },
+      tooltip:{
+        callbacks:{
+          label:ctx=>{
+            const total=ctx.dataset.data.reduce((a,b)=>a+b,0);
+            const pct=Math.round((ctx.parsed/total)*100);
+            return ` ${ctx.label}: ${ctx.parsed} companies (${pct}%)`;
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
