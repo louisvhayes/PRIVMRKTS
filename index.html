@@ -1020,11 +1020,7 @@ const ADMIN_PASSWORD = "Swimmingboy@7oaks";
 
 /* ── STORAGE ── */
 function load() {
-  try {
-    const d = localStorage.getItem('pmj_entries');
-    entries = d ? JSON.parse(d) : [];
-    if (!entries.length) seedDefaults();
-  } catch(e) { entries = []; seedDefaults(); }
+  seedDefaults();
 }
 function save() {
   try { localStorage.setItem('pmj_entries', JSON.stringify(entries)); } catch(e) {}
