@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobeus Equity Partners — Funds I & II Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--red:#ff4050;--blue:#3d8ef0;--yellow:#f0b429;--purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}.nav-logo b{color:var(--orange)}.nav-pipe{width:1px;height:18px;background:var(--border-2)}.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}.nl:hover{color:var(--white)}.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 370px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.3vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem} h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:660px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}.meta-row span{display:flex;align-items:center;gap:5px}.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}.sp-row:last-child{border-bottom:none}.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}.sp-right{text-align:right}.sp-val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);line-height:1.1}.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+.wrap{max-width:1180px;margin:0 auto}.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}.sec.alt{background:var(--off-black)}.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.1rem}.body strong{color:var(--white);font-weight:600}.body em{color:var(--orange);font-style:normal}
+.note{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--yellow);padding:1rem 1.2rem;margin:1.2rem 0 1.7rem;color:var(--white-2);font-size:12.5px;line-height:1.7}
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1}.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border-2);margin-top:1rem}
+thead th{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);text-align:left;padding:.85rem .9rem;border-bottom:1px solid var(--border);vertical-align:bottom}
+tbody td{font-size:12px;color:var(--white-2);padding:.95rem .9rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tbody tr:last-child td{border-bottom:none}
+tbody td strong{color:var(--white)}
+.small{font-size:11px;color:var(--white-3)}
+.badge{display:inline-block;font-family:var(--mono);font-size:9px;padding:.18rem .42rem;border:1px solid var(--orange-line);background:var(--orange-dim);color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem}
+.badge.green{border-color:rgba(0,200,117,.3);background:rgba(0,200,117,.12);color:var(--green)}
+.badge.blue{border-color:rgba(61,142,240,.3);background:rgba(61,142,240,.12);color:var(--blue)}
+.badge.yellow{border-color:rgba(240,180,41,.3);background:rgba(240,180,41,.12);color:var(--yellow)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:1rem}
+.fact{background:var(--off-black);padding:1.05rem}.fact .k{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}.fact .v{font-family:var(--serif);font-size:22px;font-weight:900;color:var(--orange);line-height:1.1}.fact .s{font-size:11px;color:var(--white-3);margin-top:.35rem}
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}.foot-logo b{color:var(--orange)}.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}.fu.vis{opacity:1;transform:none}
+@media(max-width:940px){.hero-inner,.g2,.g3,.facts{grid-template-columns:1fr}.stat-panel{display:none}table{display:block;overflow:auto}footer{flex-direction:column;text-align:center}.foot-src{text-align:center}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Research Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#overview">Overview</a>
+    <a class="nl" href="#fund1">Mobeus 1</a>
+    <a class="nl" href="#fund2">Mobeus 2</a>
+    <a class="nl" href="#realisations">Realisations</a>
+    <a class="nl" href="#fundlife">Fund life</a>
+    <a class="nl" href="#takeaway">Takeaway</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Funds Deep Dive · Mobeus 1 & Mobeus 2</div>
+      <h1>A <em>fund-by-fund</em> view of<br>Mobeus Equity Partners</h1>
+      <p class="hero-lead">This version goes beyond the firm overview and focuses on the two institutional buyout funds: what Mobeus 1 and Mobeus 2 are, which investments are publicly identifiable in each fund, what Mobeus appears to have done operationally in each case, and which return metrics have been publicly disclosed.</p>
+      <div class="meta-row">
+        <span>Updated March 2026</span>
+        <span>Official public materials only</span>
+        <span>Same visual style as reference file</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Verified public snapshot</div>
+      <div class="sp-row"><div class="sp-lbl">Mobeus 1</div><div class="sp-right"><div class="sp-val">2017 vintage</div><div class="sp-sub">closed in 2017</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Mobeus 1 status (Summer 2025)</div><div class="sp-right"><div class="sp-val">7 realised</div><div class="sp-sub">7 still in portfolio</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Mobeus 1 fund metrics</div><div class="sp-right"><div class="sp-val">5x realised MoC</div><div class="sp-sub">already returned 2x in cash</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Mobeus 2</div><div class="sp-right"><div class="sp-val">2021 launch</div><div class="sp-sub">first close £115m vs £175m target</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Mobeus 2 status (Summer 2025)</div><div class="sp-right"><div class="sp-val">8 completed</div><div class="sp-sub">fund deployed within 4 years</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Public evidence after Summer 2025</div><div class="sp-right"><div class="sp-val">G=mc2</div><div class="sp-sub">publicly shown as Fund 2 in Jan 2026</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="overview" class="sec alt"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">How to read this document</h2></div>
+  <p class="body fu">This document is built from <strong>Mobeus’s public website, investment pages, deal announcements and the Summer 2025 “Inside Out” PDF</strong>. It is therefore strongest on investments that Mobeus still highlights publicly, and on exits where it published return data. It is weaker on any historical investments that are no longer featured clearly on the public site.</p>
+  <div class="note fu">Important caveat: this should be read as a <strong>public-materials reconstruction</strong> of Mobeus 1 and Mobeus 2, not a definitive LP reporting pack. For several current investments, Mobeus discloses the value-creation plan and some trading or M&A milestones, but <strong>does not publicly disclose unrealised fund returns</strong>. Where that is the case, the document explicitly says so.</div>
+  <div class="pq fu"><div class="pq-text">In other words: for realised deals, you often get MoC and IRR; for unrealised deals, you usually get strategy, operational actions and selected KPIs — but not current mark-to-market returns.</div></div>
+  <div class="facts fu">
+    <div class="fact"><div class="k">Publicly stated for Mobeus 1</div><div class="v">7 realised</div><div class="s">Summer 2025 “Inside Out” positioning.</div></div>
+    <div class="fact"><div class="k">Publicly stated for Mobeus 1</div><div class="v">7 current</div><div class="s">Current portfolio count shown in Summer 2025 PDF.</div></div>
+    <div class="fact"><div class="k">Publicly stated for Mobeus 2</div><div class="v">8 completed</div><div class="s">As at Summer 2025.</div></div>
+    <div class="fact"><div class="k">Publicly stated for Mobeus 2</div><div class="v">>£30m</div><div class="s">Looking to deploy in next 6 months, per Summer 2025 PDF.</div></div>
+  </div>
+</div></div>
+
+<div id="fund1" class="sec"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">Mobeus 1 — what it is</h2></div>
+  <p class="body fu">Mobeus 1 is the firm’s first institutional small-cap buyout fund. Mobeus says it <strong>closed in 2017</strong>. By Summer 2025, the firm described Mobeus 1 as the fund that was <strong>“being realised”</strong>, with <strong>7 investments realised</strong>, <strong>7 still in portfolio</strong>, a <strong>top quartile vintage</strong>, <strong>5x realised MoC</strong> and <strong>2x already returned in cash</strong>. That makes it the mature harvesting vehicle in the current Mobeus story.</p>
+  <p class="body fu">The public material does <strong>not</strong> give a hard public “end date” for Mobeus 1. However, because it closed in 2017 and because traditional private equity buyout funds are commonly structured with lives of roughly <strong>10 to 12 years</strong>, the natural interpretation is that Mobeus 1 is now in its realisation/distribution phase, with exits expected over the next few years and final wind-down likely only after remaining assets are sold.</p>
+
+  <table class="fu">
+    <thead>
+      <tr>
+        <th>Publicly identifiable Mobeus 1 investment</th>
+        <th>Status</th>
+        <th>What Mobeus says it did</th>
+        <th>Public return / KPI disclosure</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Advantedge</strong><br><span class="small">invoice finance business</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Backed the MBO, expanded the funding line to £100m, rebranded the business, opened offices in Scotland and the Midlands, and supported the acquisition of Henry Howard Cashflow Finance.</td>
+        <td><strong>2.7x MoC; 30% IRR</strong>. Revenues grew 2.4x and EBITDA doubled during ownership.</td>
+      </tr>
+      <tr>
+        <td><strong>Ludlow Wealth Management</strong><br><span class="small">wealth advice</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Backed CEO Ian Hemingway in a £12m buyout from the founder; helped scale the business from £865m of assets under advice at entry.</td>
+        <td><strong>3.3x MoC; 36% IRR</strong>. Sold for enterprise value of £36.1m.</td>
+      </tr>
+      <tr>
+        <td><strong>Access Partnership</strong><br><span class="small">technology public-policy consultancy</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Supported growth in a specialist consulting model and sold the company to Mayfair Equity Partners after a less than three-year hold.</td>
+        <td><strong>4.4x MoC; 64% IRR</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>Kinneir Dufort</strong><br><span class="small">design & product development consultancy</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Supported growth and eventual sale to SteriPack; public materials frame this as another strong human-capital / specialist-services exit from the fund.</td>
+        <td><strong>2.8x MoC; 28% IRR</strong>, with possible uplift to 3.0x if post-completion financial objectives were achieved.</td>
+      </tr>
+      <tr>
+        <td><strong>The Boundary</strong><br><span class="small">digital twins / architectural visualisation</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Enhanced internal systems, developed proprietary software tools, strengthened the senior team with a CFO and COO, introduced a Chair, and funded acquisitions including Buildmedia.</td>
+        <td><strong>2.4x MoC; 37% IRR</strong>. Profits grew 2.5x; business scaled to 100 artists/developers across three offices on three continents.</td>
+      </tr>
+      <tr>
+        <td><strong>Star Brands</strong><br><span class="small">owner of The Pink Stuff</span></td>
+        <td><span class="badge green">Realised</span></td>
+        <td>Repositioned the business from private label into a branded growth story; repackaged and reformulated Pink Stuff, used influencers/social to go viral, expanded the range to 20+ SKUs, led the acquisition of the US distributor, and refined IP protection.</td>
+        <td><strong>Exit value £345m + earnout</strong>. Sales grew <strong>5x</strong>; EBITDA grew <strong>15x</strong>. Public materials call it the largest realisation in Mobeus history.</td>
+      </tr>
+      <tr>
+        <td><strong>ABL 1Touch</strong><br><span class="small">automotive accident repair</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Backed the incumbent management team with an initial £9.5m investment, supported by an industry chair, and planned to almost double the site footprint during the investment term.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public KPI at entry: turnover had doubled in the prior three years; total investment highlighted at £11.0m on the investment page.</td>
+      </tr>
+      <tr>
+        <td><strong>Active Travel Group</strong><br><span class="small">adventure / activity travel</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Initially supported Ski Solutions, then funded the acquisition of Wilderness Scotland to create ATG; later supported acquisitions including Inspired ITALY and MV Luxury Travel, turning the business into a more balanced year-round adventure group.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Summer 2025 PDF shows group summer revenues now 70% of total and FY26 EBITDA forecast above £5m.</td>
+      </tr>
+      <tr>
+        <td><strong>Assured Underwriting Group (AUG)</strong><br><span class="small">travel-sector surety insurance MGA</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Backed the MBO, supported geographic expansion in mainland Europe, introduced a sector-specialist chair, completed bolt-ons including Kaera and TIE, and pushed the business toward a pan-European travel MGA model.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Summer 2025 PDF shows FY25 revenues growth above 10% and FY26 EBITDA forecast above £4m.</td>
+      </tr>
+      <tr>
+        <td><strong>Cooper Coated Coil (CCC)</strong><br><span class="small">pre-coated metals</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Backed a complex buyout of Arc Specialist Engineering, sold non-core assets quickly, repaid acquisition debt and focused the remaining group on CCC as the sole core asset, with an operational improvement programme to free capacity and improve margins.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page says acquisition debt and a material amount of loan notes were repaid within 12 months.</td>
+      </tr>
+      <tr>
+        <td><strong>Inbox Insight</strong><br><span class="small">B2B demand generation</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Supported the MBO, introduced a chair, and focused on continued investment in the technology platform, data science and analytics capabilities.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page says the business achieved a 20% CAGR over the prior five years; investment size shown as £18.1m.</td>
+      </tr>
+      <tr>
+        <td><strong>Orbital Internet Group</strong><br><span class="small">connectivity / ISP</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Took a minority stake to accelerate fibre rollout, develop business services and build a holiday parks connectivity position; later provided follow-on capital for the ClubWifi acquisition.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public materials frame ClubWifi as the first of more bolt-ons to come.</td>
+      </tr>
+      <tr>
+        <td><strong>Ventrica</strong><br><span class="small">outsourced contact centre</span></td>
+        <td><span class="badge yellow">Current / fund not clearly shown on page</span></td>
+        <td>Provided £9.1m in an equity-release transaction to give the founder a partial exit, while funding management strengthening and systems investment to support rapid growth.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page used in search results does not clearly show the fund number, but the deal dates suggest it belongs to the Mobeus 1 era.</td>
+      </tr>
+    </tbody>
+  </table>
+</div></div>
+
+<div id="fund2" class="sec alt"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Mobeus 2 — what it is</h2></div>
+  <p class="body fu">Mobeus 2 LP is the successor institutional buyout fund. Mobeus announced a <strong>£115m first close against a £175m target</strong> in November 2021 and said the fund would invest <strong>£5m to £20m</strong> in a mix of control and minority stakes in UK small-cap MBOs. By Summer 2025, Mobeus described Mobeus 2 as the fund <strong>“being invested”</strong>, with <strong>8 investments completed</strong>, average deal size above <strong>£12.5m</strong>, one <strong>£20m</strong> investment, and deployment completed within four years.</p>
+  <p class="body fu">Again, there is no public website disclosure of the precise legal termination date. On a normal private equity timetable, a 2021 launch would often imply a natural end somewhere around <strong>2031–2033</strong> depending on extensions. But that is an inference from the generic PE fund model, not a Mobeus-specific public commitment. Summer 2025 materials also indicated the fund still expected to deploy more than £30m over the following six months, and Mobeus’s January 2026 G=mc2 page still labels that investment as <strong>Fund: Mobeus 2</strong>.</p>
+
+  <table class="fu">
+    <thead>
+      <tr>
+        <th>Publicly identifiable Mobeus 2 investment</th>
+        <th>Status</th>
+        <th>What Mobeus says it did</th>
+        <th>Public return / KPI disclosure</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Gungho Marketing</strong><br><span class="small">RegTech-focused sales outsourcing</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>First Fund 2 investment; backed the founder MBO with an £8.8m debt-and-equity package, introduced an executive chair, and aimed to build the proprietary database, enhance scalability and expand into adjacent verticals like LegalTech and TaxTech.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>GW Global Insights</strong><br><span class="small">gasworld / H2 View information platform</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Second Fund 2 investment; backed the MBO from the founder and aimed to grow business intelligence, digital content, marketing services and events, building on gasworld and H2 View.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page shows investment size of £10.9m.</td>
+      </tr>
+      <tr>
+        <td><strong>The Translation People</strong><br><span class="small">language services provider</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Backed the MBO with £12.4m and introduced Chair Steve Dolton; supported workflow/platform investment plus a buy-and-build strategy. Public announcements show bolt-ons including Sure Languages, Dialogue and Transladiem.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Publicly disclosed as a four-acquisition consolidation strategy by February 2025.</td>
+      </tr>
+      <tr>
+        <td><strong>LACE Partners</strong><br><span class="small">HR transformation consultancy</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Took a minority stake via a £10.2m package, backed organic and acquisitive growth, and later supported the 3XO bolt-on to deepen reward/performance capability. Summer 2025 materials show ongoing hiring into tech consulting, AI and M&A capability.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Summer 2025 materials flag strong organic growth and active bolt-on search.</td>
+      </tr>
+      <tr>
+        <td><strong>Intralink</strong><br><span class="small">Asia market-entry consultancy</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Fifth Fund 2 investment; invested £19.6m for a minority stake, joined the board, and aimed to expand ASEAN and India coverage. In 2025 Mobeus supported the acquisition of Orissa International, adding teams across six Southeast Asian markets.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page says revenues had almost doubled over the prior three years at investment.</td>
+      </tr>
+      <tr>
+        <td><strong>Ellis Recruitment Group</strong><br><span class="small">ERP specialist recruitment</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Sixth Fund 2 investment; became a significant minority shareholder, introduced a chair, and aimed to accelerate hiring and expansion across Europe and North America.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page shows investment size of £9.5m.</td>
+      </tr>
+      <tr>
+        <td><strong>Distant Journeys</strong><br><span class="small">long-haul escorted tours</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Backed the founder MBO with £15.2m, introduced Richard Bowden-Doyle as chair, and targeted destination rollout plus sales and customer-engagement system upgrades.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Summer 2025 PDF shows FY25 revenue growth above 30% and FY26 EBITDA forecast above £5m.</td>
+      </tr>
+      <tr>
+        <td><strong>Big Potato Games</strong><br><span class="small">board games IP business</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Invested £16.2m to fund a buyout from private shareholders and an EOT, introduced Judy Gibbons as chair, and targeted new product development, international expansion, online sales growth and more control of distribution.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong> Public page notes 64+ titles sold in 44 countries and B-Corp certification in 2024.</td>
+      </tr>
+      <tr>
+        <td><strong>G=mc2</strong><br><span class="small">AI-enabled brand strategy consultancy</span></td>
+        <td><span class="badge blue">Current</span></td>
+        <td>Publicly shown as a Fund 2 investment in January 2026; Mobeus invested £15.8m for a majority stake, introduced a new chair and CFO, and is funding international expansion, including a US office, plus systems/process build-out for scalability.</td>
+        <td><strong>Unrealised return not publicly disclosed.</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div></div>
+
+<div id="realisations" class="sec"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">What the realised deals say about Mobeus’s playbook</h2></div>
+  <p class="body fu">The realised Mobeus 1 exits show a pattern. Mobeus tends to make money not from one single trick, but from combining <strong>management backing, operational professionalisation, targeted M&A, international growth and board-level resourcing</strong>. The very biggest outcome — Star Brands — is a branded-goods version of that formula. The consulting and services exits — Access, Kinneir Dufort, The Boundary — are specialist-services versions of the same formula.</p>
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Most spectacular winner</div>
+      <div class="ac-body"><strong>Star Brands</strong>: sales up 5x, EBITDA up 15x, sold for £345m plus earnout. This is the clearest illustration of Mobeus’s “identify a latent growth lever and back management hard” model.</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Best published IRR</div>
+      <div class="ac-body"><strong>Access Partnership</strong>: 4.4x MoC and 64% IRR, showing that a shorter-hold specialist consultancy success can generate very high annualised returns.</div>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">Consistent pattern</div>
+      <div class="ac-body"><strong>Advantedge, Ludlow, Kinneir Dufort, The Boundary</strong> all show public evidence of operational growth plus strong exit metrics, rather than passive holding.</div>
+    </div>
+  </div>
+  <div class="pq fu"><div class="pq-text">The public return data suggests Mobeus 1 has been driven by a handful of strong winners, supported by several solid 2–4x outcomes — exactly the kind of distribution many successful lower mid-market buyout funds rely on.</div></div>
+</div></div>
+
+<div id="fundlife" class="sec alt"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">When are Mobeus 1 and Mobeus 2 supposed to end or pay out investors?</h2></div>
+  <p class="body fu">The key honest answer is: <strong>Mobeus’s public website does not state the exact legal termination dates or waterfall schedule for either fund</strong>. Those details normally sit in private fund documents rather than public marketing pages.</p>
+  <p class="body fu">What we can say from public evidence is this:</p>
+  <div class="g2 fu">
+    <div class="ac or">
+      <div class="ac-hd">Mobeus 1</div>
+      <div class="ac-body">Closed in 2017 and is explicitly described in Summer 2025 as the fund that is <strong>being realised</strong>. Mobeus says it had already returned <strong>2x in cash</strong>, had <strong>7 realisations</strong> completed, and expected the remaining realisation programme to run over the next few years.</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Mobeus 2</div>
+      <div class="ac-body">Launched in 2021 and was still actively investing in 2025–2026. Summer 2025 materials say the fund was <strong>being invested</strong>; January 2026 public pages still list new deals such as G=mc2 as <strong>Fund: Mobeus 2</strong>.</div>
+    </div>
+  </div>
+  <p class="body fu">From the generic private equity model, a buyout fund often has a life of roughly <strong>10 years, commonly with extension rights</strong>. So the sensible public-market interpretation is that Mobeus 1 is in late harvesting mode, while Mobeus 2 is still in the investment and early value-creation phase and would usually distribute meaningfully later in the cycle rather than immediately.</p>
+</div></div>
+
+<div id="takeaway" class="sec"><div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">Bottom line</h2></div>
+  <div class="pq fu"><div class="pq-text">Mobeus 1 is now best understood as the realised-and-realising proof of concept: public materials show strong exits, high realised multiples and a portfolio still being harvested. Mobeus 2 is the active deployment vehicle: a growing set of UK lower mid-market investments where the public evidence focuses on boards, strategy, hiring, M&A and operational scaling — but not yet on disclosed returns.</div></div>
+  <div class="note fu">Practical implication: if you want the cleanest return evidence, look to <strong>Mobeus 1 exits</strong>. If you want to understand how Mobeus operates today, look to <strong>Mobeus 2 current holdings</strong> and the operational plans attached to them.</div>
+</div></div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS</div>
+  <div class="foot-src">Mobeus Funds I & II Deep Dive<br>Compiled from public Mobeus materials · March 2026</div>
+</footer>
+
+<script>
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{const h=document.documentElement;const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;prog.style.width=sc+'%';
+let secs=document.querySelectorAll('.sec[id], .hero');let links=document.querySelectorAll('.nl');let current='';
+secs.forEach(sec=>{const top=sec.offsetTop-90;if(scrollY>=top) current=sec.id || 'overview';});
+links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+current || (current==='overview' && a.getAttribute('href')==='#overview')));
+});
+const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.12});
+document.querySelectorAll('.fu').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

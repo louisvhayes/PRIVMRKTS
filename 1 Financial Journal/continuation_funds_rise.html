@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rise of Continuation Funds — Reasons & Drivers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* HERO */
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+
+/* HERO STATS PANEL */
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+
+/* SECTION WRAPPERS */
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+/* BODY TEXT */
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+
+/* PULL QUOTE */
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+
+/* GRID LAYOUTS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+
+/* ACCENT CARDS */
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}
+.ac.gr{border-top:2px solid var(--green)}
+.ac.re{border-top:2px solid var(--red)}
+.ac.bl{border-top:2px solid var(--blue)}
+.ac.ye{border-top:2px solid var(--yellow)}
+.ac.pu{border-top:2px solid var(--purple)}
+.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}
+.ac.gr .ac-hd{color:var(--green)}
+.ac.re .ac-hd{color:var(--red)}
+.ac.bl .ac-hd{color:var(--blue)}
+.ac.ye .ac-hd{color:var(--yellow)}
+.ac.pu .ac-hd{color:var(--purple)}
+.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}
+.ac.gr .ac-stat{color:var(--green)}
+.ac.re .ac-stat{color:var(--red)}
+.ac.bl .ac-stat{color:var(--blue)}
+.ac.ye .ac-stat{color:var(--yellow)}
+.ac.pu .ac-stat{color:var(--purple)}
+.ac.te .ac-stat{color:var(--teal)}
+
+/* BULLET LIST */
+.blist{list-style:none;font-size:13px;color:var(--white-2);line-height:1}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+
+/* DATA ROW */
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.d-sub{font-family:var(--mono);font-size:10px;color:var(--green);text-align:right}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+.tl-vol{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--green);float:right;margin-left:12px}
+
+/* CHART CONTAINER */
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.04em;text-align:right}
+.chart-wrap{position:relative;width:100%}
+
+/* LEGEND */
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+
+/* BAR METER */
+.bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.bar-lbl{font-size:12px;color:var(--white-2);width:230px;flex-shrink:0}
+.bar-wrap{flex:1;height:5px;background:var(--panel-2);border-radius:0;overflow:hidden}
+.bar-fill{height:100%;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:10px;font-weight:600;width:52px;text-align:right;flex-shrink:0}
+
+/* FLOW DIAGRAM */
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
+.flow-node{flex:1;min-width:130px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;position:relative;cursor:default;transition:border-color .2s,background .2s}
+.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
+.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
+.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
+.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
+
+/* OUTLOOK GRID */
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+/* REGULATORY TIMELINE */
+.reg-item{display:flex;gap:1.25rem;padding:1rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.reg-item:last-child{border-bottom:none}
+.reg-yr{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);width:60px;flex-shrink:0;padding-top:2px}
+.reg-body{flex:1}
+.reg-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.reg-text{font-size:12px;color:var(--white-3);line-height:1.6}
+.reg-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;margin-bottom:5px}
+.badge-warn{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(240,180,41,.3)}
+.badge-change{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-line)}
+.badge-risk{background:var(--red-dim);color:var(--red);border:1px solid var(--red-b)}
+.badge-ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
+
+/* VERDICT */
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+
+/* FOOTER */
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  .bar-lbl{width:140px}
+  .flow{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Research Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#drivers">Drivers</a>
+    <a class="nl" href="#market">Market Data</a>
+    <a class="nl" href="#macro">Macro Context</a>
+    <a class="nl" href="#structure">Structural Shifts</a>
+    <a class="nl" href="#regulatory">Regulatory</a>
+    <a class="nl" href="#outlook">Outlook</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Special Report · Private Markets 2025–2026</div>
+      <h1>Why Continuation Funds<br>Are <em>Everywhere Now</em></h1>
+      <p class="hero-lead">From niche workaround to a $115 billion structural fixture — a deep-dive into the six converging forces that have made continuation vehicles the defining exit innovation of modern private equity, and why the trend is accelerating rather than reversing.</p>
+      <div class="meta-row">
+        <span>March 2026</span>
+        <span>Private Equity · Secondaries</span>
+        <span>Sources: McKinsey · Jefferies · Bain · CFA Institute · MSCI</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Market snapshot — 2025 full year</div>
+      <div class="sp-row">
+        <div class="sp-lbl">GP-led secondaries volume</div>
+        <div class="sp-right"><div class="sp-val">$115B</div><div class="sp-sub">▲ tripled vs 2020's $35bn</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Share of PE exits via CVs</div>
+        <div class="sp-right"><div class="sp-val">~20%</div><div class="sp-sub">▲ from 5% in 2020</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Unrealised PE exit overhang</div>
+        <div class="sp-right"><div class="sp-val">$3.6T</div><div class="sp-sub">29,000 unsold companies</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">PE funds 6+ years old</div>
+        <div class="sp-right"><div class="sp-val">>50%</div><div class="sp-sub">1,607 winding down 2025–26</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">LP distributions (2024)</div>
+        <div class="sp-right"><div class="sp-val">11%</div><div class="sp-sub">of NAV — decade low</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">CV contribution ratio (2021–Q3 2025)</div>
+        <div class="sp-right"><div class="sp-val">20%</div><div class="sp-sub">▲ avg 6% in 2016–2020</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: THE 6 DRIVERS ── -->
+<div id="drivers" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">01</div>
+    <h2 class="sec-title">The Six Converging Forces</h2>
+  </div>
+
+  <p class="body fu">No single cause explains the explosion of continuation funds. Instead, six structural forces collided simultaneously — each one individually might have produced a modest uptick; together, they generated a self-reinforcing cycle that transformed continuation vehicles from an emergency tool into <strong>the dominant PE exit mechanism of the 2020s</strong>.</p>
+
+  <div class="flow fu" id="flowDiag">
+    <div class="flow-node">
+      <div class="fn-num">01</div>
+      <div class="fn-title">Exit Drought</div>
+      <div class="fn-body">IPO &amp; M&A markets frozen — nowhere to sell at acceptable prices</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">02</div>
+      <div class="fn-title">Maturity Wall</div>
+      <div class="fn-body">50%+ of PE funds 6+ years old — wind-down deadlines approaching</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">03</div>
+      <div class="fn-title">LP Liquidity</div>
+      <div class="fn-body">Distributions at decade lows — LPs desperately need cash</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">04</div>
+      <div class="fn-title">GP Economics</div>
+      <div class="fn-body">Fee &amp; carry reset gives GPs powerful financial incentive to structure CVs</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">05</div>
+      <div class="fn-title">Deep Secondary Market</div>
+      <div class="fn-body">$302bn dry powder dedicated to secondaries — buyers ready at scale</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">06</div>
+      <div class="fn-title">Longer Value Arcs</div>
+      <div class="fn-body">Businesses outgrowing 10-year fund life — GPs need more time</div>
+    </div>
+  </div>
+
+  <!-- DRIVER DETAIL TABS -->
+  <div class="tabs fu" id="driverTabs">
+    <div class="tab on" onclick="switchTab('d1',this,'driverTabs','driverPanels')">Exit Drought</div>
+    <div class="tab" onclick="switchTab('d2',this,'driverTabs','driverPanels')">Maturity Wall</div>
+    <div class="tab" onclick="switchTab('d3',this,'driverTabs','driverPanels')">LP Liquidity</div>
+    <div class="tab" onclick="switchTab('d4',this,'driverTabs','driverPanels')">GP Economics</div>
+    <div class="tab" onclick="switchTab('d5',this,'driverTabs','driverPanels')">Secondary Market</div>
+    <div class="tab" onclick="switchTab('d6',this,'driverTabs','driverPanels')">Longer Value Arcs</div>
+  </div>
+  <div id="driverPanels">
+
+    <div class="tab-panel on" id="d1">
+      <div class="g2">
+        <div>
+          <p class="body">The most visible trigger for the continuation fund boom has been the near-total seizure of traditional PE exit channels. <strong>IPO markets</strong> — the historic prestige exit for PE sponsors — have remained deeply depressed since their 2021 peak. Volatile public markets, rising interest rates that compress growth-stock valuations, and regulatory complexity have all contributed to a profound reluctance among sponsors to list portfolio companies at prices they consider inadequate.</p>
+          <p class="body">Simultaneously, <strong>strategic M&A</strong> — the other primary route — hit a decade low in 2023 and has only partially recovered. Antitrust scrutiny, financing costs, and a wide bid-ask gap between seller expectations (still anchored to ZIRP-era multiples) and buyer willingness have paralysed deal activity. The result: GPs holding high-quality assets at fund maturity with no viable exit at an acceptable price.</p>
+          <div class="pq">
+            <div class="pq-text">Continuation funds allow managers to retain high-conviction assets and provide investors with liquidity options in an environment where the backdrop of low financing costs that encouraged record transaction volumes has evaporated.</div>
+            <div class="pq-src">— CFA Institute Research &amp; Policy Center, 2025</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Exit market indicators — 2024 vs 2021 peak</div>
+            <div class="d-row"><span class="d-lbl">Global PE-backed IPOs</span><div><div class="d-val" style="color:var(--red)">-70%</div><div class="d-sub">vs 2021 peak</div></div></div>
+            <div class="d-row"><span class="d-lbl">Global M&A value (2023)</span><div><div class="d-val" style="color:var(--red)">Decade low</div><div class="d-sub">2023 recorded</div></div></div>
+            <div class="d-row"><span class="d-lbl">PE exit count (2024)</span><div><div class="d-val" style="color:var(--red)">3,796</div><div class="d-sub">vs 4,383 peak (2021)</div></div></div>
+            <div class="d-row"><span class="d-lbl">Unsold PE companies</span><div><div class="d-val" style="color:var(--orange)">29,000</div><div class="d-sub">$3.6tn total value</div></div></div>
+            <div class="d-row"><span class="d-lbl">Companies held 4+ years</span><div><div class="d-val" style="color:var(--orange)">52%</div><div class="d-sub">of buyout inventory — record</div></div></div>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Why GPs won't sell at any price</div>
+            <ul class="blist">
+              <li>Assets acquired at 11–13x EBITDA during ZIRP era — forced sale now would crystalise a loss relative to GP's own valuation marks</li>
+              <li>Selling at distressed prices locks in a poor IRR that damages GP's fundraising track record for successor funds</li>
+              <li>Portfolio company fundamentals often still strong — GP conviction that more value remains to be captured</li>
+              <li>LP pressure to maximise DPI, but not at any price — LPs also don't want write-downs on their books</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="d2">
+      <div class="g2">
+        <div>
+          <p class="body">Private equity fund lifecycles are fixed — typically 10 years, with possible extensions. The deal-making frenzy of 2014–2018 produced an enormous cohort of funds that are now approaching or past their natural wind-down dates. <strong>More than 50% of PE funds globally are now 6+ years old</strong>, and Pitchbook estimates that 1,607 funds are scheduled to dissolve in 2025 or 2026 alone.</p>
+          <p class="body">This creates a structural imperative: <strong>either sell assets, or find a vehicle to hold them</strong>. In a closed exit environment, continuation funds are the only credible mechanism that allows GPs to avoid forced sales. The fund maturity wall is not a temporary phenomenon — it reflects the accumulated legacy of years of above-average fundraising that must eventually unwind.</p>
+          <p class="body">The average buyout holding period reached <strong>6.7 years</strong> in 2024, up from a two-decade average of 5.7 years — meaning the typical PE-backed company now outlives the original expectation for its fund by more than a year. This single statistic encapsulates the structural mismatch between fund design and modern business reality.</p>
+        </div>
+        <div>
+          <div class="ac ye">
+            <div class="ac-hd">Fund maturity wall — key numbers</div>
+            <div class="d-row"><span class="d-lbl">Funds 6+ years old (global)</span><div><div class="d-val" style="color:var(--yellow)">50%+</div><div class="d-sub">of all active PE funds</div></div></div>
+            <div class="d-row"><span class="d-lbl">Funds winding down 2025–26</span><div><div class="d-val" style="color:var(--yellow)">1,607</div><div class="d-sub">Pitchbook estimate</div></div></div>
+            <div class="d-row"><span class="d-lbl">Avg buyout holding period (2024)</span><div><div class="d-val" style="color:var(--orange)">6.7 yrs</div><div class="d-sub">vs 5.7yr 20-year avg</div></div></div>
+            <div class="d-row"><span class="d-lbl">Exit backlog age</span><div><div class="d-val" style="color:var(--orange)">Biggest since 2005</div><div class="d-sub">McKinsey 2025</div></div></div>
+          </div>
+          <div class="ac bl" style="margin-top:1rem">
+            <div class="ac-hd">Why businesses outlive their funds</div>
+            <ul class="blist">
+              <li>Buy-and-build strategies require multiple sequential acquisitions — often taking 6–8 years to fully assemble the platform</li>
+              <li>Digital transformation and operational improvement programmes now embedded in value creation — these take time</li>
+              <li>Companies staying private longer overall — average time-to-IPO for VC-backed companies doubled in 10 years</li>
+              <li>GPs underestimated time needed at entry; exit conditions at fund maturity often worse than expected</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="d3">
+      <div class="g2">
+        <div>
+          <p class="body">LP distributions from private equity fell to just <strong>11% of NAV in 2024</strong> — the lowest level in more than a decade, according to Bain &amp; Company. Pension funds, endowments, insurance companies, and sovereign wealth funds that committed capital to PE in 2014–2019 are sitting on large, unrealised positions with no distributions arriving to fund their own obligations.</p>
+          <p class="body">This has created an acute <strong>"DPI drought"</strong> (Distributed to Paid-In capital). Institutions that depend on PE distributions to fund pension payments or re-deploy into new vintages are experiencing real cash flow strain. Continuation funds address this directly by offering existing LPs a clean binary choice: <strong>take liquidity now at current NAV, or roll over</strong> for further upside — without being forced to sell on the secondary market at a discount.</p>
+          <p class="body">The mantra <em>"DPI is the new IRR"</em> became a genuine industry catchphrase in 2023–2024, reflecting the shift in LP priorities from theoretical return multiples towards actual cash-in-hand. CVs became the primary mechanism through which GPs could satisfy this demand without compromising on valuation.</p>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">LP liquidity pressure indicators</div>
+            <div class="d-row"><span class="d-lbl">PE distributions / NAV (2024)</span><div><div class="d-val" style="color:var(--red)">11%</div><div class="d-sub">lowest in 10+ years</div></div></div>
+            <div class="d-row"><span class="d-lbl">LP dry powder available for secondaries</span><div><div class="d-val" style="color:var(--green)">$302bn</div><div class="d-sub">mid-2025 (Jefferies)</div></div></div>
+            <div class="d-row"><span class="d-lbl">Secondary market volume (2025)</span><div><div class="d-val" style="color:var(--green)">$240bn</div><div class="d-sub">+48% YoY</div></div></div>
+            <div class="d-row"><span class="d-lbl">CV vs mature PE fund ratio</span><div><div class="d-val" style="color:var(--orange)">20%</div><div class="d-sub">avg 2021–Q3 2025; was 6% in 2016–2020</div></div></div>
+          </div>
+          <div class="pq" style="margin-top:1rem">
+            <div class="pq-text">LPs can exit for immediate liquidity or roll over to chase future upside. New investors gain exposure to proven assets with lower blind-pool risk. Continuation funds boast a 9% loss ratio compared to 19% for buyouts.</div>
+            <div class="pq-src">— CFA Institute, Continuation Funds: Ethics in Private Markets, 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="d4">
+      <div class="g2">
+        <div>
+          <p class="body">One of the most underappreciated drivers of continuation fund growth is <strong>the powerful economic incentive for GPs themselves</strong>. When a GP structures a continuation fund, they are not acting purely on behalf of LPs — they are also engineering a material benefit to their own firm.</p>
+          <p class="body">The economics reset is threefold. First, <strong>management fees</strong> are re-established on the continuation vehicle's committed capital, extending the income stream for the GP firm. Second, <strong>carried interest</strong> is reset — a new carry clock starts, meaning the GP earns a fresh 20% of future appreciation from the entry price in the new fund, even on value they themselves created in the legacy fund. Third, GPs frequently <strong>increase their own equity co-investment</strong> in the assets at the valuation set for the transaction — at the same price new institutional buyers are entering.</p>
+          <p class="body">This creates an inherent conflict of interest: the GP is simultaneously advising the legacy fund (the seller) and managing the continuation fund (the buyer). Governance safeguards like LPAC approval and fairness opinions exist to mitigate this — but the financial incentive to structure a continuation vehicle is always present, regardless of whether it is in LPs' interests.</p>
+        </div>
+        <div>
+          <div class="ac pu">
+            <div class="ac-hd">GP economic benefits from a CV</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Management fee reset</strong> — fees re-established on new capital base, often 1.5–2% p.a. on a multi-hundred-million fund — multi-year income stream</li>
+              <li><strong style="color:var(--white)">Carry reset</strong> — 20% of all future appreciation from CV entry price accrues to GP, even on value already created</li>
+              <li><strong style="color:var(--white)">GP co-invest</strong> — opportunity to increase personal stake in best assets at same price as institutional buyers</li>
+              <li><strong style="color:var(--white)">Track record management</strong> — avoids selling at depressed prices that would impair IRR and damage fundraising story for next fund</li>
+              <li><strong style="color:var(--white)">Fundraising signal</strong> — CVs signal conviction in the asset and the GP's own thesis, aiding the next flagship fund raise</li>
+            </ul>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Conflict of interest: the fundamental tension</div>
+            <div class="ac-body">The GP acts as fiduciary for both the legacy fund (seller) and the continuation vehicle (buyer) simultaneously. Every CV decision — the transfer price, which assets to include, new fund terms — involves a party the GP controls on both sides. This is structurally unresolvable; governance can only mitigate it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="d5">
+      <div class="g2">
+        <div>
+          <p class="body">Continuation funds cannot exist without buyers — and until recently, the secondary market for GP-led deals was too thin, too fragmented, and too sceptical to support the volume now being transacted. The <strong>dramatic maturation of the dedicated secondary fund universe</strong> has been the essential enabling infrastructure for the CV boom.</p>
+          <p class="body">Total secondary market volume reached <strong>$240 billion in 2025</strong> — up 48% year-on-year and more than triple the 2019 level. Dedicated secondary fund managers raised $97.5 billion in the trailing 12 months to Q3 2024 alone — a 31% year-on-year increase. Available dry powder earmarked specifically for secondaries stood at <strong>$302 billion by mid-2025</strong>. This capital needs to be deployed, and GP-led continuation vehicles — with their visible assets, knowable GPs, and structured processes — represent an ideal deployment channel.</p>
+          <p class="body">The buyer universe has also diversified. Historically dominated by a handful of specialist firms (Ardian, HarbourVest, Lexington, Coller), the space now includes dedicated GP-led desks at major banks, insurance company allocators, sovereign wealth funds, and increasingly, <strong>retail and HNW investor vehicles</strong> — broadening the capital pool further.</p>
+        </div>
+        <div>
+          <div class="ac te">
+            <div class="ac-hd">Secondary market infrastructure — 2025</div>
+            <div class="d-row"><span class="d-lbl">Total secondary volume (2025)</span><div><div class="d-val" style="color:var(--teal)">$240B</div><div class="d-sub">+48% YoY (Jefferies)</div></div></div>
+            <div class="d-row"><span class="d-lbl">GP-led component</span><div><div class="d-val" style="color:var(--orange)">$115B</div><div class="d-sub">48% of total volume</div></div></div>
+            <div class="d-row"><span class="d-lbl">Dedicated dry powder mid-2025</span><div><div class="d-val" style="color:var(--teal)">$302B</div><div class="d-sub">earmarked for secondaries</div></div></div>
+            <div class="d-row"><span class="d-lbl">Secondary fundraising YTD Q3 2024</span><div><div class="d-val" style="color:var(--teal)">$97.5B</div><div class="d-sub">+31% YoY</div></div></div>
+            <div class="d-row"><span class="d-lbl">Deals above $1bn (H1 2025)</span><div><div class="d-val" style="color:var(--teal)">56</div><div class="d-sub">already above full-year 2024's 51</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="d6">
+      <div class="g2">
+        <div>
+          <p class="body">Beyond the market dislocations, there is a deeper structural reason continuation funds have proliferated: <strong>the businesses PE backs have simply outgrown the original fund model</strong>. The traditional 10-year closed-end fund structure was designed in the 1980s for an era of simpler, primarily financial engineering — buy, lever, cut costs, sell in five years.</p>
+          <p class="body">Modern private equity value creation looks fundamentally different. Buy-and-build platform strategies require years of sequential acquisitions to assemble and integrate. Digital transformation, internationalisation, and ESG repositioning programmes have multi-year horizons. Companies that are genuinely performing often hit <strong>inflection points</strong> — a product launch, a market expansion, an M&A opportunity — at exactly the point their fund would naturally need to exit.</p>
+          <p class="body">This is the <em>legitimate</em> case for continuation funds: not emergency liquidity management, but <strong>rational extension of a value creation thesis</strong> that requires more time than the original fund lifecycle allows. The best GPs argue persuasively that forcing a sale at year 10 simply because a fund document says so is contrary to LP interests when the asset is at an inflection point.</p>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Businesses that benefit most from CVs</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Buy-and-build platforms</strong> — 6–8 years needed to assemble, integrate, and realise full synergies from a fragmented sector roll-up</li>
+              <li><strong style="color:var(--white)">Inflection-point assets</strong> — company about to launch a new product line, enter a new geography, or complete a transformative acquisition</li>
+              <li><strong style="color:var(--white)">Infrastructure assets</strong> — index-linked revenues, 20–30 year concessions; 10-year fund life is structurally too short</li>
+              <li><strong style="color:var(--white)">Late-stage VC / growth equity</strong> — strong fundamentals but IPO market closed; VC funds need extended runway for companies near but not yet at listing readiness</li>
+              <li><strong style="color:var(--white)">Regulated industries</strong> — financial services, healthcare, utilities — where transformation timelines are inherently longer due to regulatory complexity</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /driverPanels -->
+</div>
+</div>
+
+<!-- ── SECTION 2: MARKET DATA ── -->
+<div id="market" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">02</div>
+    <h2 class="sec-title">Market Growth in Numbers</h2>
+  </div>
+
+  <div class="g2 fu">
+    <div class="chart-box">
+      <div class="chart-hd">
+        <div class="chart-title">GP-led secondaries annual volume ($bn)</div>
+        <div class="chart-src">Jefferies · Lazard · McKinsey</div>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="volChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hd">
+        <div class="chart-title">CV as % of all PE exits</div>
+        <div class="chart-src">Jefferies · Houlihan Capital · CFA Institute</div>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="exitChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Growth trajectory — GP-led secondaries vs total secondary market ($bn)</div>
+      <div class="chart-src">Jefferies Global Secondary Market Reviews 2022–2026</div>
+    </div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>GP-led (CVs dominate)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>LP-led secondaries</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#888480;border:1px dashed #555"></span>2025E projection</span>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="stackChart"></canvas></div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">2024 CV snapshot</div>
+      <div class="d-row"><span class="d-lbl">Continuation funds recorded</span><span class="d-val">96</span></div>
+      <div class="d-row"><span class="d-lbl">Year-on-year growth</span><span class="d-val">+12.9%</span></div>
+      <div class="d-row"><span class="d-lbl">CV share of GP-led</span><span class="d-val">~90%</span></div>
+      <div class="d-row"><span class="d-lbl">Largest single deal (Alterra)</span><span class="d-val">$3.0bn</span></div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Performance vs traditional buyouts</div>
+      <div class="d-row"><span class="d-lbl">CV loss ratio</span><span class="d-val" style="color:var(--green)">9%</span></div>
+      <div class="d-row"><span class="d-lbl">Buyout loss ratio</span><span class="d-val" style="color:var(--red)">19%</span></div>
+      <div class="d-row"><span class="d-lbl">LP NAV pricing (avg 2025)</span><span class="d-val">90% of NAV</span></div>
+      <div class="d-row"><span class="d-lbl">Risk-adjusted advantage</span><span class="d-val" style="color:var(--green)">Significant</span></div>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">2025 acceleration</div>
+      <div class="d-row"><span class="d-lbl">Total secondary volume</span><span class="d-val">$240bn</span></div>
+      <div class="d-row"><span class="d-lbl">GP-led (CVs)</span><span class="d-val">$115bn</span></div>
+      <div class="d-row"><span class="d-lbl">H1 2025 vs H1 2024</span><span class="d-val" style="color:var(--green)">+51%</span></div>
+      <div class="d-row"><span class="d-lbl">H1 2025 global record</span><span class="d-val">$103bn</span></div>
+    </div>
+  </div>
+
+  <!-- DRIVER WEIGHT BARS -->
+  <div class="ac or fu" style="margin-bottom:1.5rem">
+    <div class="ac-hd">Relative contribution of each driver to CV growth — practitioner survey consensus</div>
+    <div id="driverBars">
+      <div class="bar-row"><div class="bar-lbl">Closed IPO &amp; M&A exit markets</div><div class="bar-wrap"><div class="bar-fill" data-w="93" style="background:#f56a00"></div></div><div class="bar-val" style="color:#f56a00">CRITICAL</div></div>
+      <div class="bar-row"><div class="bar-lbl">Fund maturity wall pressure</div><div class="bar-wrap"><div class="bar-fill" data-w="85" style="background:#f0b429"></div></div><div class="bar-val" style="color:#f0b429">HIGH</div></div>
+      <div class="bar-row"><div class="bar-lbl">LP demand for distributions</div><div class="bar-wrap"><div class="bar-fill" data-w="80" style="background:#f0b429"></div></div><div class="bar-val" style="color:#f0b429">HIGH</div></div>
+      <div class="bar-row"><div class="bar-lbl">Depth of secondary buyer market</div><div class="bar-wrap"><div class="bar-fill" data-w="75" style="background:#3d8ef0"></div></div><div class="bar-val" style="color:#3d8ef0">HIGH</div></div>
+      <div class="bar-row"><div class="bar-lbl">GP economic reset incentive</div><div class="bar-wrap"><div class="bar-fill" data-w="70" style="background:#8b5cf6"></div></div><div class="bar-val" style="color:#8b5cf6">MEDIUM</div></div>
+      <div class="bar-row"><div class="bar-lbl">Longer business value creation arcs</div><div class="bar-wrap"><div class="bar-fill" data-w="62" style="background:#00c875"></div></div><div class="bar-val" style="color:#00c875">MEDIUM</div></div>
+      <div class="bar-row"><div class="bar-lbl">Infrastructure / VC / credit adoption</div><div class="bar-wrap"><div class="bar-fill" data-w="52" style="background:#00c8c8"></div></div><div class="bar-val" style="color:#00c8c8">EMERGING</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: MACRO CONTEXT ── -->
+<div id="macro" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">03</div>
+    <h2 class="sec-title">The Macro Context: How Rates Created the Crisis</h2>
+  </div>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The continuation fund boom cannot be understood without appreciating <strong>the most aggressive monetary tightening cycle in four decades</strong>. From near-zero rates in early 2022, the Federal Reserve raised rates to 5.5% by mid-2023 — a 525 basis point increase in 18 months. The ECB moved from negative rates to 4.5%; the Bank of England from 0.1% to 5.25%.</p>
+      <p class="body">This shock hit private equity from multiple directions simultaneously. <strong>Leveraged buyout economics broke down</strong>: debt that cost 4% in 2021 cost 9–10% by 2023, collapsing the financial engineering that drove buyout returns. <strong>Equity valuations compressed</strong>: the public market re-rating of growth assets (particularly SaaS, which fell from 20x+ to sub-5x revenue) meant portfolio company marks fell sharply. And <strong>M&A dried up</strong>: the wide bid-ask gap between sellers (anchored to ZIRP valuations) and buyers (repricing in a new rate environment) paralysed strategic deal-making.</p>
+      <p class="body">The result was a vast accumulation of PE-held assets that could not be sold at prices GPs were willing to accept. Continuation funds filled the vacuum — allowing GPs to provide LP liquidity at current marks, without crystallising the valuation reset that an open-market sale would have forced.</p>
+    </div>
+    <div class="chart-box" style="align-self:start">
+      <div class="chart-hd">
+        <div class="chart-title">Interest rate cycle vs CV volume ($bn)</div>
+        <div class="chart-src">Fed · Jefferies · McKinsey</div>
+      </div>
+      <div class="chart-wrap" style="height:220px"><canvas id="rateChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac re">
+      <div class="ac-hd">Rate shock impact on LBOs</div>
+      <ul class="blist">
+        <li>Debt cost rose from ~4% (2021) to ~9–10% (2023) — buyout interest coverage ratios collapsed</li>
+        <li>Average leverage multiples fell from 7x EBITDA peak to ~5–5.5x — smaller deals, lower returns</li>
+        <li>PIK (payment-in-kind) structures proliferated as cash interest unaffordable for many portfolio companies</li>
+        <li>PE-backed company distress &amp; bankruptcies (Pluralsight, Alacrity etc.) rose sharply 2023–24</li>
+      </ul>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Valuation dislocation</div>
+      <ul class="blist">
+        <li>SaaS multiples: 20x+ revenue (2021) collapsed to sub-5x (2023) — PE tech portfolios marked down severely</li>
+        <li>PE median purchase multiple held at 11.3–11.8x EBITDA — GPs unwilling to write down entry prices</li>
+        <li>Bid-ask gap between seller marks and buyer pricing widened to widest level since GFC</li>
+        <li>Strategic acquirers repriced assets 30–50% below 2021 seller expectations — deal paralysis</li>
+      </ul>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Rate easing — the 2024–2026 partial relief</div>
+      <ul class="blist">
+        <li>Fed cut 100bps Sept–Dec 2024, paused 2025; ECB cut to 2.15%; BoE to 4.25%</li>
+        <li>Easing improved LBO financing conditions but exit markets not yet fully normalised</li>
+        <li>IPO window reopened partially — but GPsremain cautious about valuations</li>
+        <li>CV activity has not declined in easing cycle — structural demand remains regardless of rates</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: STRUCTURAL SHIFTS ── -->
+<div id="structure" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">04</div>
+    <h2 class="sec-title">Structural Shifts Enabling the Boom</h2>
+  </div>
+
+  <p class="body fu">Beyond the immediate macro triggers, three long-run structural evolutions in private markets have made continuation funds permanently viable at scale — irrespective of the interest rate or exit environment.</p>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">1. The reputational pivot</div>
+      <div class="ac-body">Until ~2015, GP-led restructurings carried a stigma of distress — "zombie funds" used to hide problem assets. The shift to structuring CVs around <strong>high-conviction "trophy assets"</strong> fundamentally changed perception. Today, a continuation fund signals GP conviction, not weakness. This reputational rehabilitation was essential to attracting top-tier institutional buyers.</div>
+      <div class="ac-stat">2024: 90% of CV volume involves performing / high-conviction assets</div>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">2. Asset class expansion</div>
+      <div class="ac-body">CVs began in buyout PE but have spread rapidly to <strong>infrastructure</strong> (84% of LP survey respondents saw more infra CVs in 2025), <strong>venture capital</strong> (Lightspeed, Insight Partners, RockPort 2024), and <strong>private credit</strong> (managers extending duration on performing portfolios). This diversification dramatically widens the addressable market.</div>
+      <div class="ac-stat">Infrastructure CV LPs seeing increase: 84% · Venture CVs: emerging rapidly</div>
+    </div>
+    <div class="ac te">
+      <div class="ac-hd">3. Retail / evergreen capital</div>
+      <div class="ac-body">The emergence of <strong>semi-liquid, evergreen, and interval fund structures</strong> targeting retail and HNW investors has created a vast new pool of potential secondary buyers. These vehicles need to deploy continuously and cannot wait years for primary fund cycles — GP-led CVs with known assets and shorter J-curves are an ideal fit. Secondary market "overheating" in LP-led deals has partly been attributed to this influx.</div>
+      <div class="ac-stat">Semi-liquid structures growing as % of new private capital raised in 2025</div>
+    </div>
+  </div>
+
+  <div class="tl" id="structureTl">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-yr">2008–2012</div>
+      <div class="tl-card">
+        <div class="tl-title">Origins: "Zombie fund" restructurings</div>
+        <div class="tl-text">GP-led secondaries emerge post-GFC as emergency tools for distressed assets. Traded at steep discounts (often 30–50% below NAV). Viewed with deep suspicion as proof of fund failure. Minimal volume.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-yr">2015–2019</div>
+      <div class="tl-card">
+        <div class="tl-title">Reputational rehabilitation — trophy assets take over</div>
+        <div class="tl-text">Leading GPs begin using CVs for best-in-portfolio assets, reframing the structure entirely. Dedicated secondary buyers develop GP-led underwriting expertise. Volume grows steadily. Market infrastructure matures. Stigma fades.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">2020–2021</div>
+      <div class="tl-card">
+        <div class="tl-title">Mainstream breakthrough <span class="tl-vol">$35–45bn</span></div>
+        <div class="tl-text">COVID + ZIRP creates dual demand for both liquidity and holding power. GP-led deals reach 40%+ of secondaries volume. 2021 is a record year for both buyouts AND GP-led deals simultaneously — proving CVs are all-weather tools, not just distress relief.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">2022–2023</div>
+      <div class="tl-card">
+        <div class="tl-title">Rate shock turbocharges demand <span class="tl-vol">$47–52bn</span></div>
+        <div class="tl-text">Fastest rate hiking cycle in 40 years freezes IPO and M&A markets. Exit overhang builds to record levels. CVs become the primary exit mechanism for GPs who refuse to sell quality assets cheaply. 56% growth in H1 2024 vs H1 2023.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">2024</div>
+      <div class="tl-card">
+        <div class="tl-title">Record scale — 14% of all PE exits <span class="tl-vol">$63bn CV / $75bn GP-led</span></div>
+        <div class="tl-text">96 continuation vehicles recorded (+12.9%). $3bn Alterra Mountain sets new scale benchmark. CVs reach ~90% of all GP-led activity. CFA Institute publishes landmark ethics report. SEC fairness opinion rules vacated by 5th Circuit — governance debate intensifies.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">2025</div>
+      <div class="tl-card">
+        <div class="tl-title">Structural permanence confirmed <span class="tl-vol">$115bn GP-led</span></div>
+        <div class="tl-text">GP-led volume hits $115bn even as IPO markets partially recover — proving CVs are now a permanent portfolio management tool, not a workaround. 1 in 5 PE exits now via CVs. $240bn total secondary market. Infrastructure and VC adoption surges. Retail/HNW capital entering the buyer pool.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: REGULATORY ── -->
+<div id="regulatory" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">05</div>
+    <h2 class="sec-title">Regulatory &amp; Governance Landscape</h2>
+  </div>
+
+  <p class="body fu">The regulatory backdrop for continuation funds has shifted materially since 2022 — significantly reducing mandatory protections for LPs at precisely the moment the market is scaling fastest. Understanding this evolution is essential context for any LP or GP operating in the space.</p>
+
+  <div class="fu">
+    <div class="reg-item">
+      <div class="reg-yr">2022</div>
+      <div class="reg-body">
+        <span class="reg-badge badge-warn">Background</span>
+        <div class="reg-title">SEC proposes Private Fund Advisers Rule</div>
+        <div class="reg-text">The SEC proposed sweeping new rules requiring registered investment advisers to obtain fairness opinions or independent valuations for continuation fund transactions, and to provide full disclosure to all LPs before completing a GP-led secondary. The intent was to formalise protections against the inherent conflict of interest in CV transactions.</div>
+      </div>
+    </div>
+    <div class="reg-item">
+      <div class="reg-yr">2023</div>
+      <div class="reg-body">
+        <span class="reg-badge badge-change">Rule Finalised</span>
+        <div class="reg-title">SEC finalises rule — fairness opinions mandated</div>
+        <div class="reg-text">The final rule required advisers conducting GP-led secondaries to obtain an independent fairness opinion on the transaction price and to distribute a written summary of material business relationships. Industry pushed back hard, arguing the requirements were overly prescriptive and increased transaction costs without commensurate LP benefit.</div>
+      </div>
+    </div>
+    <div class="reg-item">
+      <div class="reg-yr">June 2024</div>
+      <div class="reg-body">
+        <span class="reg-badge badge-risk">Major Change</span>
+        <div class="reg-title">5th Circuit Court of Appeals vacates key provisions</div>
+        <div class="reg-text">In a landmark ruling, the US Fifth Circuit Court of Appeals vacated the SEC's Private Fund Advisers Rule in its entirety, holding the SEC had exceeded its statutory authority. This removed the mandatory fairness opinion and disclosure requirements for GP-led secondaries — just as the market was hitting new volume records. The ruling dramatically increased GP flexibility but materially reduced mandatory LP protections.</div>
+      </div>
+    </div>
+    <div class="reg-item">
+      <div class="reg-yr">2024–2025</div>
+      <div class="reg-body">
+        <span class="reg-badge badge-ok">Industry Response</span>
+        <div class="reg-title">ILPA guidance &amp; voluntary best practices emerge</div>
+        <div class="reg-text">The Institutional Limited Partners Association (ILPA) published updated guidance on GP-led secondary transactions, recommending LPs require fairness opinions, competitive processes, and enhanced disclosure on a contractual rather than regulatory basis. Leading GPs continued obtaining fairness opinions voluntarily, recognising they are essential to deal credibility even without regulatory compulsion.</div>
+      </div>
+    </div>
+    <div class="reg-item">
+      <div class="reg-yr">2025–2026</div>
+      <div class="reg-body">
+        <span class="reg-badge badge-warn">Ongoing</span>
+        <div class="reg-title">Regulatory uncertainty remains — LP scrutiny intensifying</div>
+        <div class="reg-text">Despite the rule vacatur, LP scrutiny of CV terms has intensified rather than relaxed. Sophisticated LPs increasingly negotiate enhanced governance rights — LPAC independence requirements, no-fault removal rights, mandatory competitive processes — as contractual conditions of rolling over into continuation vehicles. The market is self-regulating in the absence of formal rules.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2 fu" style="margin-top:1.5rem">
+    <div class="ac re">
+      <div class="ac-hd">Key governance risks post-vacatur</div>
+      <ul class="blist">
+        <li>No mandatory fairness opinion requirement — GP can set transfer price with only voluntary disclosure</li>
+        <li>Information asymmetry between GP (full asset knowledge) and selling LPs (reliant on GP-provided data)</li>
+        <li>Small LPs lack resources to mount opposition to transactions backed by large LP majorities</li>
+        <li>LPAC "capture" risk — committee composition may favour GP-friendly incumbents</li>
+        <li>GPeconomic reset may not be disclosed with full clarity to rolling LPs</li>
+      </ul>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Best-practice governance safeguards</div>
+      <ul class="blist">
+        <li>Third-party independent fairness opinion — voluntary but strongly recommended even without mandate</li>
+        <li>Competitive auction process to validate transfer price via market discovery, not GP-set NAV alone</li>
+        <li>LPAC with genuinely independent members not dominated by GP-friendly large LPs</li>
+        <li>No-fault removal rights for GPs in the continuation vehicle — stronger than legacy fund terms</li>
+        <li>Full disclosure of GP economics reset (fees, carry, co-invest) in writing to all LPs pre-close</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: OUTLOOK ── -->
+<div id="outlook" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">06</div>
+    <h2 class="sec-title">Outlook: Structural Permanence</h2>
+  </div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell">
+      <div class="og-icon">📈</div>
+      <div class="og-lbl">10-year market growth</div>
+      <div class="og-val">3–6×</div>
+      <div class="og-sub">Schroders projects continuation investments will grow 3x–6x over the next decade from 2024 base</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">🎯</div>
+      <div class="og-lbl">Projected PE exit share</div>
+      <div class="og-val">20%+</div>
+      <div class="og-sub">Greenhill projects CVs will represent 20%+ of all PE exits — up from 14% in 2024, ~20% in 2025</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">🏗️</div>
+      <div class="og-lbl">Mid/large buyout displacement</div>
+      <div class="og-val">8%</div>
+      <div class="og-sub">Schroders (via Bloomberg): CVs will displace 8% of total deal flow for mid and large buyouts over 10 years</div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">Structural tailwinds — why CV growth is durable</div>
+      <ul class="blist">
+        <li>$3.6tn exit overhang ensures a persistent pipeline of CV candidates for years to come — the backlog is not clearing quickly</li>
+        <li>Infrastructure, private credit, and VC adoption are widening the addressable market well beyond traditional buyout PE</li>
+        <li>Growing retail / HNW capital pools dedicated to secondaries expand the buyer universe dramatically</li>
+        <li>Rate cutting cycle improves LBO financing conditions but exit market normalisation will take years</li>
+        <li>LP sophistication increasing — institutional LPs building dedicated GP-led evaluation teams, reducing friction</li>
+        <li>2021–2025 vintage CV track records beginning to emerge — if returns are strong, further legitimisation follows</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Structural risks — what could slow the market</div>
+      <ul class="blist">
+        <li>Market saturation risk: too many mediocre assets labelled "trophy" assets — LP fatigue with overpriced CVs will emerge if returns disappoint</li>
+        <li>Regulatory re-intervention: Congress or a future SEC administration could reimpose mandatory disclosure rules more stringently than the vacated 2022 rule</li>
+        <li>Normalising exit markets: a genuine IPO and M&A recovery would reduce the supply of forced CV candidates, tightening deal flow for secondary buyers</li>
+        <li>LP power shift: LPs are becoming more sophisticated and less willing to accept GP-set terms — increasing negotiation friction and deal timelines</li>
+        <li>Performance track record risk: the 2021–2025 CV cohort has yet to fully realise — poor exits would damage the asset class' reputation materially</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">Editorial view — Private Markets Intelligence</div>
+    <div class="verdict-text">Continuation funds have passed the all-weather test. They grew through the ZIRP boom, accelerated through the rate-shock bust, and are maintaining momentum through the easing recovery. The structural forces that created them — a maturing PE industry, longer value creation arcs, a deeper secondary market, and LP demand for liquidity — are not temporary. The question is no longer whether continuation funds belong in private equity. It is whether the governance frameworks being constructed — voluntarily, contractually, in the absence of regulatory compulsion — can keep pace with the speed and scale of a market now approaching $120 billion annually.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Research Intelligence</div>
+  <div class="foot-src">
+    Sources: CFA Institute RPC (2025) · McKinsey Global Private Markets Report (2026) · Jefferies Global Secondary Market Reviews (2024–2026)<br>
+    Bain &amp; Company Global PE Report (2025) · MSCI Private Capital Trends (2026) · Houlihan Capital · Pitchbook · Schroders · ILPA<br>
+    Data as of March 2026 · For research and educational purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── SCROLL PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('prog').style.width = (s / h * 100) + '%';
+});
+
+/* ── NAV ACTIVE ── */
+const sections = ['drivers','market','macro','structure','regulatory','outlook'];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  let cur = sections[0];
+  sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
+  document.querySelectorAll('.nl').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+});
+
+/* ── INTERSECTION OBSERVER ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fu, .tl-item').forEach(el => io.observe(el));
+
+/* ── BAR METERS ── */
+const barIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      barIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const barSection = document.getElementById('driverBars');
+if (barSection) barIO.observe(barSection);
+
+/* ── TABS ── */
+function switchTab(panelId, btn, tabsId, panelsId) {
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+
+/* ── CHART: VOLUME BAR ── */
+new Chart(document.getElementById('volChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [{
+      label: 'GP-led ($bn)',
+      data: [12, 16, 20, 26, 35, 45, 52, 47, 75, 115],
+      backgroundColor: ctx => ctx.dataIndex >= 8 ? 'rgba(245,106,0,.55)' : 'rgba(245,106,0,.75)',
+      borderColor: '#f56a00',
+      borderWidth: 0,
+      borderRadius: 1,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` $${c.parsed.y}bn` } } },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 } } },
+      y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 }, callback: v => '$' + v + 'bn' } }
+    }
+  }
+});
+
+/* ── CHART: EXIT % ── */
+new Chart(document.getElementById('exitChart'), {
+  type: 'line',
+  data: {
+    labels: ['2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [{
+      label: '% of PE exits',
+      data: [4, 5, 5, 9, 11, 14, 20],
+      borderColor: '#f56a00',
+      backgroundColor: 'rgba(245,106,0,.1)',
+      fill: true,
+      tension: 0.3,
+      borderWidth: 2.5,
+      pointRadius: 4,
+      pointBackgroundColor: '#f56a00',
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.parsed.y}% of PE exits` } } },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 } } },
+      y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 }, callback: v => v + '%' }, min: 0, max: 25 }
+    }
+  }
+});
+
+/* ── CHART: STACKED BAR ── */
+new Chart(document.getElementById('stackChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [
+      {
+        label: 'GP-led (CVs)',
+        data: [26, 35, 45, 52, 47, 75, 115],
+        backgroundColor: 'rgba(245,106,0,.8)',
+        stack: 'a',
+        borderRadius: 0,
+      },
+      {
+        label: 'LP-led',
+        data: [38, 23, 47, 48, 62, 77, 125],
+        backgroundColor: 'rgba(61,142,240,.7)',
+        stack: 'a',
+        borderRadius: 0,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: 'index', callbacks: { label: c => ` ${c.dataset.label}: $${c.parsed.y}bn` } }
+    },
+    scales: {
+      x: { stacked: true, grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 } } },
+      y: { stacked: true, grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 }, callback: v => '$' + v + 'bn' } }
+    }
+  }
+});
+
+/* ── CHART: RATE VS CV ── */
+new Chart(document.getElementById('rateChart'), {
+  type: 'line',
+  data: {
+    labels: ['2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [
+      {
+        label: 'Fed Funds Rate (%)',
+        data: [2.25, 0.25, 0.25, 4.5, 5.5, 4.5, 3.75],
+        borderColor: '#3d8ef0',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 3,
+        yAxisID: 'y1',
+      },
+      {
+        label: 'GP-led CV volume ($bn)',
+        data: [26, 35, 45, 52, 47, 75, 115],
+        borderColor: '#f56a00',
+        backgroundColor: 'rgba(245,106,0,.08)',
+        fill: true,
+        borderWidth: 2.5,
+        tension: 0.3,
+        pointRadius: 3,
+        yAxisID: 'y',
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        display: true,
+        labels: { color: '#888', font: { size: 10 }, boxWidth: 18, padding: 14 }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#888', font: { size: 10 } } },
+      y: { position: 'left', grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#f56a00', font: { size: 10 }, callback: v => '$' + v + 'bn' } },
+      y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#3d8ef0', font: { size: 10 }, callback: v => v + '%' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
