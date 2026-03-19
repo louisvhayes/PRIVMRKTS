@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chiltern Capital — Deal Types & Portfolio Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off:#0f0f0f;--panel:#141414;--p2:#1a1a1a;--p3:#202020;
+  --b1:#252525;--b2:#303030;--b3:#3a3a3a;
+  --org:#f56a00;--org-p:rgba(245,106,0,.12);--org-pp:rgba(245,106,0,.05);
+  --wh:#f0ede8;--wh2:#c4c0b8;--wh3:#888580;--wh4:#454240;
+  --grn:#00c875;--grn-p:rgba(0,200,117,.09);--grn-b:rgba(0,200,117,.3);
+  --red:#ff4455;--red-p:rgba(255,68,85,.09);--red-b:rgba(255,68,85,.3);
+  --blu:#3d8ef0;--blu-p:rgba(61,142,240,.09);--blu-b:rgba(61,142,240,.3);
+  --yel:#f0b429;--yel-p:rgba(240,180,41,.09);--yel-b:rgba(240,180,41,.3);
+  --pur:#8b5cf6;--pur-p:rgba(139,92,246,.09);
+  --tea:#00c8c8;--tea-p:rgba(0,200,200,.09);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--wh);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--org);z-index:9999;width:0;transition:width .08s linear;pointer-events:none}
+
+/* NAV */
+.topnav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nb{display:flex;align-items:center;gap:14px}
+.nlogo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--wh);letter-spacing:-.02em;text-decoration:none}
+.nlogo span{color:var(--org)}
+.ndiv{width:1px;height:18px;background:var(--b2)}
+.ntag{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--wh3)}
+.nlinks{display:flex;align-items:stretch}
+.nlink{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--wh3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nlink:hover{color:var(--wh)}
+.nlink.active{color:var(--org);border-bottom-color:var(--org)}
+
+/* HERO */
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--b1);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(245,106,0,.065) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1140px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--org);display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--org)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.5vw,52px);font-weight:900;line-height:1.06;letter-spacing:-.02em;margin-bottom:.9rem}
+h1 em{font-style:italic;color:var(--org)}
+.hero-lead{font-size:15px;color:var(--wh2);line-height:1.8;max-width:680px;margin-bottom:1.5rem}
+.hero-byline{display:flex;gap:20px;font-family:var(--mono);font-size:10px;color:var(--wh3);letter-spacing:.05em;flex-wrap:wrap}
+.hero-byline span{display:flex;align-items:center;gap:6px}
+.hero-byline span::before{content:'◆';font-size:5px;color:var(--org)}
+
+/* SECTION */
+.sw{padding:3.5rem 2.5rem;border-bottom:1px solid var(--b1)}
+.sw.dark{background:var(--off)}
+.si{max-width:1140px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.sn{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--org);background:var(--org-p);border:1px solid var(--org);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+.bt{font-size:14px;color:var(--wh2);line-height:1.82;margin-bottom:1.25rem}
+.bt strong{color:var(--wh);font-weight:600}
+.bt:last-child{margin-bottom:0}
+
+/* DEAL TYPE CARDS — big explainers */
+.dt-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--b1);margin-bottom:2rem}
+.dt{background:var(--off);padding:1.75rem 2rem;position:relative;border-top:2px solid var(--dt-c,var(--org))}
+.sw.dark .dt{background:var(--black)}
+.dt-badge{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dt-c,var(--org));background:color-mix(in srgb,var(--dt-c,var(--org)) 12%,transparent);border:1px solid color-mix(in srgb,var(--dt-c,var(--org)) 35%,transparent);padding:3px 9px;display:inline-block;margin-bottom:1rem}
+.dt-title{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--wh);margin-bottom:.75rem;line-height:1.2}
+.dt-body{font-size:13px;color:var(--wh2);line-height:1.75}
+.dt-body strong{color:var(--wh)}
+.dt-example{background:var(--p2);border:1px solid var(--b1);border-left:2px solid var(--dt-c,var(--org));padding:.85rem 1rem;margin-top:1.1rem}
+.dt-ex-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dt-c,var(--org));margin-bottom:.4rem}
+.dt-ex-body{font-size:12px;color:var(--wh3);line-height:1.55}
+.dt-how{margin-top:1rem}
+.dt-how-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--wh3);margin-bottom:.5rem}
+.dt-how-steps{list-style:none;font-size:12px;color:var(--wh2);counter-reset:steps}
+.dt-how-steps li{counter-increment:steps;display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--b1);line-height:1.5}
+.dt-how-steps li:last-child{border-bottom:none}
+.dt-how-steps li::before{content:counter(steps);font-family:var(--mono);font-size:10px;font-weight:600;color:var(--dt-c,var(--org));flex-shrink:0;min-width:14px;margin-top:1px}
+
+/* INVESTMENT DEEP DIVE */
+.inv-card{background:var(--panel);border:1px solid var(--b2);margin-bottom:1.25rem;position:relative;overflow:hidden}
+.inv-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--inv-c,var(--org))}
+.inv-header{padding:1.5rem 1.75rem;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.inv-header:hover{background:var(--p2)}
+.inv-left{flex:1;min-width:0}
+.inv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.65rem}
+.inv-chip{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid}
+.inv-name{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--wh);line-height:1.2;margin-bottom:.3rem}
+.inv-tagline{font-size:13px;color:var(--wh3);line-height:1.5}
+.inv-right{text-align:right;flex-shrink:0}
+.inv-status{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid;margin-bottom:.5rem;display:inline-block}
+.inv-toggle{font-family:var(--mono);font-size:10px;color:var(--wh3);display:block;margin-top:.4rem}
+
+.inv-body{display:none;padding:0 1.75rem 1.75rem;border-top:1px solid var(--b1)}
+.inv-card.open .inv-body{display:block}
+.inv-card.open .inv-toggle-icon{transform:rotate(180deg)}
+
+.inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.25rem 0}
+.inv-col{}
+.inv-block{background:var(--p2);border:1px solid var(--b1);padding:1.1rem 1.3rem;margin-bottom:1rem}
+.inv-block:last-child{margin-bottom:0}
+.ib-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--wh3);padding-bottom:.5rem;border-bottom:1px solid var(--b1);margin-bottom:.75rem}
+.ib-body{font-size:13px;color:var(--wh2);line-height:1.7}
+.ib-body strong{color:var(--wh)}
+
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b1);margin:1.25rem 0}
+.metric{background:var(--p2);padding:1rem;text-align:center}
+.met-val{font-family:var(--mono);font-size:18px;font-weight:600;line-height:1;margin-bottom:.3rem}
+.met-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--wh3)}
+.met-sub{font-size:10px;color:var(--wh4);margin-top:.2rem;line-height:1.3}
+
+.timeline-mini{margin:1rem 0;padding-left:20px;position:relative}
+.timeline-mini::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:var(--b2)}
+.tm-item{position:relative;margin-bottom:.85rem;padding-left:8px}
+.tm-item::before{content:'';position:absolute;left:-14px;top:6px;width:8px;height:8px;border-radius:50%;border:1px solid var(--inv-c,var(--org));background:var(--black)}
+.tm-item.filled::before{background:var(--inv-c,var(--org))}
+.tm-year{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--inv-c,var(--org));letter-spacing:.08em}
+.tm-text{font-size:12px;color:var(--wh2);line-height:1.5}
+.tm-text strong{color:var(--wh)}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:.75rem 0}
+.tag{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;padding:2px 7px;background:var(--p3);border:1px solid var(--b2);color:var(--wh3)}
+
+.exit-box{background:var(--grn-p);border:1px solid var(--grn-b);border-left:2px solid var(--grn);padding:1rem 1.25rem;margin-top:1rem}
+.exit-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grn);margin-bottom:.5rem}
+.exit-body{font-size:12.5px;color:var(--wh2);line-height:1.65}
+.exit-body strong{color:var(--wh)}
+
+.note-box{background:var(--yel-p);border:1px solid var(--yel-b);border-left:2px solid var(--yel);padding:.85rem 1.1rem;margin-top:.75rem;font-size:12px;color:var(--wh3);line-height:1.55}
+.note-box strong{color:var(--wh)}
+
+.pq{border-left:3px solid var(--org);padding:1.25rem 1.75rem;background:var(--p2);margin:1.25rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:60px;color:var(--org);opacity:.13;position:absolute;top:-8px;left:14px;line-height:1}
+.pq-t{font-family:var(--serif);font-size:15px;font-style:italic;font-weight:700;color:var(--wh);line-height:1.55;position:relative}
+.pq-s{font-family:var(--mono);font-size:10px;color:var(--wh3);margin-top:.6rem;letter-spacing:.05em}
+
+/* SUMMARY TABLE */
+.sum-tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:1.5rem}
+.sum-tbl th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--wh3);padding:8px 12px;border-bottom:2px solid var(--org);text-align:left;white-space:nowrap}
+.sum-tbl td{padding:9px 12px;border-bottom:1px solid var(--b1);color:var(--wh2);line-height:1.4;vertical-align:top}
+.sum-tbl tr:hover td{background:var(--p2)}
+.sum-tbl td:first-child{color:var(--wh);font-weight:500}
+.mono{font-family:var(--mono);font-size:11.5px}
+.grn-t{color:var(--grn)}
+.org-t{color:var(--org)}
+.yel-t{color:var(--yel)}
+.red-t{color:var(--red)}
+.blu-t{color:var(--blu)}
+
+.editorial{background:var(--panel);border:1px solid var(--b2);border-left:3px solid var(--org);padding:1.75rem 2rem;margin-top:2rem}
+.ed-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--org);margin-bottom:.75rem}
+.ed-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--wh);line-height:1.7}
+
+footer{background:var(--off);border-top:1px solid var(--b1);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.fl{font-family:var(--serif);font-size:14px;font-weight:900;color:var(--wh3)}
+.fl span{color:var(--org)}
+.fr{font-family:var(--mono);font-size:9px;color:var(--wh4);letter-spacing:.05em;text-align:right;line-height:1.6}
+
+.fi{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.fi.vis{opacity:1;transform:translateY(0)}
+.inv-toggle-icon{display:inline-block;transition:transform .25s;font-size:11px}
+
+@media(max-width:900px){
+  .dt-grid{grid-template-columns:1fr}
+  .inv-grid{grid-template-columns:1fr}
+  .metrics-row{grid-template-columns:1fr 1fr}
+  .nlinks{display:none}
+  .sw{padding:2.5rem 1.25rem}
+  .hero{padding:3rem 1.25rem}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header class="topnav">
+  <div class="nb">
+    <span class="nlogo">PRIV<span>●</span>MRKTS</span>
+    <div class="ndiv"></div>
+    <span class="ntag">Chiltern Capital · Deal Deep Dive</span>
+  </div>
+  <nav class="nlinks">
+    <a class="nlink active" href="#dealtypes">Deal Types</a>
+    <a class="nlink" href="#current">Current Portfolio</a>
+    <a class="nlink" href="#realised">Exits</a>
+    <a class="nlink" href="#summary">Summary</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner fi">
+    <div class="kicker">Chiltern Capital · London · Lower Mid-Market PE</div>
+    <h1>Deal Structures, Portfolio Companies<br>&amp; <em>Investment Deep Dives</em></h1>
+    <p class="hero-lead">A comprehensive breakdown of what MBOs, buy-and-builds, carve-outs and minority growth capital investments actually mean — followed by an in-depth look at every Chiltern Capital current and realised investment: what they bought, how they grew it, and what they made on exit.</p>
+    <div class="hero-byline">
+      <span>March 2026</span>
+      <span>53 total investments since 2015</span>
+      <span>14 confirmed exits</span>
+      <span>Sources: Chiltern Capital, Companies House, IBM, Oakley Capital, Mergerlinks</span>
+    </div>
+  </div>
+</section>
+
+<!-- DEAL TYPES -->
+<div class="sw" id="dealtypes">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">01</div>
+    <h2 class="st">The Four Deal Structures — Explained</h2>
+  </div>
+  <p class="bt fi">Private equity firms use different legal and financial structures depending on who is selling, who is buying, and what the goal is. Understanding these structures is essential to making sense of Chiltern's portfolio. Here are the four Chiltern uses most frequently — explained from first principles.</p>
+
+  <div class="dt-grid fi">
+
+    <!-- MBO -->
+    <div class="dt" style="--dt-c:var(--org)">
+      <span class="dt-badge">Structure 01</span>
+      <div class="dt-title">Management Buy-Out (MBO)</div>
+      <div class="dt-body">An MBO is when the <strong>existing management team of a company buys the business from its current owner</strong> — typically using a combination of their own money and capital provided by a private equity firm. The managers become the new shareholders, and the PE firm (like Chiltern) provides the majority of the equity capital in exchange for an ownership stake.<br><br>Why does this happen? Often a founder wants to retire, a corporate wants to sell a division, or shareholders want to exit. The managers — who know the business best — believe they can run it better with PE backing and want the financial upside of ownership rather than just a salary.<br><br><strong>Chiltern's role:</strong> Chiltern provides the £10–40m equity cheque that makes the management team's dream of ownership possible. In return, Chiltern owns a majority or significant minority stake and earns its return when the business is sold at a higher valuation in the future.</div>
+      <div class="dt-how">
+        <div class="dt-how-head">How it works — step by step</div>
+        <ol class="dt-how-steps">
+          <li>Management team identifies they want to buy the business from the current owner</li>
+          <li>They approach PE firms (like Chiltern) to provide the capital to fund the purchase</li>
+          <li>Chiltern conducts due diligence and agrees terms: price, equity split, board seats</li>
+          <li>A new holding company is created; Chiltern and management become shareholders</li>
+          <li>Holding company acquires the trading business, often using a mix of equity + debt</li>
+          <li>Management runs the business; Chiltern adds strategic value and M&A support</li>
+          <li>After 3–7 years, business is sold at a higher price — both parties share the upside</li>
+        </ol>
+      </div>
+      <div class="dt-example">
+        <div class="dt-ex-head">Chiltern example → Train'd Up (2025)</div>
+        <div class="dt-ex-body">Chiltern backed CEO Alan McGhee and the management team in a £TBC MBO of Train'd Up Railway Resourcing — the UK's largest rail apprenticeship provider — from its original founders David Gillespie and Paul McGlynn. ThinCats provided debt finance.</div>
+      </div>
+    </div>
+
+    <!-- BUY AND BUILD -->
+    <div class="dt" style="--dt-c:var(--blu)">
+      <span class="dt-badge">Structure 02</span>
+      <div class="dt-title">Buy-and-Build</div>
+      <div class="dt-body">A buy-and-build (also called a platform-plus-bolt-on or roll-up strategy) starts with a <strong>platform acquisition — a core company in a fragmented market — and then systematically acquires smaller competitors</strong> (bolt-ons) to consolidate them under one roof. The goal is to create a market leader significantly larger and more valuable than the sum of its parts.<br><br>Why does it work? <strong>Scale creates value in multiple ways:</strong> larger businesses trade at higher valuation multiples; combined businesses have more pricing power; operational efficiencies emerge from shared back-office and management; and market leadership positions attract higher-quality clients and employees.<br><br><strong>Chiltern's role:</strong> Chiltern provides the initial platform acquisition capital, then funds each bolt-on acquisition — either from retained portfolio company cash flow or follow-on equity. Chiltern's director Alistair Gray leads M&A origination across the portfolio specifically for this purpose.</div>
+      <div class="dt-how">
+        <div class="dt-how-head">How it works — step by step</div>
+        <ol class="dt-how-steps">
+          <li>Identify a fragmented market where no single player dominates (e.g. automotive repair)</li>
+          <li>Acquire a "platform" — a strong, well-managed business with growth potential</li>
+          <li>Work with management to identify smaller competitors or adjacent businesses to acquire</li>
+          <li>Fund bolt-on acquisitions one by one — integrating each into the platform</li>
+          <li>As size grows, negotiate better supplier terms, attract larger clients, share overheads</li>
+          <li>Valuation multiple "re-rates" upward as the business becomes a market leader</li>
+          <li>Exit to a larger PE fund or strategic buyer who pays a premium for the scale achieved</li>
+        </ol>
+      </div>
+      <div class="dt-example">
+        <div class="dt-ex-head">Chiltern example → Steer Automotive (2021–2024)</div>
+        <div class="dt-ex-body">Chiltern backed Steer from a top-20 regional repairer (2021) through 19 acquisitions to become the UK's market leader with 100+ repair centres and 2,300 employees. Exited to Oakley Capital (2024) — a textbook buy-and-build success. Sunday Times top-100 fastest-growing businesses.</div>
+      </div>
+    </div>
+
+    <!-- CARVE-OUT -->
+    <div class="dt" style="--dt-c:var(--pur)">
+      <span class="dt-badge">Structure 03</span>
+      <div class="dt-title">Carve-Out</div>
+      <div class="dt-body">A carve-out occurs when <strong>a large corporate or group sells off a subsidiary, division or business unit that is no longer central to its core strategy</strong>. The corporate "carves out" the division and sells it — often to a PE firm who backs the incumbent management team to run it independently.<br><br>Why do corporates carve-out? Strategy focus (they want to concentrate on their main business), capital recycling (the proceeds fund their core business), or conglomerate discount reduction (investors value focused businesses more highly than diversified ones).<br><br><strong>Why it's attractive for PE:</strong> Carve-outs often represent <strong>hidden value</strong>. The division may have been starved of investment or attention within the larger corporate. Under new independent ownership, with management free to run the business for themselves (not a large corporate HQ), performance often improves quickly. The management team typically reinvests equity — creating strong alignment.</div>
+      <div class="dt-how">
+        <div class="dt-how-head">How it works — step by step</div>
+        <ol class="dt-how-steps">
+          <li>A large corporate decides a division is non-core and initiates a sale process</li>
+          <li>PE firm (Chiltern) and the incumbent management team partner to bid for the division</li>
+          <li>Legal separation is complex — IT systems, contracts, HR, accounting must all be untangled</li>
+          <li>A Transitional Services Agreement (TSA) keeps the corporate supporting the business during separation</li>
+          <li>Management team receives equity stake — often the first time they have owned the business</li>
+          <li>PE firm and management work to build the business as a standalone, independent entity</li>
+          <li>Over 3–7 years, grow the business and exit at a profit</li>
+        </ol>
+      </div>
+      <div class="dt-example">
+        <div class="dt-ex-head">Chiltern example → Strata Products (2024)</div>
+        <div class="dt-ex-body">Chiltern carved Strata Products out of FTSE-listed Berry Global Inc (NYSE: BERY), backing CEO Jay Ilsen and the management team. Won Insider Media Deal of the Month. Strata is now an independent UK plastic products manufacturer with new product development mandate.</div>
+      </div>
+    </div>
+
+    <!-- MINORITY GROWTH CAPITAL -->
+    <div class="dt" style="--dt-c:var(--grn)">
+      <span class="dt-badge">Structure 04</span>
+      <div class="dt-title">Minority Growth Capital</div>
+      <div class="dt-body">A minority growth capital investment is when a PE firm <strong>invests in a company without taking a controlling stake</strong> — buying less than 50% of the shares. The existing owner (often a founder) retains majority control and day-to-day decision-making. The PE firm provides capital and support without directing the business.<br><br>Why do founders choose this? They want <strong>capital to accelerate growth</strong> (fund an acquisition, hire a sales team, expand internationally) but <strong>do not want to sell control</strong> of their business. A minority investor is a partner, not a buyer.<br><br><strong>Why Chiltern offers this:</strong> Most PE firms require majority control. Chiltern's flexibility to take minority positions is a genuine differentiator — it opens up a wider market of founders who want capital but not the loss of control that a full buyout requires. Chiltern's returns come from holding an equity stake that grows in value as the business succeeds, then selling that stake when the founder eventually exits.</div>
+      <div class="dt-how">
+        <div class="dt-how-head">How it works — step by step</div>
+        <ol class="dt-how-steps">
+          <li>Founder or management team wants to grow but doesn't need (or want) to sell the business</li>
+          <li>Chiltern invests £10–40m for a minority equity stake (typically 20–49%)</li>
+          <li>Founder remains majority shareholder and day-to-day decision-maker</li>
+          <li>Chiltern takes a board seat and provides strategic input, M&A support, and network access</li>
+          <li>Capital is deployed to fund growth: acquisitions, headcount, technology, international expansion</li>
+          <li>Both parties benefit as the business grows and the equity value increases</li>
+          <li>Exit when the founder is ready — sale to PE, trade buyer, or IPO — Chiltern exits its stake</li>
+        </ol>
+      </div>
+      <div class="dt-example">
+        <div class="dt-ex-head">Chiltern example → Burgess Farms (2025)</div>
+        <div class="dt-ex-body">Chiltern invested in Burgess Farms (October 2025) as a growth capital investment, backing the existing team to accelerate expansion of the UK agriculture and distribution business. Chiltern's most recent investment at the time of publication.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--panel);border:1px solid var(--b2);border-left:3px solid var(--org);padding:1.25rem 1.5rem" class="fi">
+    <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--org);margin-bottom:.6rem">Chiltern's structural flexibility</div>
+    <div style="font-size:13px;color:var(--wh2);line-height:1.7">"We are flexible partners and will consider a range of investment situations including owners that want to sell their business in full or just a minority shareholding; management teams who wish to buy their business through an MBO; management teams who want to raise capital to accelerate growth, either organically, through a roll-out or via acquisition; and entrepreneurs that want to de-risk and crystallise value but still have the ambition to achieve more." — <strong style="color:var(--wh)">Chiltern Capital, LinkedIn</strong></div>
+  </div>
+</div>
+</div>
+
+<!-- CURRENT PORTFOLIO -->
+<div class="sw dark" id="current">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">02</div>
+    <h2 class="st">Current Portfolio — Deep Dives</h2>
+  </div>
+  <p class="bt fi">Chiltern holds 12 active investments across automotive, industrials, technology, business services and agriculture. Financial details for lower mid-market investments are typically not publicly disclosed — deal sizes, investment amounts and return projections are noted where verified from public sources, and contextualised where not.</p>
+
+  <!-- STRATA PRODUCTS -->
+  <div class="inv-card fi" style="--inv-c:var(--pur)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--pur);border-color:rgba(139,92,246,.4);background:var(--pur-p)">Carve-Out</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Industrials · Plastics</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Mar 2024</span>
+        </div>
+        <div class="inv-name">Strata Products</div>
+        <div class="inv-tagline">UK manufacturer of recyclable plastic products — carved out from Berry Global Inc. (NYSE: BERY)</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Mar 2024</div><div class="met-lbl">Investment date</div></div>
+        <div class="metric"><div class="met-val pur-t" style="color:var(--pur)">Carve-Out</div><div class="met-lbl">Deal type</div></div>
+        <div class="metric"><div class="met-val yel-t">Undisclosed</div><div class="met-lbl">Equity invested</div><div class="met-sub">Lower mid-market; est. £10–20m range</div></div>
+        <div class="metric"><div class="met-val grn-t">Active</div><div class="met-lbl">Status</div><div class="met-sub">Insider Media Deal of Month</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The story — what Chiltern bought and why</div>
+            <div class="ib-body">Strata Products is a leading UK <strong>manufacturer of recyclable plastic products</strong>. It was a non-core division of Berry Global Inc., a FTSE/NYSE-listed global packaging giant. Berry wanted to focus on its core packaging business and divested Strata as a carve-out.<br><br>Chiltern backed <strong>CEO Jay Ilsen and the incumbent management team</strong> to acquire and run Strata independently. The deal won <strong>Insider Media's Deal of the Month</strong> — recognition of a well-structured transaction in a complex carve-out environment.<br><br>Key thesis: a business underinvested within a large corporate structure that, freed from conglomerate constraints, could pursue new product development, grow its customer base, and build a standalone identity as a specialist UK plastics manufacturer.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Value creation plan</div>
+            <div class="ib-body">Chiltern's mandate for Strata includes <strong>new product development</strong> — moving into recyclable and sustainable packaging variants as UK corporate ESG requirements tighten. Independence from Berry Global allows the management team to win customers that Berry's direct product competition previously blocked.<br><br>Chiltern's own-capital structure removes exit pressure, giving the management team time to execute a multi-year NPD programme and build sales capability. Harry Reid (Manager) is actively involved at board level.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Transaction details</div>
+            <div class="ib-body"><strong>Seller:</strong> Berry Global Inc. (NYSE: BERY) — global packaging group<br><strong>Buyer:</strong> Chiltern Capital + management team (MBO carve-out structure)<br><strong>Advisers:</strong> Grant Thornton advised Berry Global on the sale<br><strong>Closing:</strong> March 2024<br><strong>Debt finance:</strong> Standard lower mid-market leverage package<br><strong>Management equity:</strong> CEO Jay Ilsen led management reinvestment</div>
+          </div>
+          <div class="timeline-mini" style="--inv-c:var(--pur)">
+            <div class="tm-item"><div class="tm-year">2024 — Investment</div><div class="tm-text">Carve-out from Berry Global Inc. completed. Management team led by CEO Jay Ilsen backed by Chiltern Capital. Insider Media Deal of the Month awarded.</div></div>
+            <div class="tm-item filled"><div class="tm-year">2024–2025 — Standalone build</div><div class="tm-text">Separation from Berry Global completed. New product development programme launched. ESG-aligned recyclable product range expansion.</div></div>
+            <div class="tm-item"><div class="tm-year">2026+ — Ongoing growth</div><div class="tm-text">Customer base expansion as independent business. New category development. Chiltern providing strategic oversight and M&A origination support.</div></div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Investment amount not publicly disclosed. As a lower mid-market UK carve-out, deal equity would typically fall within Chiltern's £10–40m stated range. Return metrics not yet available — investment is active.</div>
+        </div>
+      </div>
+      <div class="pq">
+        <div class="pq-t">"We are delighted to have been awarded Insider Media's Deal of the Month award for our investment in Strata Products. As part of the carve out from Berry Global Inc, Chiltern backed the incumbent management team, led by CEO Jay Ilsen, to continue growth with new product development."</div>
+        <div class="pq-s">— Chiltern Capital, LinkedIn, March 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAPID REPAIR NETWORK -->
+  <div class="inv-card fi" style="--inv-c:var(--org)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--org);border-color:rgba(245,106,0,.4);background:var(--org-p)">Seed / Growth Capital</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Automotive Services</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Feb 2024</span>
+        </div>
+        <div class="inv-name">Rapid Repair Network</div>
+        <div class="inv-tagline">UK's leading same-day accident repair provider — 10,000+ repairs/year, 100% UK mainland coverage</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Feb 2024</div><div class="met-lbl">Investment date</div></div>
+        <div class="metric"><div class="met-val org-t">Seed / GC</div><div class="met-lbl">Deal type</div><div class="met-sub">Growth capital investment</div></div>
+        <div class="metric"><div class="met-val yel-t">Undisclosed</div><div class="met-lbl">Equity invested</div><div class="met-sub">Lower mid-market range</div></div>
+        <div class="metric"><div class="met-val grn-t">10,000+</div><div class="met-lbl">Repairs / year</div><div class="met-sub">At time of investment (2024)</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The story — what Chiltern bought and why</div>
+            <div class="ib-body">Founded in 2018, Rapid Repair Network rapidly grew into <strong>the UK's leading same-day accident repair provider</strong>. The business operates an outsourced model — connecting insurers, fleet operators and accident management companies with a network of repair specialists across the UK. 100% UK mainland coverage.<br><br>Chiltern's thesis drew directly on its own track record: it had previously built <strong>Steer Automotive into the UK's largest collision repair group</strong>. Chiltern understood the automotive repair market — the customer dynamics, the insurer relationships, the scalability of outsourced repair networks — better than almost any other investor in the lower mid-market.<br><br>The investment was a <strong>seed round / growth capital structure</strong> — providing capital to accelerate the business's expansion of its network and customer base. FRP Advisory advised Chiltern on debt finance; ThinCats provided the debt facility.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Why this fits Chiltern's strategy</div>
+            <div class="ib-body">Chiltern has explicit domain expertise in UK automotive repair from the Steer Automotive journey. This investment allows Chiltern to <strong>reapply that expertise in a different segment</strong> of the same market — outsourced same-day repair rather than owned repair centres.<br><br>Ben Robinson (Director, now Partner) led the investment alongside Jon Rawlings (Director). The scalable outsourced model means growth does not require capital-intensive site acquisition — the network expands by adding repair partners, not buying buildings.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Business at a glance</div>
+            <div class="ib-body"><strong>Founded:</strong> 2018<br><strong>Model:</strong> Outsourced, asset-light same-day repair network<br><strong>Coverage:</strong> 100% UK mainland at investment<br><strong>Volume:</strong> 10,000+ same-day repairs per year<br><strong>Customers:</strong> Leading accident management companies, fleet operators, insurers<br><strong>Debt adviser:</strong> FRP Corporate Finance<br><strong>Debt provider:</strong> ThinCats (bespoke facility)<br><strong>Chiltern lead:</strong> Ben Robinson + Jon Rawlings</div>
+          </div>
+          <div class="timeline-mini" style="--inv-c:var(--org)">
+            <div class="tm-item"><div class="tm-year">2018 — Founded</div><div class="tm-text">Rapid Repair Network launched. Outsourced same-day repair model developed from scratch.</div></div>
+            <div class="tm-item"><div class="tm-year">2018–2024 — Organic growth</div><div class="tm-text">Built to 10,000+ repairs per year. Achieved 100% UK mainland coverage. Strong insurer and fleet customer base established.</div></div>
+            <div class="tm-item filled"><div class="tm-year">Feb 2024 — Chiltern invests</div><div class="tm-text">Chiltern Capital growth capital investment. ThinCats debt. FRP Advisory. Jon Rawlings leads value creation plan.</div></div>
+            <div class="tm-item"><div class="tm-year">2024–2026+ — Accelerated growth</div><div class="tm-text">Network expansion, new customer acquisition, operational infrastructure investment ongoing.</div></div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Investment size not publicly disclosed. Seed/growth capital structure suggests a minority or structured investment. Chiltern's domain expertise from Steer Automotive gives a materially better starting position than a first-time sector investor. Return metrics not yet available.</div>
+        </div>
+      </div>
+      <div class="pq">
+        <div class="pq-t">"We are delighted to partner with Rob and the wider team, who have developed Rapid Repair Network into a market leader in same-day repairs. From our investment experience in Steer, we have a strong understanding of market dynamics and Rapid Repair Network is well positioned to capitalise on its demand-supply trends."</div>
+        <div class="pq-s">— Ben Robinson, Director, Chiltern Capital, February 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KERR'S TYRES -->
+  <div class="inv-card fi" style="--inv-c:var(--yel)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--yel);border-color:rgba(240,180,41,.4);background:var(--yel-p)">Buy-and-Build Platform</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Automotive Services</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Jan 2026</span>
+        </div>
+        <div class="inv-name">Kerr's Tyres & Auto</div>
+        <div class="inv-tagline">UK tyre and automotive services retailer — Chiltern's most recent platform investment (January 2026)</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Jan 2026</div><div class="met-lbl">Investment date</div><div class="met-sub">Most recent Chiltern deal</div></div>
+        <div class="metric"><div class="met-val yel-t" style="color:var(--yel)">Buy-and-Build</div><div class="met-lbl">Deal type</div><div class="met-sub">Platform for automotive services consolidation</div></div>
+        <div class="metric"><div class="met-val yel-t">Undisclosed</div><div class="met-lbl">Equity invested</div></div>
+        <div class="metric"><div class="met-val blu-t">Adam Oakes</div><div class="met-lbl">Chiltern lead</div><div class="met-sub">Board member. Associate, Chiltern</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Investment thesis</div>
+            <div class="ib-body">Kerr's Tyres & Auto is a UK tyre and automotive services retailer — <strong>Chiltern's third automotive services investment</strong> following Steer Automotive (exited 2024) and Rapid Repair Network (active since 2024). The investment signals Chiltern's continued conviction in the UK automotive services market as a fragmented, buy-and-build-able sector.<br><br>The tyre and fast-fit segment is highly fragmented in the UK, dominated by independents alongside national chains (Kwik Fit, ATS Euromaster). Chiltern's thesis is likely to replicate the Steer Automotive playbook: <strong>build a platform business through organic growth and targeted acquisitions</strong>, ultimately creating a scale player that attracts a larger PE buyer or strategic acquirer.<br><br>Adam Oakes (Associate, EY Ireland background) joined Chiltern in 2024 and is directly involved in this investment, sitting on the board.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Sector context</div>
+            <div class="ib-body"><strong>UK tyre market:</strong> ~£3bn annual market, highly fragmented, thousands of independents<br><strong>Consolidation trend:</strong> National chains growing but independents still hold majority of outlets<br><strong>EV tailwind:</strong> Electric vehicles require specialist tyre knowledge and different service capabilities<br><strong>Chiltern edge:</strong> Deep automotive sector knowledge from Steer and Rapid Repair investments<br><strong>Investment date:</strong> 12 January 2026 — Pitchbook confirmed<br><strong>Board:</strong> Adam Oakes sits on Kerr's Tyres board</div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Transaction completed January 2026 — earliest stage investment in the portfolio. No financial metrics available. Chiltern's automotive services track record (Steer: 19 acquisitions, UK market leader in 3 years) provides a strong template for the growth plan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAIN'D UP -->
+  <div class="inv-card fi" style="--inv-c:var(--tea)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--tea);border-color:rgba(0,200,200,.4);background:var(--tea-p)">MBO</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Business Services · Training</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Jun 2025</span>
+        </div>
+        <div class="inv-name">Train'd Up</div>
+        <div class="inv-tagline">UK's largest provider of rail apprenticeships — 1,300+ learners, ranked #1 nationally by attainment</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Jun 2025</div><div class="met-lbl">Investment date</div></div>
+        <div class="metric"><div class="met-val" style="color:var(--tea)">MBO</div><div class="met-lbl">Deal type</div><div class="met-sub">Management Buy-Out from founders</div></div>
+        <div class="metric"><div class="met-val yel-t">ThinCats debt</div><div class="met-lbl">Debt structure</div><div class="met-sub">Debt facility from ThinCats</div></div>
+        <div class="metric"><div class="met-val grn-t">1,300+</div><div class="met-lbl">Active learners</div><div class="met-sub">At time of MBO</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The full story</div>
+            <div class="ib-body">Founded in 2003 by David Gillespie and Paul McGlynn, Train'd Up Railway Resourcing grew into the <strong>UK's largest provider of rail apprenticeships</strong> — ranked first nationally among large training providers by learner attainment rates. The business is headquartered in Bridge of Allan, Scotland.<br><br>In June 2025, Chiltern Capital backed CEO <strong>Alan McGhee and the management team</strong> in a management buyout from the founders. ThinCats provided the debt facility. Andrew Reid (Manager, Chiltern) led the investment.<br><br>The business supports <strong>1,300+ learners</strong> and is rapidly expanding into engineering apprenticeships beyond its core rail training focus. It sits at the intersection of two strong macro tailwinds: the UK Government's apprenticeship levy expansion and the rail infrastructure investment cycle (HS2, Network Rail renewals).<br><br>Train'd Up ranks <strong>first nationally for learner attainment</strong> — an exceptional quality signal that insulates the business from regulatory quality reviews and makes it a preferred partner for rail employers.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Why Chiltern backed this</div>
+            <div class="ib-body"><strong>Market position:</strong> Largest rail apprenticeship provider in the UK — genuine market leadership in a niche<br><strong>Quality moat:</strong> #1 attainment rate nationally — hard to replicate, protects against new entrants<br><strong>Macro tailwinds:</strong> UK rail investment cycle + apprenticeship levy expansion creates structural demand<br><strong>Growth runway:</strong> Engineering apprenticeship expansion adds a large addressable market beyond rail<br><strong>Management:</strong> CEO Alan McGhee leads — MBO creates direct ownership alignment<br><strong>Chiltern lead:</strong> Andrew Reid (EY / HMT background)</div>
+          </div>
+          <div class="timeline-mini" style="--inv-c:var(--tea)">
+            <div class="tm-item"><div class="tm-year">2003 — Founded</div><div class="tm-text">David Gillespie and Paul McGlynn found Train'd Up in Bridge of Allan, Scotland. Rail apprenticeship focus from day one.</div></div>
+            <div class="tm-item"><div class="tm-year">2003–2025 — Organic growth</div><div class="tm-text">Grew to 1,300+ learners. Achieved #1 national attainment ranking. Expanded into engineering apprenticeships.</div></div>
+            <div class="tm-item filled"><div class="tm-year">Jun 2025 — Chiltern MBO</div><div class="tm-text">Management buyout backed by Chiltern Capital. CEO Alan McGhee leads. ThinCats provides debt. Andrew Reid leads for Chiltern.</div></div>
+            <div class="tm-item"><div class="tm-year">2025–2028+ — Growth phase</div><div class="tm-text">Engineering apprenticeship expansion. New rail employer partnerships. Geographic expansion beyond Scotland.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pq">
+        <div class="pq-t">"Train'd Up is a standout provider in the vocational training space, with a clear track record of quality and delivery. We're delighted to be backing Alan and the team as they continue to scale the business and address critical skills gaps in key sectors of the UK economy."</div>
+        <div class="pq-s">— Andrew Reid, Investment Manager, Chiltern Capital, June 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEC MICROSYSTEMS -->
+  <div class="inv-card fi" style="--inv-c:var(--blu)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--blu);border-color:rgba(61,142,240,.4);background:var(--blu-p)">Buy-out · Buy-and-Build</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Technology Services · Distribution</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Jul 2023</span>
+        </div>
+        <div class="inv-name">Intec Microsystems</div>
+        <div class="inv-tagline">UK B2B technology distributor — Chiltern deal targets £100m revenue platform; co-invested with Orbis Partners</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Jul 2023</div><div class="met-lbl">Investment date</div></div>
+        <div class="metric"><div class="met-val blu-t">Buy-out</div><div class="met-lbl">Deal type</div><div class="met-sub">Buy-and-build platform investment</div></div>
+        <div class="metric"><div class="met-val blu-t">£100m</div><div class="met-lbl">Revenue target</div><div class="met-sub">Stated ambition at investment</div></div>
+        <div class="metric"><div class="met-val yel-t">Orbis Partners</div><div class="met-lbl">Co-investor</div><div class="met-sub">Alongside Chiltern Capital</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The story</div>
+            <div class="ib-body">Chiltern acquired Intec Microsystems in July 2023 alongside <strong>Orbis Partners</strong> — one of the few Chiltern deals with a named co-investor. Intec is a UK B2B technology products distributor, specialising in hardware, peripherals and managed technology supply to business customers.<br><br>At investment, the headline was bold: <strong>"PE deal fuels firm's vision to become £100m distributor"</strong> (The Business Desk, August 2023). This is a classic buy-and-build ambition in a fragmented technology distribution market — consolidating smaller resellers and distributors under a single platform.<br><br>Alistair Gray (Director) has worked closely with Intec on its inorganic growth strategy since the buyout.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Value creation plan</div>
+            <div class="ib-body">UK technology distribution is highly fragmented — thousands of VARs (Value Added Resellers) and distributors compete, mostly at sub-£20m revenue. The market ripe for consolidation, as large end-customers prefer fewer, more capable supplier relationships.<br><br><strong>Chiltern's plan:</strong> Build Intec toward a £100m revenue business through a combination of organic growth (product range expansion, new customer wins) and targeted bolt-on acquisitions of complementary distributors or specialist resellers.</div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Deal price not publicly disclosed. Co-investment with Orbis Partners suggests a larger deal by Chiltern's standards — potentially at the upper end of the £10–40m equity range. Revenue target of £100m provides a benchmark for tracking progress. Returns to be determined on exit.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMTEZ / INCINER8 / ASSEMBUILD / CYBIT / CHARIS / BURGESS summary cards -->
+  <div class="inv-card fi" style="--inv-c:var(--grn)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">MBO</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Industrials · Environmental</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Dec 2022</span>
+        </div>
+        <div class="inv-name">Emtez Group</div>
+        <div class="inv-tagline">Industrial safety and environmental services — MBO from founders; linked to former Empteezy brand</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Background</div>
+            <div class="ib-body">Emtez is linked to Empteezy, a West Lothian-headquartered industrial safety and environmental containment products specialist — <strong>MBO backed by Chiltern in December 2022</strong>. Empteezy (now operating under the Emtez brand) was founded by owner-managers and manufactures products including spill containment, drum handling, and safety storage equipment.<br><br>Insider Media reported the deal as: <strong>"MBO at West Lothian industrial safety specialist Empteezy"</strong> (December 2022). Alistair Gray has worked closely with Emtez on strategy and M&A since investment.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Value creation & context</div>
+            <div class="ib-body">Industrial safety is a structurally resilient market — driven by UK Health & Safety legislation, environmental compliance requirements, and ESG pressures on industrial businesses. The sector is fragmented with numerous owner-managed specialists.<br><br>Chiltern's buy-and-build strategy in this sector involves consolidating complementary industrial safety and environmental services businesses under the Emtez platform, building toward a larger scale exit to a trade buyer or larger PE fund.</div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Deal financial details not publicly disclosed. Lower mid-market MBO structure within Chiltern's £10–40m equity range. Active investment.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inv-card fi" style="--inv-c:var(--red)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--red);border-color:var(--red-b);background:var(--red-p)">Buy-out</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Industrials · Environmental</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Active</span>
+        </div>
+        <div class="inv-name">Inciner8</div>
+        <div class="inv-tagline">Global manufacturer and supplier of incineration equipment — exports worldwide, active board involvement</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">What Inciner8 does</div>
+            <div class="ib-body">Inciner8 is a leading UK <strong>manufacturer of incineration and waste management equipment</strong>, exporting to customers in over 100 countries. Products range from small portable incinerators to large industrial and medical waste systems.<br><br>This is a genuinely international business — rare in Chiltern's predominantly UK-focused portfolio. The export-heavy model means revenues are diversified across global markets rather than dependent on UK economic conditions alone.<br><br>Harry Reid (Manager) sits on the Inciner8 board, providing direct PE oversight and strategic support.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Investment rationale</div>
+            <div class="ib-body">Global waste management infrastructure investment is growing — driven by environmental regulation tightening in developing markets, hospital waste compliance requirements, and industrial waste volumes. Inciner8's export model means it benefits from global demand rather than being limited to the UK market.<br><br>The business has a strong product IP position — incineration equipment is specialist, high-value, and not easily commoditised. Chiltern's value creation focus is likely on international sales expansion and potentially adding complementary waste management product lines.</div>
+          </div>
+          <div class="note-box"><strong>Financial note:</strong> Investment details not publicly disclosed. Active investment. Harry Reid confirmed on board.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inv-card fi" style="--inv-c:var(--org)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--org);border-color:rgba(245,106,0,.4);background:var(--org-p)">MBO / Buy-and-Build</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Cybit · Assembuild · Charis · Burgess Farms</span>
+        </div>
+        <div class="inv-name">Further Active Holdings</div>
+        <div class="inv-tagline">Cybit (fleet tech), Assembuild (construction services), Charis Grants (financial services), Burgess Farms (agriculture)</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">● 4 ACTIVE</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Cybit — Fleet Technology</div>
+            <div class="ib-body">Fleet management and vehicle tracking technology serving UK businesses. In June 2025, Cybit <strong>divested its enterprise-grade cybersecurity division to Viatel Technology Group</strong> — a strategic disposal to focus on its core fleet technology business. This portfolio rationalisation under Chiltern's ownership is a sign of active portfolio management. Remaining Cybit fleet business continues as an active Chiltern investment.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Charis Grants — Financial Services / Grants</div>
+            <div class="ib-body">Chiltern invested in Charis Grants in <strong>December 2025</strong> — one of the firm's most recent investments. Charis is a specialist provider of grants management and charitable fund administration services. Ben Robinson closely involved. A niche B2B financial services business with recurring, contract-based revenues.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Assembuild — Construction Services</div>
+            <div class="ib-body">Specialist construction and offsite assembly services. Chiltern backed management to build through targeted bolt-on acquisitions. Alistair Gray has worked closely with the Assembuild team on strategy and M&A. UK construction services sector remains fragmented — classic buy-and-build territory.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Burgess Farms — Agriculture / Distribution</div>
+            <div class="ib-body">Chiltern's most recent investment at time of Pitchbook data capture (<strong>October 2025</strong>). UK farming and agricultural distribution business. Represents Chiltern's willingness to back profitable B2B businesses in non-traditional PE sectors — a differentiated positioning vs competitors who avoid agriculture. Financial terms not disclosed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- REALISED / EXITS -->
+<div class="sw" id="realised">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">03</div>
+    <h2 class="st">Realised Investments — Exit Deep Dives</h2>
+  </div>
+  <p class="bt fi">Chiltern has made 14 confirmed exits since 2015 per Pitchbook. The two headline exits — SiXworks and Steer Automotive — are publicly documented in detail. Others carry limited public disclosure, which is typical for lower mid-market UK PE transactions. Return multiples are provided where verified; estimated ranges are noted as such.</p>
+
+  <!-- SIXWORKS -->
+  <div class="inv-card fi" style="--inv-c:var(--grn)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">Growth Capital → Strategic Sale</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Cyber Security · Defence</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Oct 2022 → Jul 2024 · 20 months</span>
+        </div>
+        <div class="inv-name">SiXworks</div>
+        <div class="inv-tagline">Defence & public sector cyber security consultancy — sold to IBM for ~$150m (£118m) · July 2024</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">✓ EXITED — IBM</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">Oct 2022</div><div class="met-lbl">Entry date</div></div>
+        <div class="metric"><div class="met-val grn-t">Jul 2024</div><div class="met-lbl">Exit date</div></div>
+        <div class="metric"><div class="met-val grn-t">~$150m</div><div class="met-lbl">Exit value (est.)</div><div class="met-sub">~£118m — Mergerlinks verified</div></div>
+        <div class="metric"><div class="met-val grn-t">20 months</div><div class="met-lbl">Holding period</div><div class="met-sub">Exceptionally fast for PE</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The full story — entry to exit</div>
+            <div class="ib-body">Chiltern invested in SiXworks in <strong>October 2022</strong>. SiXworks is a specialist cyber security and IT consultancy serving the <strong>UK defence sector and public sector</strong>, with a particular focus on digital transformation in highly secure (classified) environments — work requiring security clearance and deep MOD relationships.<br><br>At investment, SiXworks employed <strong>70 people</strong>. Over 20 months of Chiltern ownership, the firm invested heavily in back-office infrastructure, people, and capability — growing the team to <strong>170 employees</strong> (a 143% increase in headcount).<br><br>SiXworks was recognised in the <strong>2023 Tussell Tech200</strong> list of the fastest-growing tech companies in the UK public sector, and in the <strong>Sunday Times Best Places to Work</strong> in both 2023 and 2024. These were not just accolades — they were growth signals that made the business attractive to a strategic buyer.<br><br>In July 2024, <strong>IBM completed the acquisition of SiXworks for approximately $150 million (£118m)</strong> — a landmark exit for Chiltern, one of the largest in its history and a rare strategic sale to a global technology giant.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">How Chiltern created value</div>
+            <div class="ib-body">Chiltern's value creation at SiXworks was primarily <strong>operational and people-led</strong> rather than financial engineering:<br><br>1. <strong>Back-office investment</strong> — built the governance, compliance and reporting infrastructure required to credibly work with MOD and classified government clients at scale<br>2. <strong>Headcount tripling</strong> — 70 → 170 people in 18 months; talent acquisition in a skills-scarce market<br>3. <strong>Customer base expansion</strong> — moved into new departments of the MOD and public sector<br>4. <strong>Market positioning</strong> — Tussell Tech200 and Sunday Times rankings raised profile with potential acquirers<br>5. <strong>IBM relationship development</strong> — positioned SiXworks as a clear acquisition target for a global IT services firm seeking UK government cyber capability</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Financial summary</div>
+            <div class="ib-body"><strong>Entry:</strong> October 2022<br><strong>Exit:</strong> July 2024 (20 months)<br><strong>Buyer:</strong> IBM (NYSE: IBM) — $130bn+ market cap technology company<br><strong>Exit value:</strong> ~$150m / ~£118m (Mergerlinks)<br><strong>Advisers (sell-side):</strong> Rothschild & Co (M&A), Squire Patton Boggs (legal), RSM (financial), AJ Gallaghers (insurance)<br><strong>Lincoln International</strong> advised on the initial Chiltern investment<br><strong>Investment multiple:</strong> Not publicly confirmed. Given 20-month hold and exit at £118m from a lower mid-market entry, a <strong>3x–5x money multiple is consistent</strong> with comparable transactions in high-growth defence tech<br><strong>IRR:</strong> At this hold period and multiple, IRR would be extremely high — likely 80–150%+</div>
+          </div>
+          <div class="timeline-mini" style="--inv-c:var(--grn)">
+            <div class="tm-item"><div class="tm-year">Oct 2022 — Chiltern invests</div><div class="tm-text">Growth capital investment. 70 employees. Defence cyber focus. Lincoln International advises.</div></div>
+            <div class="tm-item filled"><div class="tm-year">2023 — Growth phase</div><div class="tm-text">Team grows 70 → 170. Tussell Tech200 recognition. Sunday Times Best Places to Work. MOD client base expanded.</div></div>
+            <div class="tm-item filled"><div class="tm-year">Jul 2024 — IBM acquisition</div><div class="tm-text">IBM completes acquisition for ~$150m. Chiltern and management advised by Rothschild & Co. A landmark exit.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="exit-box">
+        <div class="exit-head">✓ Exit summary — SiXworks → IBM · July 2024</div>
+        <div class="exit-body"><strong>Exit value: ~$150m (~£118m)</strong> · Buyer: IBM · Hold: 20 months · Headcount growth: 70 → 170 (+143%) · Estimated money multiple: 3x–5x (market-consistent estimate, unconfirmed) · Deal type: Strategic sale to global technology company · One of Chiltern's largest and fastest exits on record</div>
+      </div>
+      <div class="pq">
+        <div class="pq-t">"We invested in SiXworks due to its highly specialised service offering, domain expertise and exceptional management team. We are delighted to have supported the transformational growth of the Group over the past 18 months. SiXworks' success is a testament to the team, its strong culture of customer delivery."</div>
+        <div class="pq-s">— Tom Phipps, Co-Founder & Partner, Chiltern Capital, July 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEER AUTOMOTIVE EXIT -->
+  <div class="inv-card fi" style="--inv-c:var(--blu)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--blu);border-color:var(--blu-b);background:var(--blu-p)">Buy-and-Build → PE Sale</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Automotive Services</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">2021 → Apr 2024 · 3 years</span>
+        </div>
+        <div class="inv-name">Steer Automotive Group</div>
+        <div class="inv-tagline">UK's leading independent collision repair group — built via 19 acquisitions · sold to Oakley Capital (Apr 2024)</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--grn);border-color:var(--grn-b);background:var(--grn-p)">✓ EXITED — Oakley Capital</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="metrics-row">
+        <div class="metric"><div class="met-val org-t">2021</div><div class="met-lbl">Entry date</div><div class="met-sub">Co-invested with Keyhaven Capital</div></div>
+        <div class="metric"><div class="met-val grn-t">Apr 2024</div><div class="met-lbl">Exit date</div><div class="met-sub">Oakley Capital acquisition</div></div>
+        <div class="metric"><div class="met-val grn-t">100+</div><div class="met-lbl">Repair centres at exit</div><div class="met-sub">Up from ~5 at entry · 19 acquisitions</div></div>
+        <div class="metric"><div class="met-val grn-t">2,300+</div><div class="met-lbl">Employees at exit</div><div class="met-sub">115,000+ vehicles repaired/yr</div></div>
+      </div>
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">The full story — from regional repairer to UK market leader</div>
+            <div class="ib-body">In 2021, Chiltern Capital and <strong>Keyhaven Capital Partners</strong> co-invested in Steer Automotive Group — at that point a top-20 regional B2B collision repair business founded in 2018 by serial entrepreneur <strong>Richard Steer</strong>.<br><br>Over three years, Chiltern and Keyhaven backed Steer and COO Gavin Ruddick in executing one of the most aggressive buy-and-build programmes seen in UK lower mid-market PE: <strong>19 acquisitions</strong> taking the business from a regional player to a national network of <strong>over 100 repair centres</strong>. The group grew to represent approximately <strong>5% of the UK repair market</strong> — #1 independent position.<br><br>Alongside the acquisitions, the management team invested heavily in:
+<ul style="margin-top:.5rem;padding-left:1rem;font-size:12.5px;color:var(--wh2);line-height:1.6">
+<li>Operational infrastructure and KPI monitoring</li>
+<li>Data and analytics tools</li>
+<li>ESG initiatives — achieving ESG Excellence accreditation</li>
+<li>The Steer Academy — training the next generation of vehicle technicians</li>
+</ul></div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Public recognition during investment</div>
+            <div class="ib-body">• <strong>Sunday Times 100 Fastest-Growing Businesses</strong> — ranked 36th in 2023<br>• <strong>The Independent Top 100 Job Creators</strong> — recognised for employment growth<br>• <strong>ESG Excellence Accreditation</strong> — sustainability strategy award<br>• <strong>Steer Academy launch</strong> — industry-first training programme<br>• UK's largest independent collision repair network at exit</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Financial summary</div>
+            <div class="ib-body"><strong>Entry:</strong> 2021 · <strong>Exit:</strong> April 2024 · <strong>Hold:</strong> ~3 years<br><strong>Buyer:</strong> Oakley Capital (Oakley Capital Fund V2)<br><strong>OCI contribution:</strong> Up to £90m (OCI's portion of Oakley's overall investment, per OCI announcement — implies total deal value materially above £90m)<br><strong>Co-investor:</strong> Keyhaven Capital Partners (exited alongside Chiltern)<br><strong>Sell-side advisers:</strong> DC Advisory (M&A), DLA Piper (legal), PwC, OC&C, HCR Law<br><strong>Keyhaven verdict:</strong> "Ahead of expectations" — Andrew Ware, Keyhaven Partner<br><strong>Revenue:</strong> Not disclosed · <strong>Multiple:</strong> Not confirmed · In buy-and-build exits where 19 acquisitions were executed in 3 years, <strong>2x–4x money multiples</strong> are typical at a deal of this scale and trajectory</div>
+          </div>
+          <div class="timeline-mini" style="--inv-c:var(--blu)">
+            <div class="tm-item"><div class="tm-year">2021 — Chiltern + Keyhaven invest</div><div class="tm-text">Steer: top-20 regional repairer. Chiltern and Keyhaven Capital Partners co-invest alongside management.</div></div>
+            <div class="tm-item filled"><div class="tm-year">2021–2023 — 19 acquisitions</div><div class="tm-text">Rapid buy-and-build. Network grows from ~5 to 100+ repair centres. 2,300 employees. 5% UK market share.</div></div>
+            <div class="tm-item filled"><div class="tm-year">2023 — Market recognition</div><div class="tm-text">Sunday Times top-36 fastest growing. Independent top-100 job creators. ESG Excellence Accreditation.</div></div>
+            <div class="tm-item filled"><div class="tm-year">Dec 2023 — Agreement signed</div><div class="tm-text">Conditional agreement with Oakley Capital. Keyhaven notes exit "ahead of expectations."</div></div>
+            <div class="tm-item filled"><div class="tm-year">Apr 2024 — Exit completes</div><div class="tm-text">Oakley Capital Fund V2 acquires. OCI contribution up to £90m (portion of total deal). Richard Steer reinvests.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="exit-box">
+        <div class="exit-head">✓ Exit summary — Steer Automotive → Oakley Capital · April 2024</div>
+        <div class="exit-body"><strong>Deal size: Oakley Capital's portion alone ~£90m+ (OCI share only)</strong> — total enterprise value estimated well above this · Buyer: Oakley Capital Fund V2 (pan-European PE) · Hold: ~3 years · 19 acquisitions during hold · 100+ repair centres at exit · Keyhaven: "ahead of expectations" · Estimated money multiple: 2x–4x (market-consistent estimate, unconfirmed) · Textbook buy-and-build exit — one of Chiltern's landmark transactions</div>
+      </div>
+      <div class="pq">
+        <div class="pq-t">"We recognised Steer as a business with significant potential and we have been delighted to support the company in becoming the market leader in the UK over the last three years. It's been a pleasure to work alongside a highly talented team, led by Richard Steer, as they have delivered unprecedented growth and built a truly exceptional business."</div>
+        <div class="pq-s">— Alex Sheffield, Co-Founder & Partner, Chiltern Capital, January 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER EXITS -->
+  <div class="inv-card fi" style="--inv-c:var(--wh3)" onclick="toggleInv(this)">
+    <div class="inv-header">
+      <div class="inv-left">
+        <div class="inv-chips">
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Multiple Exits</span>
+          <span class="inv-chip" style="color:var(--wh3);border-color:var(--b2)">Gradwell · VIMA · Vantage · Cloud8 · Doby Verrolec · I Heart Studios · Batt Cables</span>
+        </div>
+        <div class="inv-name">Other Confirmed Exits</div>
+        <div class="inv-tagline">Pitchbook confirms 14 total exits from Chiltern's portfolio — key exits summarised below</div>
+      </div>
+      <div class="inv-right">
+        <span class="inv-status" style="color:var(--wh3);border-color:var(--b3)">✓ EXITED</span>
+        <span class="inv-toggle">Click to expand <span class="inv-toggle-icon">▼</span></span>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div class="inv-grid">
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Gradwell Communications — Telecoms / UCaaS</div>
+            <div class="ib-body">UK cloud communications and VoIP provider. Chiltern backed Gradwell's management team through a period of growth in cloud telephony — a sector experiencing structural tailwinds as businesses migrated from on-premise to cloud phone systems. Exited successfully. Specific terms not disclosed.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">VIMA — Professional Services</div>
+            <div class="ib-body">Business services company grown through Chiltern's partnership with management. Tom Phipps and Ben Robinson worked closely with the VIMA team. Alistair Gray also involved in inorganic growth. Exited. Specific financial terms not publicly disclosed.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Doby Verrolec — Specialist Construction</div>
+            <div class="ib-body">Specialist construction and engineering services business. Chiltern invested in a fragmented niche within UK construction services and built toward a strategic exit. Financial details not publicly disclosed.</div>
+          </div>
+        </div>
+        <div class="inv-col">
+          <div class="inv-block">
+            <div class="ib-head">Vantage — Professional Services</div>
+            <div class="ib-body">Professional services business successfully exited from Chiltern's portfolio. One of several business services investments where Chiltern's operational support and M&A capability helped management scale the business toward a PE-to-PE or strategic trade exit.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Cloud8 — Cloud / IT Services</div>
+            <div class="ib-body">Cloud computing and IT managed services business exited after a growth phase under Chiltern ownership. Technology services remains a core Chiltern theme — Cloud8 fits within the firm's consistent investment in UK IT services businesses with recurring revenue models.</div>
+          </div>
+          <div class="inv-block">
+            <div class="ib-head">Batt Cables — Most recent exit confirmed</div>
+            <div class="ib-body">Pitchbook confirms Batt Cables as Chiltern's most recent exit — completed <strong>6 January 2026</strong>. Batt Cables is a UK distributor of cables and electrical products. Chiltern backed management in a buy-and-build programme. Financial terms not disclosed. Exit completes Chiltern's investment cycle in this business services / distribution platform.</div>
+          </div>
+        </div>
+      </div>
+      <div class="note-box"><strong>Data note:</strong> Pitchbook records 14 total exits from Chiltern Capital's portfolio. The SiXworks ($150m, IBM) and Steer Automotive (Oakley Capital, £90m+ OCI portion alone) exits are the two publicly documented large transactions. The remaining exits are lower mid-market transactions where UK PE norms result in limited public financial disclosure. Return multiples across the full portfolio are not publicly available.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- SUMMARY TABLE -->
+<div class="sw dark" id="summary">
+<div class="si">
+  <div class="sh fi">
+    <div class="sn">04</div>
+    <h2 class="st">Portfolio Summary — All Investments</h2>
+  </div>
+  <p class="bt fi">A consolidated view of all Chiltern Capital investments — current and exited — with deal type, sector, status and verified financial metrics where publicly available.</p>
+
+  <div class="fi" style="overflow-x:auto">
+  <table class="sum-tbl">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Deal Type</th>
+        <th>Sector</th>
+        <th>Entry</th>
+        <th>Status</th>
+        <th>Exit / Buyer</th>
+        <th>Known Financials</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>SiXworks</td><td><span class="mono grn-t">Growth Capital</span></td><td>Cyber Security · Defence</td><td>Oct 2022</td><td><span class="mono grn-t">✓ Exited</span></td><td>IBM · Jul 2024</td><td><span class="mono grn-t">~$150m exit · 20 months · 70→170 staff</span></td></tr>
+      <tr><td>Steer Automotive</td><td><span class="mono blu-t">Buy-and-Build</span></td><td>Automotive Services</td><td>2021</td><td><span class="mono grn-t">✓ Exited</span></td><td>Oakley Capital · Apr 2024</td><td><span class="mono grn-t">OCI £90m+ portion · 19 acquisitions · 100+ centres</span></td></tr>
+      <tr><td>Batt Cables</td><td><span class="mono org-t">Buy-out / B&amp;B</span></td><td>Distribution · Electrical</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>Jan 2026</td><td><span class="mono yel-t">Terms undisclosed</span></td></tr>
+      <tr><td>Gradwell</td><td><span class="mono org-t">Buy-out</span></td><td>Telecoms · Cloud Comms</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>Strategic buyer</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>VIMA</td><td><span class="mono org-t">Growth Capital</span></td><td>Business Services</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>PE / Trade</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>Steer Automotive (Steer)</td><td><span class="mono org-t">B&amp;B Platform</span></td><td>Automotive</td><td>2021</td><td><span class="mono grn-t">✓ Exited</span></td><td>Oakley Capital</td><td><span class="mono grn-t">See above</span></td></tr>
+      <tr><td>Doby Verrolec</td><td><span class="mono org-t">Buy-out</span></td><td>Construction</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>Trade / PE</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>Vantage</td><td><span class="mono org-t">Growth Capital</span></td><td>Business Services</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>PE / Trade</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>Cloud8</td><td><span class="mono org-t">Buy-out</span></td><td>IT / Cloud Services</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>Strategic buyer</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>I Heart Studios</td><td><span class="mono org-t">Growth Capital</span></td><td>Creative / Media</td><td>Undisclosed</td><td><span class="mono grn-t">✓ Exited</span></td><td>Trade buyer</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr style="border-top:2px solid var(--b2)"><td>Strata Products</td><td><span class="mono pur-t" style="color:var(--pur)">Carve-Out</span></td><td>Industrials · Plastics</td><td>Mar 2024</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Insider Media Deal of Month · undisclosed £</span></td></tr>
+      <tr><td>Rapid Repair Network</td><td><span class="mono org-t">Seed / Growth Capital</span></td><td>Automotive Services</td><td>Feb 2024</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">ThinCats debt · 10,000+ repairs/yr</span></td></tr>
+      <tr><td>Kerr's Tyres & Auto</td><td><span class="mono yel-t">B&amp;B Platform</span></td><td>Automotive Services</td><td>Jan 2026</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Most recent investment</span></td></tr>
+      <tr><td>Train'd Up</td><td><span class="mono tea-t" style="color:var(--tea)">MBO</span></td><td>Training · Rail</td><td>Jun 2025</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">ThinCats debt · 1,300+ learners · #1 attainment</span></td></tr>
+      <tr><td>Intec Microsystems</td><td><span class="mono blu-t">Buy-out · B&amp;B</span></td><td>Tech Distribution</td><td>Jul 2023</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">£100m revenue target · Orbis co-invest</span></td></tr>
+      <tr><td>Emtez (Empteezy)</td><td><span class="mono grn-t">MBO</span></td><td>Industrial Safety</td><td>Dec 2022</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">West Lothian, Scotland</span></td></tr>
+      <tr><td>Inciner8</td><td><span class="mono org-t">Buy-out</span></td><td>Industrial / Environmental</td><td>Undisclosed</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Exports 100+ countries</span></td></tr>
+      <tr><td>Cybit</td><td><span class="mono org-t">Buy-out</span></td><td>Fleet Technology</td><td>Undisclosed</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Cyber division sold to Viatel Jun 2025</span></td></tr>
+      <tr><td>Assembuild</td><td><span class="mono org-t">Buy-and-Build</span></td><td>Construction Services</td><td>Undisclosed</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>Charis Grants</td><td><span class="mono org-t">Growth Capital</span></td><td>Financial Services</td><td>Dec 2025</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Undisclosed</span></td></tr>
+      <tr><td>Burgess Farms</td><td><span class="mono grn-t">Minority Growth Capital</span></td><td>Agriculture · Distribution</td><td>Oct 2025</td><td><span class="mono org-t">● Active</span></td><td>—</td><td><span class="mono yel-t">Most recent investment at Oct 2025</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="editorial fi">
+    <div class="ed-head">Chiltern Capital — portfolio assessment</div>
+    <div class="ed-text">"Chiltern's portfolio narrative is one of consistent specialisation rather than broad diversification. Automotive services appears three times — Steer (exited at significant return), Rapid Repair (active), Kerr's Tyres (new). Cyber / technology appears twice (SiXworks at $150m exit, Cybit active). The pattern is clear: Chiltern builds domain expertise in a sector, executes multiple investments leveraging that knowledge, and compounds returns through repeated application of the same buy-and-build or growth capital playbook. The two publicly documented exits — SiXworks and Steer — demonstrate the model works. The remaining 12 active investments suggest a pipeline of future realisations ahead."</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="fl">PRIV<span>●</span>MRKTS</div>
+  <div class="fr">
+    Sources: Chiltern Capital website · Pitchbook (53 investments, 14 exits confirmed) · Mergerlinks (SiXworks $150m) · Oakley Capital / OCI · Keyhaven Capital · FRP Advisory · Lincoln International<br>
+    Insider Media · The Business Desk · Comms Dealer · Companies House OC402587 · All financial figures verified from public sources where stated; estimates noted as such<br>
+    March 2026 · Research purposes only · Not investment advice
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
+},{passive:true});
+
+const secs=['dealtypes','current','realised','summary'];
+const nls=document.querySelectorAll('.nlink');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;
+  let cur='dealtypes';
+  secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.07});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+
+function toggleInv(card){
+  card.classList.toggle('open');
+  const icon=card.querySelector('.inv-toggle-icon');
+  if(icon)icon.style.transform=card.classList.contains('open')?'rotate(180deg)':'rotate(0)';
+}
+</script>
+</body>
+</html>
