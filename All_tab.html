@@ -812,11 +812,7 @@ const TICKER_DATA = [
 let entries = [], activeCat = 'all', sortMode = 'date', editTags = [], editingId = null;
 
 function load() {
-  try {
-    const d = localStorage.getItem('pmj_entries');
-    entries = d ? JSON.parse(d) : [];
-    if (!entries.length) seedDefaults();
-  } catch(e) { entries = []; seedDefaults(); }
+  seedDefaults();
 }
 function save() {
   try { localStorage.setItem('pmj_entries', JSON.stringify(entries)); } catch(e) {}
