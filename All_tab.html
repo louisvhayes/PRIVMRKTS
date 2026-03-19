@@ -86,39 +86,54 @@ body {
 
 /* MASTHEAD */
 .masthead {
-  background: var(--off-black);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(6,6,6,.96);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
+  height: 56px;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
-  height: 64px;
+  padding: 0 2.5rem;
 }
+
 .masthead-left {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 16px;
 }
+
 .logo {
   font-family: var(--serif);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--white);
   letter-spacing: -0.02em;
-  padding-right: 20px;
-  border-right: 1px solid var(--border);
+  text-decoration: none;
   line-height: 1;
 }
-.logo span { color: var(--orange); }
+
+.logo span {
+  color: var(--orange);
+}
+
+.masthead-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+
 .masthead-tag {
   font-family: var(--mono);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  color: var(--white-muted);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding-left: 20px;
+  color: var(--white-muted);
 }
+
 .masthead-right {
   display: flex;
   align-items: center;
@@ -180,7 +195,7 @@ body {
 .nav {
   background: var(--panel);
   border-bottom: 2px solid var(--orange);
-  padding: 0 2rem;
+  padding: 0 2.5rem;
   display: flex;
   align-items: stretch;
   gap: 0;
@@ -850,22 +865,25 @@ body {
 </div>
 
 <!-- MASTHEAD -->
-<div class="masthead">
+<!-- MASTHEAD -->
+<header class="masthead">
   <div class="masthead-left">
-    <div class="logo">PRIV<span>●</span>MRKTS</div>
-    <div class="masthead-tag">Research & Analysis Journal</div>
+    <a class="logo" href="index.html">PRIV<span>●</span>MRKTS</a>
+    <div class="masthead-divider"></div>
+    <div class="masthead-tag">Private Markets Intelligence</div>
   </div>
+
   <div class="masthead-right">
     <a class="linkedin-link" href="https://linkedin.com/in/louisvohayes" target="_blank" rel="noopener noreferrer">
-  <svg class="linkedin-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8.09h4.54V24H.22zM8.56 8.09h4.35v2.17h.06c.61-1.15 2.09-2.36 4.3-2.36 4.6 0 5.45 3.03 5.45 6.97V24h-4.54v-7.76c0-1.85-.03-4.23-2.58-4.23-2.59 0-2.99 2.02-2.99 4.1V24H8.56z"/>
-  </svg>
-  LinkedIn
-</a>
+      <svg class="linkedin-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8.09h4.54V24H.22zM8.56 8.09h4.35v2.17h.06c.61-1.15 2.09-2.36 4.3-2.36 4.6 0 5.45 3.03 5.45 6.97V24h-4.54v-7.76c0-1.85-.03-4.23-2.58-4.23-2.59 0-2.99 2.02-2.99 4.1V24H8.56z"/>
+      </svg>
+      LinkedIn
+    </a>
     <div class="timestamp" id="clock">--:-- GMT</div>
     <button class="btn-add" onclick="openProtectedModal()">+ ADD ENTRY</button>
   </div>
-</div>
+</header>
 
 <!-- NAV -->
 <nav class="nav" id="mainNav"></nav>
