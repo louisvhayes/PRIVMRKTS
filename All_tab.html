@@ -103,6 +103,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -130,64 +131,127 @@ body {
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.16em;
+  color: var(--white-muted);
+  text-transform: uppercase;
+}
+
+.masthead-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: auto;
+  margin-right: 14px;
+}
+
+.masthead-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--white-muted);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s;
+  white-space: nowrap;
+}
+
+.masthead-link:hover {
+  color: var(--white);
+}
+
+.masthead-dropdown {
+  position: relative;
+  height: 56px;
+  display: flex;
+  align-items: stretch;
+}
+
+.masthead-drop-btn {
+  background: none;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.masthead-caret {
+  font-size: 11px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.masthead-dropdown-menu {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  min-width: 240px;
+  background: rgba(12,12,12,.98);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--orange);
+  box-shadow: 0 16px 30px rgba(0,0,0,.35);
+  padding: 8px 0;
+  display: none;
+  z-index: 500;
+}
+
+.masthead-dropdown-menu a {
+  display: block;
+  padding: 11px 16px;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+
+.masthead-dropdown-menu a:hover {
+  background: rgba(255,102,0,.06);
+  color: var(--orange);
+}
+
+.masthead-dropdown:hover .masthead-dropdown-menu {
+  display: block;
+}
+
+.masthead-dropdown:hover .masthead-drop-btn {
+  color: var(--white);
 }
 
 .masthead-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-.timestamp {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--white-muted);
-  letter-spacing: 0.04em;
-}
-.linkedin-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--white-muted);
-  text-decoration: none;
-  padding: 6px 12px;
-  border: 1px solid var(--border-light);
-  transition: all 0.15s;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.linkedin-link:hover {
-  color: var(--orange);
-  border-color: var(--orange);
-}
-
-.linkedin-icon {
-  width: 14px;
-  height: 14px;
-  fill: var(--white-muted);
-  transition: fill 0.15s;
-}
-
-.linkedin-link:hover .linkedin-icon {
-  fill: var(--orange);
-}
-.btn-add {
+.nav-cta {
   background: var(--orange);
   color: var(--black);
   border: none;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 8px 16px;
-  cursor: pointer;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  transition: background 0.15s;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background .15s;
+  text-decoration: none;
+}
+
+.nav-cta:hover {
+  background: #ff8533;
 }
 .btn-add:hover { background: #ff8533; }
 
@@ -870,18 +934,39 @@ body {
   <div class="masthead-left">
     <a class="logo" href="index.html">PRIV<span>●</span>MRKTS</a>
     <div class="masthead-divider"></div>
-    <div class="masthead-tag">Private Markets Intelligence</div>
+    <span class="masthead-tag">Private Markets Intelligence</span>
   </div>
 
+  <nav class="masthead-nav">
+    <a class="masthead-link" href="index.html">Home</a>
+
+    <div class="masthead-dropdown">
+      <button class="masthead-link masthead-drop-btn" type="button">
+        Research
+        <span class="masthead-caret">▾</span>
+      </button>
+
+      <div class="masthead-dropdown-menu">
+        <a href="All_tab.html">All</a>
+        <a href="#">Private Markets</a>
+        <a href="#">Private Equity</a>
+        <a href="#">Macro &amp; Rates</a>
+        <a href="#">Company Profiles</a>
+        <a href="#">Venture Capital</a>
+        <a href="#">Private Credit</a>
+        <a href="#">Leveraged Finance</a>
+        <a href="#">Real Estate</a>
+        <a href="#">Infrastructure</a>
+        <a href="#">Hedge Funds</a>
+      </div>
+    </div>
+
+    <a class="masthead-link" href="index.html#what">About</a>
+    <a class="masthead-link" href="#contact">Contact Us</a>
+  </nav>
+
   <div class="masthead-right">
-    <a class="linkedin-link" href="https://linkedin.com/in/louisvohayes" target="_blank" rel="noopener noreferrer">
-      <svg class="linkedin-icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8.09h4.54V24H.22zM8.56 8.09h4.35v2.17h.06c.61-1.15 2.09-2.36 4.3-2.36 4.6 0 5.45 3.03 5.45 6.97V24h-4.54v-7.76c0-1.85-.03-4.23-2.58-4.23-2.59 0-2.99 2.02-2.99 4.1V24H8.56z"/>
-      </svg>
-      LinkedIn
-    </a>
-    <div class="timestamp" id="clock">--:-- GMT</div>
-    <button class="btn-add" onclick="openProtectedModal()">+ ADD ENTRY</button>
+    <a class="nav-cta" href="All_tab.html">Enter Journal →</a>
   </div>
 </header>
 
