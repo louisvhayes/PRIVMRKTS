@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRIV•MRKTS — Private Markets Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --black: #060606;
+  --off: #0c0c0c;
+  --panel: #111111;
+  --p2: #161616;
+  --p3: #1c1c1c;
+  --b1: #232323;
+  --b2: #2e2e2e;
+  --b3: #3a3a3a;
+  --org: #f56a00;
+  --org2: #ff8533;
+  --org-p: rgba(245,106,0,.13);
+  --org-pp: rgba(245,106,0,.06);
+  --wh: #f0ede8;
+  --wh2: #c8c4bc;
+  --wh3: #888480;
+  --wh4: #484440;
+  --grn: #00c875;
+  --grn-p: rgba(0,200,117,.08);
+  --red: #ff4455;
+  --blu: #3d8ef0;
+  --yel: #f0b429;
+  --pur: #8b5cf6;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --serif: 'Playfair Display', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--wh);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── TICKER ── */
+.ticker {
+  background: var(--org);
+  height: 28px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+}
+.ticker-label {
+  background: var(--black);
+  color: var(--org);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 0 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.ticker-track {
+  display: flex;
+  animation: tickerRun 55s linear infinite;
+  white-space: nowrap;
+}
+.tick {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--black);
+  padding: 0 22px;
+  letter-spacing: .04em;
+}
+.tick .chg { opacity: .7; margin-left: 4px; }
+@keyframes tickerRun {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── TOP NAV ── */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(6,6,6,.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--b1);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+}
+.nav-brand { display: flex; align-items: center; gap: 16px; }
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--wh);
+  letter-spacing: -.02em;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-logo span { color: var(--org); }
+.nav-divider { width: 1px; height: 20px; background: var(--b2); }
+.nav-tagline {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--wh3);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--wh); }
+.nav-link.active { color: var(--org); border-bottom-color: var(--org); }
+.nav-cta {
+  background: var(--org);
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background .15s;
+  text-decoration: none;
+  margin-left: 8px;
+}
+.nav-cta:hover { background: var(--org2); }
+
+.nav-dropdown {
+  position: relative;
+  height: 56px;
+  display: flex;
+  align-items: stretch;
+}
+
+.nav-drop-btn {
+  background: none;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-caret {
+  font-size: 11px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  min-width: 240px;
+  background: rgba(12,12,12,.98);
+  border: 1px solid var(--b1);
+  border-top: 2px solid var(--org);
+  box-shadow: 0 16px 30px rgba(0,0,0,.35);
+  padding: 8px 0;
+  display: none;
+  z-index: 500;
+}
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 11px 16px;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+
+.nav-dropdown-menu a:hover {
+  background: rgba(245,106,0,.06);
+  color: var(--org);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+  display: block;
+}
+
+.nav-dropdown:hover .nav-drop-btn {
+  color: var(--wh);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem 2.5rem 5rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--b1);
+}
+
+/* Background grid lines */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,106,0,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,106,0,.028) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+/* Radial glow */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 70vw;
+  height: 80vh;
+  background: radial-gradient(ellipse, rgba(245,106,0,.07) 0%, transparent 62%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 5rem;
+  align-items: center;
+}
+
+.hero-left {}
+
+.hero-kicker {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--org);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp .7s ease .1s forwards;
+}
+.hero-kicker::before { content: ''; width: 28px; height: 1px; background: var(--org); }
+.kicker-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--org);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(.7); }
+}
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 5.5vw, 76px);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  color: var(--wh);
+  margin-bottom: 1.75rem;
+  opacity: 0;
+  animation: fadeUp .8s ease .2s forwards;
+}
+.hero-h1 em { font-style: italic; color: var(--org); }
+.hero-h1 .line2 { color: var(--wh2); }
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--wh2);
+  line-height: 1.8;
+  max-width: 500px;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp .8s ease .35s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .8s ease .5s forwards;
+}
+.btn-primary {
+  background: var(--org);
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--org2); transform: translateY(-1px); }
+.btn-primary svg { width: 12px; height: 12px; }
+.btn-ghost {
+  background: none;
+  color: var(--wh2);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border: 1px solid var(--b2);
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ghost:hover { border-color: var(--org); color: var(--org); }
+
+.hero-proof {
+  display: flex;
+  gap: 28px;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--b1);
+  opacity: 0;
+  animation: fadeUp .8s ease .65s forwards;
+}
+.proof-item { display: flex; flex-direction: column; gap: 2px; }
+.proof-num {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--org);
+  line-height: 1;
+}
+.proof-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--wh3);
+}
+
+/* HERO RIGHT — live terminal panel */
+.hero-terminal {
+  background: var(--panel);
+  border: 1px solid var(--b2);
+  border-top: 2px solid var(--org);
+  opacity: 0;
+  animation: fadeUp .9s ease .4s forwards;
+}
+.term-bar {
+  background: var(--off);
+  border-bottom: 1px solid var(--b1);
+  padding: .65rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.term-dots { display: flex; gap: 5px; }
+.term-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.term-title {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--wh3);
+}
+.term-live {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--grn);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--grn);
+  animation: pulse 1.8s ease infinite;
+}
+.term-feed { padding: 1rem; }
+.term-item {
+  padding: .8rem 0;
+  border-bottom: 1px solid var(--b1);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.term-item:last-child { border-bottom: none; }
+.ti-cat {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1px solid;
+}
+.ti-body { flex: 1; min-width: 0; }
+.ti-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wh);
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+.ti-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh3);
+  letter-spacing: .04em;
+}
+.term-footer {
+  padding: .9rem 1rem;
+  border-top: 1px solid var(--b1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.term-f-txt {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh3);
+  letter-spacing: .06em;
+}
+.term-view {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--org);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color .15s;
+}
+.term-view:hover { color: var(--org2); }
+
+/* ── COVERAGE STRIP ── */
+.coverage {
+  background: var(--off);
+  border-bottom: 1px solid var(--b1);
+  padding: 0 2.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.coverage::-webkit-scrollbar { display: none; }
+.cov-inner {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.cov-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  height: 52px;
+  border-right: 1px solid var(--b1);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.cov-item:first-child { padding-left: 0; }
+.cov-item:hover { background: rgba(245,106,0,.04); }
+.cov-icon { font-size: 14px; }
+.cov-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  transition: color .15s;
+}
+.cov-item:hover .cov-lbl { color: var(--org); }
+.cov-n {
+  font-family: var(--mono);
+  font-size: 9px;
+  background: var(--org-p);
+  color: var(--org);
+  border: 1px solid rgba(245,106,0,.3);
+  padding: 1px 5px;
+  margin-left: 2px;
+}
+
+/* ── WHAT IS THIS section ── */
+.what-section {
+  padding: 5.5rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+  position: relative;
+  overflow: hidden;
+}
+.what-section::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, var(--org) 30%, var(--org) 70%, transparent);
+  opacity: .4;
+}
+.what-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.what-left {}
+.what-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--org);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.what-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--org); }
+.what-h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--wh);
+  margin-bottom: 1.5rem;
+}
+.what-h2 em { font-style: italic; color: var(--org); }
+.what-body {
+  font-size: 14px;
+  color: var(--wh2);
+  line-height: 1.82;
+  margin-bottom: 1.25rem;
+}
+.what-body strong { color: var(--wh); font-weight: 600; }
+.what-body:last-of-type { margin-bottom: 0; }
+
+.what-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--b1);
+  align-self: start;
+}
+.pillar {
+  background: var(--off);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: background .2s;
+}
+.pillar:hover { background: var(--p2); }
+.pillar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--p-c, var(--org));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s ease;
+}
+.pillar:hover::after { transform: scaleX(1); }
+.pillar-icon {
+  width: 40px; height: 40px;
+  background: color-mix(in srgb, var(--p-c, var(--org)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--p-c, var(--org)) 30%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 1.1rem;
+}
+.pillar-name {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wh);
+  margin-bottom: .5rem;
+}
+.pillar-desc {
+  font-size: 12.5px;
+  color: var(--wh3);
+  line-height: 1.6;
+}
+
+/* ── FEATURED RESEARCH ── */
+.featured-section {
+  padding: 5rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+  background: var(--off);
+}
+.section-header {
+  max-width: 1200px;
+  margin: 0 auto 2.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.sec-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--org);
+  margin-bottom: .5rem;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--wh);
+  letter-spacing: -.01em;
+}
+.sec-all {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--org);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sec-all:hover { color: var(--org2); }
+
+.feat-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 1px;
+  background: var(--b1);
+}
+.feat-card {
+  background: var(--panel);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background .15s;
+}
+.feat-card:hover { background: var(--p2); }
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--fc-c, var(--org));
+}
+.feat-card.large { padding: 2.25rem; }
+.fc-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: .85rem;
+}
+.fc-tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+}
+.fc-date {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh3);
+  letter-spacing: .04em;
+}
+.fc-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wh);
+  line-height: 1.3;
+  margin-bottom: .75rem;
+  letter-spacing: -.01em;
+}
+.feat-card.large .fc-title { font-size: 24px; }
+.fc-desc {
+  font-size: 12.5px;
+  color: var(--wh3);
+  line-height: 1.65;
+  margin-bottom: 1rem;
+}
+.fc-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1rem; }
+.fc-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh3);
+  background: var(--p2);
+  border: 1px solid var(--b1);
+  padding: 2px 6px;
+  letter-spacing: .04em;
+}
+.fc-link {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--fc-c, var(--org));
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: gap .15s;
+}
+.feat-card:hover .fc-link { gap: 8px; }
+
+/* ── WHY SECTION ── */
+.why-section {
+  padding: 5.5rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+}
+.why-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--b1);
+  margin-top: 2.5rem;
+}
+.why-card {
+  background: var(--off);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.why-num {
+  font-family: var(--mono);
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--b3);
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -.02em;
+}
+.why-title {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--wh);
+  margin-bottom: .6rem;
+}
+.why-body {
+  font-size: 13px;
+  color: var(--wh3);
+  line-height: 1.7;
+}
+
+/* ── AUDIENCE SECTION ── */
+.audience-section {
+  padding: 5rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+  background: var(--off);
+}
+.aud-inner { max-width: 1200px; margin: 0 auto; }
+.aud-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--b1);
+  margin-top: 2.5rem;
+}
+.aud-card {
+  background: var(--panel);
+  padding: 1.75rem;
+  transition: background .15s;
+  position: relative;
+  overflow: hidden;
+}
+.aud-card:hover { background: var(--p2); }
+.aud-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--a-c, var(--org));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s;
+}
+.aud-card:hover::after { transform: scaleX(1); }
+.aud-icon { font-size: 26px; margin-bottom: 1rem; }
+.aud-title {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wh);
+  margin-bottom: .5rem;
+}
+.aud-body {
+  font-size: 12.5px;
+  color: var(--wh3);
+  line-height: 1.65;
+}
+
+/* ── CATEGORY DEEP DIVE ── */
+.cats-section {
+  padding: 5rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+}
+.cats-inner { max-width: 1200px; margin: 0 auto; }
+.cats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--b1);
+  margin-top: 2.5rem;
+}
+.cat-card {
+  background: var(--off);
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: background .2s;
+  position: relative;
+  border-top: 2px solid var(--cat-c, var(--org));
+}
+.cat-card:hover { background: var(--p2); }
+.cat-num {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cat-c, var(--org));
+  line-height: 1;
+  margin-bottom: .4rem;
+}
+.cat-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  margin-bottom: .75rem;
+}
+.cat-desc {
+  font-size: 12px;
+  color: var(--wh3);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.cat-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+.cat-topic {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .06em;
+  padding: 2px 6px;
+  background: var(--p2);
+  border: 1px solid var(--b2);
+  color: var(--wh4);
+}
+
+/* ── CTA BANNER ── */
+.cta-section {
+  padding: 6rem 2.5rem;
+  border-bottom: 1px solid var(--b1);
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,106,0,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,106,0,.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.cta-section::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 60vh;
+  background: radial-gradient(ellipse, rgba(245,106,0,.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.cta-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--org);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.cta-tag::before, .cta-tag::after { content: ''; width: 20px; height: 1px; background: var(--org); }
+.cta-h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  color: var(--wh);
+  margin-bottom: 1.25rem;
+}
+.cta-h2 em { font-style: italic; color: var(--org); }
+.cta-sub {
+  font-size: 15px;
+  color: var(--wh2);
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+}
+.cta-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cta-disclaimer {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh4);
+  letter-spacing: .06em;
+  margin-top: 1.25rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--off);
+  border-top: 1px solid var(--b1);
+}
+.foot-top {
+  padding: 3rem 2.5rem 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 4rem;
+}
+.foot-brand { }
+.foot-logo {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--wh);
+  letter-spacing: -.02em;
+  margin-bottom: .75rem;
+}
+.foot-logo span { color: var(--org); }
+.foot-desc {
+  font-size: 12.5px;
+  color: var(--wh3);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+.foot-social {
+  display: flex;
+  gap: 10px;
+}
+.foot-soc-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  border: 1px solid var(--b2);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+}
+.foot-soc-btn:hover { border-color: var(--org); color: var(--org); }
+
+.foot-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.fl-col {}
+.fl-head {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--wh3);
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--b1);
+}
+.fl-list { list-style: none; }
+.fl-list li { margin-bottom: .5rem; }
+.fl-list a {
+  font-size: 13px;
+  color: var(--wh3);
+  text-decoration: none;
+  transition: color .15s;
+  cursor: pointer;
+}
+.fl-list a:hover { color: var(--org); }
+
+.foot-bottom {
+  border-top: 1px solid var(--b1);
+  padding: 1.25rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.foot-copy {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh4);
+  letter-spacing: .06em;
+}
+.foot-reg {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--wh4);
+  letter-spacing: .05em;
+  text-align: right;
+}
+
+/* ── SCROLL ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1060px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-terminal { display: none; }
+  .what-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .what-right { grid-template-columns: 1fr 1fr; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .aud-grid { grid-template-columns: 1fr 1fr; }
+  .cats-grid { grid-template-columns: 1fr 1fr; }
+  .foot-top { grid-template-columns: 1fr; }
+  .foot-links { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .topnav { padding: 0 1.25rem; }
+  .nav-links { display: none; }
+  .hero { padding: 4rem 1.25rem 3rem; }
+  .what-section, .featured-section, .why-section,
+  .audience-section, .cats-section, .cta-section { padding: 3.5rem 1.25rem; }
+  .what-right { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .aud-grid { grid-template-columns: 1fr; }
+  .cats-grid { grid-template-columns: 1fr; }
+  .foot-links { grid-template-columns: 1fr; }
+  .coverage { padding: 0 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">LIVE</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="topnav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<span>●</span>MRKTS</span>
+    <div class="nav-divider"></div>
+    <span class="nav-tagline">Private Markets Intelligence</span>
+  </div>
+  <nav class="nav-links">
+  <a class="nav-link active" href="#">Home</a>
+
+  <div class="nav-dropdown">
+    <button class="nav-link nav-drop-btn" type="button">
+      Research
+      <span class="nav-caret">▾</span>
+    </button>
+
+    <div class="nav-dropdown-menu">
+      <a href="/Users/louishayes/Downloads/1 Financial Journal/financial_journal (1).html">All</a>
+      <a href="#">Private Markets</a>
+      <a href="#">Private Equity</a>
+      <a href="#">Macro &amp; Rates</a>
+      <a href="#">Company Profiles</a>
+      <a href="#">Venture Capital</a>
+      <a href="#">Private Credit</a>
+      <a href="#">Leveraged Finance</a>
+      <a href="#">Real Estate</a>
+      <a href="#">Infrastructure</a>
+      <a href="#">Hedge Funds</a>
+    </div>
+  </div>
+
+  <a class="nav-link" href="#">About</a>
+  <a class="nav-link" href="#contact">Get in Contact</a>
+</nav>
+<a class="nav-cta" href="#">Enter Journal →</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-kicker">
+        <span class="kicker-dot"></span>
+        Private Markets Intelligence Platform
+      </div>
+      <h1 class="hero-h1">
+        Where Serious Investors<br>
+        <em>Think Deeply</em><br>
+        <span class="line2">About Private Markets.</span>
+      </h1>
+      <p class="hero-sub">Institutional-grade research on private equity, hedge funds, venture capital and macro — written for investors, analysts, and finance professionals who demand more than surface-level commentary.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          Enter the Journal
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+        </a>
+        <a href="#what" class="btn-ghost">What is this?</a>
+      </div>
+      <div class="hero-proof">
+        <div class="proof-item">
+          <span class="proof-num">13+</span>
+          <span class="proof-lbl">Research entries</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">4</span>
+          <span class="proof-lbl">Coverage sectors</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">5+</span>
+          <span class="proof-lbl">Company profiles</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">2026</span>
+          <span class="proof-lbl">Active · Growing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMINAL PANEL -->
+    <div class="hero-terminal">
+      <div class="term-bar">
+        <div class="term-dots">
+          <div class="term-dot" style="background:#ff5f57"></div>
+          <div class="term-dot" style="background:#febc2e"></div>
+          <div class="term-dot" style="background:#28c840"></div>
+        </div>
+        <span class="term-title">Latest Research Feed</span>
+        <span class="term-live"><span class="live-dot"></span>Live</span>
+      </div>
+      <div class="term-feed">
+        <div class="term-item">
+          <span class="ti-cat" style="color:var(--org);border-color:rgba(245,106,0,.4);background:var(--org-p)">PE</span>
+          <div class="ti-body">
+            <div class="ti-title">Chiltern Capital — Deal Structures & Portfolio Deep Dive</div>
+            <div class="ti-meta">Company Deep Dives · 19 Mar 2026</div>
+          </div>
+        </div>
+        <div class="term-item">
+          <span class="ti-cat" style="color:var(--blu);border-color:rgba(61,142,240,.4);background:var(--blu-p)">Macro</span>
+          <div class="ti-body">
+            <div class="ti-title">Global Interest Rates & Private Equity Impact 2000–2026</div>
+            <div class="ti-meta">Macro & Rates · 18 Mar 2026</div>
+          </div>
+        </div>
+        <div class="term-item">
+          <span class="ti-cat" style="color:var(--grn);border-color:rgba(0,200,117,.4);background:var(--grn-p)">PE</span>
+          <div class="ti-body">
+            <div class="ti-title">Why Continuation Funds Are Taking Over Private Equity</div>
+            <div class="ti-meta">Private Equity · 18 Mar 2026</div>
+          </div>
+        </div>
+        <div class="term-item">
+          <span class="ti-cat" style="color:var(--pur);border-color:rgba(139,92,246,.4);background:var(--pur-p)">HF</span>
+          <div class="ti-body">
+            <div class="ti-title">Blackstone, Hedge Funds & Anthropic AI Investment Themes</div>
+            <div class="ti-meta">PM News · 18 Mar 2026</div>
+          </div>
+        </div>
+        <div class="term-item">
+          <span class="ti-cat" style="color:var(--yel);border-color:rgba(240,180,41,.4);background:var(--yel-p)">PE</span>
+          <div class="ti-body">
+            <div class="ti-title">Bird's Eye View of the Private Equity Industry</div>
+            <div class="ti-meta">Private Equity · 18 Mar 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="term-footer">
+        <span class="term-f-txt">13 total entries · Updated daily</span>
+        <a class="term-view" href="#">View all research →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE STRIP -->
+<div class="coverage">
+  <div class="cov-inner">
+    <div class="cov-item">
+      <span class="cov-icon">🏦</span>
+      <span class="cov-lbl">Private Equity</span>
+      <span class="cov-n">4</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">🌐</span>
+      <span class="cov-lbl">Private Markets</span>
+      <span class="cov-n">4</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">📈</span>
+      <span class="cov-lbl">Macro & Rates</span>
+      <span class="cov-n">1</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">🔬</span>
+      <span class="cov-lbl">Company Deep Dives</span>
+      <span class="cov-n">4</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">⚡</span>
+      <span class="cov-lbl">Venture Capital</span>
+      <span class="cov-n">Coming</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">🎯</span>
+      <span class="cov-lbl">Hedge Funds</span>
+      <span class="cov-n">Coming</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">🏗️</span>
+      <span class="cov-lbl">Infrastructure</span>
+      <span class="cov-n">Coming</span>
+    </div>
+    <div class="cov-item">
+      <span class="cov-icon">💳</span>
+      <span class="cov-lbl">Private Credit</span>
+      <span class="cov-n">Coming</span>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IS THIS -->
+<section class="what-section" id="what">
+  <div class="what-inner">
+    <div class="what-left reveal">
+      <div class="what-eyebrow">About the platform</div>
+      <h2 class="what-h2">A Research Journal Built for <em>Serious</em> Private Markets Practitioners</h2>
+      <p class="what-body">PRIV•MRKTS is an independent research platform covering the private markets landscape — private equity, hedge funds, venture capital, infrastructure, and macro. Every piece is built as an interactive, data-rich document: not a blog post, not a news feed.</p>
+      <p class="what-body">Think of it as a <strong>living research library</strong>. Company profiles, deal structure explainers, market trend analyses, interactive charts, and deep dives into specific funds, strategies and transactions — all in one place, built to the standard you'd expect from a tier-one research house.</p>
+      <p class="what-body">The journal grows with every new entry. <strong>The more you explore, the more you find.</strong> Each file links to the next. Use the journal as a reference tool, a learning resource, or a research foundation for your own work.</p>
+    </div>
+    <div class="what-right reveal">
+      <div class="pillar" style="--p-c:var(--org)">
+        <div class="pillar-icon">📊</div>
+        <div class="pillar-name">Interactive Research</div>
+        <div class="pillar-desc">Every entry is a standalone HTML document — charts, tables, timelines and toggles that work. Not static PDFs.</div>
+      </div>
+      <div class="pillar" style="--p-c:var(--blu)">
+        <div class="pillar-icon">🏛️</div>
+        <div class="pillar-name">Institutional Depth</div>
+        <div class="pillar-desc">Deal-by-deal analysis, fund mechanics, return multiples and structural breakdowns — written for professionals.</div>
+      </div>
+      <div class="pillar" style="--p-c:var(--grn)">
+        <div class="pillar-icon">🔗</div>
+        <div class="pillar-name">Connected Knowledge</div>
+        <div class="pillar-desc">Entries cross-reference each other. Follow the thread from macro rates to PE returns to specific company deals.</div>
+      </div>
+      <div class="pillar" style="--p-c:var(--pur)">
+        <div class="pillar-icon">⚡</div>
+        <div class="pillar-name">Always Growing</div>
+        <div class="pillar-desc">New entries added regularly. The journal is a living document — not a finished product, but a compounding asset.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED RESEARCH -->
+<section class="featured-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="sec-eyebrow">Featured Research</div>
+      <h2 class="sec-title">Latest from the Journal</h2>
+    </div>
+    <a class="sec-all" href="#">View all entries →</a>
+  </div>
+  <div class="feat-grid reveal">
+    <div class="feat-card large" style="--fc-c:var(--org)">
+      <div class="fc-meta">
+        <span class="fc-tag" style="color:var(--org);border-color:rgba(245,106,0,.4);background:var(--org-p)">Company Deep Dive</span>
+        <span class="fc-date">19 Mar 2026</span>
+      </div>
+      <div class="fc-title">Chiltern Capital — Deal Structures, Portfolio Companies & Investment Deep Dives</div>
+      <div class="fc-desc">A comprehensive breakdown of MBOs, buy-and-builds, carve-outs and minority growth capital — followed by a deal-by-deal analysis of every Chiltern Capital investment: what they bought, how they grew it, and what they made on exit.</div>
+      <div class="fc-tags">
+        <span class="fc-chip">MBO</span>
+        <span class="fc-chip">Buy-and-Build</span>
+        <span class="fc-chip">Carve-Out</span>
+        <span class="fc-chip">SiXworks · IBM</span>
+        <span class="fc-chip">Steer Automotive</span>
+      </div>
+      <a class="fc-link" href="#">Read deep dive →</a>
+    </div>
+    <div class="feat-card" style="--fc-c:var(--blu)">
+      <div class="fc-meta">
+        <span class="fc-tag" style="color:var(--blu);border-color:rgba(61,142,240,.4);background:var(--blu-p)">Macro & Rates</span>
+        <span class="fc-date">18 Mar 2026</span>
+      </div>
+      <div class="fc-title">Global Interest Rates & Private Equity Impact 2000–2026</div>
+      <div class="fc-desc">Historic Fed, ECB and BoE rate cycles — interactive chart with PE commentary for every era from the dot-com bust to the 2022 rate shock.</div>
+      <div class="fc-tags">
+        <span class="fc-chip">ZIRP</span>
+        <span class="fc-chip">LBO</span>
+        <span class="fc-chip">Central Banks</span>
+      </div>
+      <a class="fc-link" href="#">Read analysis →</a>
+    </div>
+    <div class="feat-card" style="--fc-c:var(--grn)">
+      <div class="fc-meta">
+        <span class="fc-tag" style="color:var(--grn);border-color:rgba(0,200,117,.4);background:var(--grn-p)">Private Equity</span>
+        <span class="fc-date">18 Mar 2026</span>
+      </div>
+      <div class="fc-title">Why Continuation Funds Are Taking Over Private Equity</div>
+      <div class="fc-desc">From $22bn in 2020 to $115bn in 2025 — six structural forces driving the GP-led secondaries surge. Charts, timeline, and stakeholder analysis.</div>
+      <div class="fc-tags">
+        <span class="fc-chip">GP-led</span>
+        <span class="fc-chip">Secondaries</span>
+        <span class="fc-chip">Exit Markets</span>
+      </div>
+      <a class="fc-link" href="#">Read analysis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY THIS PLATFORM -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="section-header reveal">
+      <div>
+        <div class="sec-eyebrow">Why PRIV•MRKTS</div>
+        <h2 class="sec-title">Research That Respects Your Intelligence</h2>
+      </div>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-title">No surface-level summaries</div>
+        <div class="why-body">Every entry goes deep. Deal-by-deal breakdowns, actual transaction mechanics, verified financial data where it exists, and honest caveats where it doesn't. We don't publish what everyone already knows.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <div class="why-title">Interactive, not static</div>
+        <div class="why-body">Charts you can hover, tabs you can toggle, timelines you can scroll. Research built as interactive HTML documents — not PDF slides, not Twitter threads. Designed for deep reading.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-title">Structured like a professional database</div>
+        <div class="why-body">The journal is organised by sector, deal type, and company — cross-referenced and searchable. Use it as a reference when you need to look something up, or as a curriculum when you want to learn systematically.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">04</div>
+        <div class="why-title">Built by practitioners, for practitioners</div>
+        <div class="why-body">The platform is designed around how finance professionals actually work — dense with data, precise in language, and respectful of the complexity of private markets. No jargon-free dumbing down.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">05</div>
+        <div class="why-title">Private markets, exclusively</div>
+        <div class="why-body">We don't cover public equities, ETFs, or retail investing. PRIV•MRKTS focuses entirely on the private markets ecosystem — the asset classes, mechanics, and players that most platforms ignore or misunderstand.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">06</div>
+        <div class="why-title">The library grows compound</div>
+        <div class="why-body">Each new entry adds to a cross-referenced knowledge base. The more entries that exist, the more valuable each one becomes. A 2024 deal profile connects to a 2022 rates analysis which connects to a 2020 macro entry. Context compounds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="audience-section">
+  <div class="aud-inner">
+    <div class="section-header reveal">
+      <div>
+        <div class="sec-eyebrow">Who this is for</div>
+        <h2 class="sec-title">Built for the Private Markets Ecosystem</h2>
+      </div>
+    </div>
+    <div class="aud-grid reveal">
+      <div class="aud-card" style="--a-c:var(--org)">
+        <div class="aud-icon">🏦</div>
+        <div class="aud-title">Investment Professionals</div>
+        <div class="aud-body">PE associates, analysts, and fund managers who need rigorous reference material — deal comps, market structure, fund mechanics and competitive landscape across the private markets universe.</div>
+      </div>
+      <div class="aud-card" style="--a-c:var(--blu)">
+        <div class="aud-icon">📚</div>
+        <div class="aud-title">Finance Students & Candidates</div>
+        <div class="aud-body">MBA candidates, CFA students, and aspiring PE/VC professionals who want institutional-grade knowledge beyond what textbooks provide. The depth of understanding that interview prep demands.</div>
+      </div>
+      <div class="aud-card" style="--a-c:var(--grn)">
+        <div class="aud-icon">⚙️</div>
+        <div class="aud-title">Operators & Founders</div>
+        <div class="aud-body">CEOs and CFOs of PE-backed businesses, or founders considering institutional capital. Understand what your investor is thinking, how they structure deals, and what drives their decisions.</div>
+      </div>
+      <div class="aud-card" style="--a-c:var(--pur)">
+        <div class="aud-icon">🔭</div>
+        <div class="aud-title">Intellectually Curious Professionals</div>
+        <div class="aud-body">Lawyers, accountants, consultants, and advisers working adjacent to private markets. Build a structured understanding of the world your clients operate in — deal by deal, fund by fund.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE CATEGORIES -->
+<section class="cats-section">
+  <div class="cats-inner">
+    <div class="section-header reveal">
+      <div>
+        <div class="sec-eyebrow">Coverage Areas</div>
+        <h2 class="sec-title">What's in the Journal</h2>
+      </div>
+      <a class="sec-all" href="#">Browse all →</a>
+    </div>
+    <div class="cats-grid reveal">
+      <div class="cat-card" style="--cat-c:var(--org)">
+        <div class="cat-num">4</div>
+        <div class="cat-name">Private Equity</div>
+        <div class="cat-desc">Fund mechanics, deal structures, LBO models, continuation funds, secondaries, and GP-LP dynamics across the full buyout spectrum.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">LBO</span>
+          <span class="cat-topic">MBO</span>
+          <span class="cat-topic">Buy-and-Build</span>
+          <span class="cat-topic">Continuation Funds</span>
+          <span class="cat-topic">Fund Economics</span>
+          <span class="cat-topic">Carry</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--blu)">
+        <div class="cat-num">4</div>
+        <div class="cat-name">Company Deep Dives</div>
+        <div class="cat-desc">Firm profiles, portfolio analysis, investment track records and deal-by-deal breakdowns of specific private markets managers.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Chiltern Capital</span>
+          <span class="cat-topic">Firm Profiles</span>
+          <span class="cat-topic">Deal Analysis</span>
+          <span class="cat-topic">Return Multiples</span>
+          <span class="cat-topic">Portfolio Cos</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--yel)">
+        <div class="cat-num">1</div>
+        <div class="cat-name">Macro & Rates</div>
+        <div class="cat-desc">Central bank policy cycles and their transmission into private markets — how rates shape deal economics, valuations and exit markets.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Fed · ECB · BoE</span>
+          <span class="cat-topic">ZIRP Era</span>
+          <span class="cat-topic">Rate Cycles</span>
+          <span class="cat-topic">PE Valuations</span>
+          <span class="cat-topic">Credit Spreads</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--pur)">
+        <div class="cat-num">4</div>
+        <div class="cat-name">PM News & Analysis</div>
+        <div class="cat-desc">Timely analysis of private markets news — block trades, major announcements, sector trends and deal commentary.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Blackstone</span>
+          <span class="cat-topic">Block Trades</span>
+          <span class="cat-topic">Market Trends</span>
+          <span class="cat-topic">AI &amp; PE</span>
+          <span class="cat-topic">Deal Commentary</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--grn); opacity:.7">
+        <div class="cat-num" style="color:var(--b3)">—</div>
+        <div class="cat-name">Venture Capital</div>
+        <div class="cat-desc">VC fund mechanics, cap table structures, term sheets, valuation methodologies and emerging sector analysis. Coming soon.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Coming Soon</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--red); opacity:.7">
+        <div class="cat-num" style="color:var(--b3)">—</div>
+        <div class="cat-name">Hedge Funds</div>
+        <div class="cat-desc">Long/short equity, macro strategies, credit hedge funds, fee structures and performance analysis. Coming soon.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Coming Soon</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--yel); opacity:.7">
+        <div class="cat-num" style="color:var(--b3)">—</div>
+        <div class="cat-name">Private Credit</div>
+        <div class="cat-desc">Direct lending, mezzanine, distressed debt and CLO structures across the private credit spectrum. Coming soon.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Coming Soon</span>
+        </div>
+      </div>
+      <div class="cat-card" style="--cat-c:var(--blu); opacity:.7">
+        <div class="cat-num" style="color:var(--b3)">—</div>
+        <div class="cat-name">Infrastructure</div>
+        <div class="cat-desc">Infrastructure PE, asset mechanics, energy transition, and long-duration investment strategies. Coming soon.</div>
+        <div class="cat-topics">
+          <span class="cat-topic">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <div class="cta-tag">Start Reading</div>
+    <h2 class="cta-h2">The Journal is <em>Open</em>.<br>Go Explore.</h2>
+    <p class="cta-sub">13 research entries and growing. From continuation fund mechanics to Chiltern Capital deal breakdowns to global rate cycles — everything is there, interactive and deep. Start wherever interests you most.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary">
+        Enter the Journal
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+      <a href="#what" class="btn-ghost">Browse by category</a>
+    </div>
+    <div class="cta-disclaimer">Free to read · No account required · Independent research</div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="cta-inner reveal">
+    <div class="cta-tag">Contact</div>
+    <h2 class="cta-h2">Get in <em>Contact</em></h2>
+    <p class="cta-sub">
+      For research questions, collaboration, or feedback on PRIV•MRKTS, get in touch directly.
+    </p>
+    <div class="cta-actions">
+      <a href="mailto:youremail@example.com" class="btn-primary">Email Me</a>
+      <a href="#" class="btn-ghost">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">
+      <div class="foot-logo">PRIV<span>●</span>MRKTS</div>
+      <p class="foot-desc">Independent private markets intelligence. Institutional-grade research on private equity, hedge funds, venture capital, and macro — built for finance professionals, students, and serious investors.</p>
+      <div class="foot-social">
+        <a class="foot-soc-btn" href="#">LinkedIn</a>
+        <a class="foot-soc-btn" href="#">Twitter / X</a>
+      </div>
+    </div>
+    <div class="foot-links">
+      <div class="fl-col">
+        <div class="fl-head">Research</div>
+        <ul class="fl-list">
+          <li><a href="#">All Entries</a></li>
+          <li><a href="#">Private Equity</a></li>
+          <li><a href="#">Macro & Rates</a></li>
+          <li><a href="#">Company Deep Dives</a></li>
+          <li><a href="#">PM News</a></li>
+        </ul>
+      </div>
+      <div class="fl-col">
+        <div class="fl-head">Sectors</div>
+        <ul class="fl-list">
+          <li><a href="#">Buyout PE</a></li>
+          <li><a href="#">Secondaries</a></li>
+          <li><a href="#">Venture Capital</a></li>
+          <li><a href="#">Hedge Funds</a></li>
+          <li><a href="#">Private Credit</a></li>
+        </ul>
+      </div>
+      <div class="fl-col">
+        <div class="fl-head">Company Profiles</div>
+        <ul class="fl-list">
+          <li><a href="#">Chiltern Capital</a></li>
+          <li><a href="#">All Profiles</a></li>
+          <li><a href="#">Add a Company</a></li>
+        </ul>
+      </div>
+      <div class="fl-col">
+        <div class="fl-head">Platform</div>
+        <ul class="fl-list">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Research Journal</a></li>
+          <li><a href="#">Methodology</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span class="foot-copy">© 2026 PRIV•MRKTS · All rights reserved · Independent research platform</span>
+    <span class="foot-reg">For research and educational purposes only · Not investment advice · March 2026</span>
+  </div>
+</footer>
+
+<script>
+/* TICKER */
+const TICKS = [
+  {s:'FED RATE',v:'3.75%',c:'-0.50% cycle'},{s:'ECB RATE',v:'2.15%',c:'-2.35% cycle'},
+  {s:'BOE RATE',v:'4.25%',c:'-0.25% cycle'},{s:'EUR IG SPREAD',v:'112bps',c:'+3bps'},
+  {s:'US HY SPREAD',v:'318bps',c:'-12bps'},{s:'GLOBAL M&A',v:'$2.4T',c:'+14% YTD'},
+  {s:'PE DRY POWDER',v:'$3.7T',c:'+4.1% QoQ'},{s:'MSCI WORLD',v:'3,241',c:'+6.1% YTD'},
+  {s:'BRENT CRUDE',v:'$74.2',c:'-1.2%'},{s:'GOLD',v:'$2,914',c:'+11.4% YTD'},
+  {s:'USD/EUR',v:'1.0842',c:'+0.3%'},{s:'GP-LED VOL',v:'$115B',c:'+53% YTD'},
+  {s:'CONT. FUNDS',v:'20%',c:'of PE exits 2025'},
+];
+const double = [...TICKS,...TICKS];
+document.getElementById('tickerTrack').innerHTML = double.map(t=>
+  `<span class="tick">${t.s} <strong>${t.v}</strong> <span class="chg">${t.c}</span></span>`
+).join('');
+
+/* REVEAL ON SCROLL */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* NAV ACTIVE ON SCROLL */
+window.addEventListener('scroll', () => {
+  const links = document.querySelectorAll('.nav-link');
+  links.forEach(l => l.classList.remove('active'));
+  links[0].classList.add('active');
+}, { passive: true });
+</script>
+</body>
+</html>
