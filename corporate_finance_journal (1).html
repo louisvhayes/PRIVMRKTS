@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate Finance — Foundations, Decisions & Financial Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* HERO */
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+
+/* HERO STATS PANEL */
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+
+/* SECTION WRAPPERS */
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+/* BODY TEXT */
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+
+/* PULL QUOTE */
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+
+/* GRID LAYOUTS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+
+/* ACCENT CARDS */
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}
+.ac.gr{border-top:2px solid var(--green)}
+.ac.re{border-top:2px solid var(--red)}
+.ac.bl{border-top:2px solid var(--blue)}
+.ac.ye{border-top:2px solid var(--yellow)}
+.ac.pu{border-top:2px solid var(--purple)}
+.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}
+.ac.gr .ac-hd{color:var(--green)}
+.ac.re .ac-hd{color:var(--red)}
+.ac.bl .ac-hd{color:var(--blue)}
+.ac.ye .ac-hd{color:var(--yellow)}
+.ac.pu .ac-hd{color:var(--purple)}
+.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}
+.ac.gr .ac-stat{color:var(--green)}
+.ac.re .ac-stat{color:var(--red)}
+.ac.bl .ac-stat{color:var(--blue)}
+.ac.ye .ac-stat{color:var(--yellow)}
+.ac.pu .ac-stat{color:var(--purple)}
+.ac.te .ac-stat{color:var(--teal)}
+
+/* BULLET LIST */
+.blist{list-style:none;font-size:13px;color:var(--white-2);line-height:1}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+
+/* DATA ROW */
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.d-sub{font-family:var(--mono);font-size:10px;color:var(--green);text-align:right}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+
+/* CHART CONTAINER */
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.04em;text-align:right}
+.chart-wrap{position:relative;width:100%}
+
+/* LEGEND */
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+
+/* BAR METER */
+.bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.bar-lbl{font-size:12px;color:var(--white-2);width:230px;flex-shrink:0}
+.bar-wrap{flex:1;height:5px;background:var(--panel-2);border-radius:0;overflow:hidden}
+.bar-fill{height:100%;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:10px;font-weight:600;width:52px;text-align:right;flex-shrink:0}
+
+/* FLOW DIAGRAM */
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
+.flow-node{flex:1;min-width:130px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;position:relative;cursor:default;transition:border-color .2s,background .2s}
+.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
+.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
+.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
+.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
+
+/* OUTLOOK GRID */
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+/* FORMULA BOX */
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono);font-size:13px;color:var(--white)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem}
+
+/* VERDICT */
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+
+/* BADGE */
+.badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;margin-bottom:5px}
+.badge-key{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-line)}
+.badge-formula{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(61,142,240,.3)}
+.badge-warn{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(240,180,41,.3)}
+.badge-ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
+
+/* FOOTER */
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  .bar-lbl{width:140px}
+  .flow{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+/* FINANCIAL STATEMENT TABLES */
+.fs-wrap{overflow-x:auto;margin-bottom:1.5rem}
+.fs-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.fs-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);background:var(--panel-2);padding:.65rem 1rem;text-align:left;border-bottom:2px solid var(--orange-line)}
+.fs-table td{padding:.45rem 1rem;border-bottom:1px solid var(--border);color:var(--white-2);vertical-align:top}
+.fs-table tr:last-child td{border-bottom:none}
+.fs-table .fs-section{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--white-3);background:var(--panel-2);padding:.4rem 1rem}
+.fs-table .fs-total{font-weight:600;color:var(--white);border-top:1px solid var(--border-2);background:var(--panel)}
+.fs-table .fs-grand{font-family:var(--mono);font-weight:600;color:var(--orange);border-top:2px solid var(--orange-line);background:var(--panel)}
+.fs-table .fs-num{font-family:var(--mono);text-align:right;color:var(--white)}
+.fs-table .fs-neg{font-family:var(--mono);text-align:right;color:var(--red)}
+.fs-table .fs-sub{font-family:var(--mono);text-align:right;color:var(--white-3)}
+.fs-table .fs-indent{padding-left:2rem}
+.fs-split{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.fs-box{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange);overflow:hidden}
+.fs-box-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.7rem 1rem;border-bottom:1px solid var(--border);background:var(--panel-2)}
+/* IS TABLE (single column, cascading) */
+.is-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.is-table td{padding:.42rem 1rem;border-bottom:1px solid var(--border);color:var(--white-2)}
+.is-table tr:last-child td{border-bottom:none}
+.is-table .is-section{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--white-3);background:var(--panel-2);padding:.38rem 1rem}
+.is-table .is-label{padding-left:1rem}
+.is-table .is-indent{padding-left:2rem}
+.is-table .is-num{font-family:var(--mono);text-align:right;color:var(--white);white-space:nowrap}
+.is-table .is-neg{font-family:var(--mono);text-align:right;color:var(--red);white-space:nowrap}
+.is-table .is-sub{font-family:var(--mono);text-align:right;color:var(--white-3);white-space:nowrap}
+.is-table .is-total{font-weight:600;color:var(--white);border-top:1px solid var(--border-2);background:var(--panel)}
+.is-table .is-grand{font-family:var(--mono);font-weight:600;color:var(--orange);border-top:2px solid var(--orange-line);background:var(--panel)}
+.is-table .is-margin{font-family:var(--mono);font-size:10px;text-align:right;color:var(--green)}
+@media(max-width:860px){.fs-split{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#decisions">The 4 Decisions</a>
+    <a class="nl" href="#balancesheet">Balance Sheet</a>
+    <a class="nl" href="#incomestatement">Income Statement</a>
+    <a class="nl" href="#markets">Financial Markets</a>
+    <a class="nl" href="#ratios">Ratio Analysis</a>
+    <a class="nl" href="#dupont">DuPont Identity</a>
+    <a class="nl" href="#marketvalue">Market Value</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance Foundations</div>
+      <h1>Corporate Finance:<br><em>Decisions, Value</em><br>&amp; Analysis</h1>
+      <p class="hero-lead">From the four core decisions of corporate finance to financial ratio analysis and the DuPont identity — a comprehensive deep-dive into how firms create value, how they are financed, and how we measure their performance through accounting statements.</p>
+      <div class="meta-row">
+        <span>Foundations Module</span>
+        <span>Corporate Finance · Financial Analysis</span>
+        <span>Capital Budgeting · Ratios · DuPont · Market Value</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core concepts at a glance</div>
+      <div class="sp-row">
+        <div class="sp-lbl">Main objective of the firm</div>
+        <div class="sp-right"><div class="sp-val">Max Value</div><div class="sp-sub">▲ for shareholders</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Fundamental accounting equation</div>
+        <div class="sp-right"><div class="sp-val">A = L + E</div><div class="sp-sub">Assets = Liabilities + Equity</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Net Working Capital</div>
+        <div class="sp-right"><div class="sp-val">CA − CL</div><div class="sp-sub">Current Assets minus Current Liabilities</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Interest coverage benchmark (high quality)</div>
+        <div class="sp-right"><div class="sp-val">&gt; 5×</div><div class="sp-sub">EBIT / Interest expense</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">DuPont identity decomposes</div>
+        <div class="sp-right"><div class="sp-val">ROE</div><div class="sp-sub">Margin × Turnover × Multiplier</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Best operating return measure</div>
+        <div class="sp-right"><div class="sp-val">ROIC</div><div class="sp-sub">EBIT(1−t) / Invested Capital</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: THE 4 DECISIONS ── -->
+<div id="decisions" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">01</div>
+    <h2 class="sec-title">The Four Core Decisions of Corporate Finance</h2>
+  </div>
+
+  <p class="body fu">Corporate finance is not a single question — it is four interlocking questions that together define how a firm creates, sustains, and distributes value. Every financial decision a manager makes flows from one of these four pillars. Together they describe <strong>the entire lifecycle of capital inside a firm</strong>, from acquisition to deployment to return.</p>
+
+  <div class="flow fu">
+    <div class="flow-node">
+      <div class="fn-num">01</div>
+      <div class="fn-title">Investment</div>
+      <div class="fn-body">What long-term assets should the firm invest in to maximise value?</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">02</div>
+      <div class="fn-title">Financing</div>
+      <div class="fn-body">How should those investments be financed — debt or equity?</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">03</div>
+      <div class="fn-title">Cash Flow Mgmt</div>
+      <div class="fn-body">How should short-term operating cash flows be managed daily?</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">04</div>
+      <div class="fn-title">Payout</div>
+      <div class="fn-body">How should the firm return cash to investors — dividends or buybacks?</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">★</div>
+      <div class="fn-title">Objective</div>
+      <div class="fn-body">Maximise the value of the firm for all stakeholders</div>
+    </div>
+  </div>
+
+  <!-- DECISION DETAIL TABS -->
+  <div class="tabs fu" id="decisionTabs">
+    <div class="tab on" onclick="switchTab('dec1',this,'decisionTabs','decisionPanels')">Investment</div>
+    <div class="tab" onclick="switchTab('dec2',this,'decisionTabs','decisionPanels')">Financing</div>
+    <div class="tab" onclick="switchTab('dec3',this,'decisionTabs','decisionPanels')">Cash Flow Mgmt</div>
+    <div class="tab" onclick="switchTab('dec4',this,'decisionTabs','decisionPanels')">Payout</div>
+  </div>
+  <div id="decisionPanels">
+
+    <!-- INVESTMENT DECISION -->
+    <div class="tab-panel on" id="dec1">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>investment decision</strong> asks: what long-term investments in fixed assets should the firm undertake to maximise value? This is the most fundamental question a firm faces. It concerns the <strong>left side of the balance sheet</strong> — specifically, which assets to acquire and hold. The nature of the business typically dictates the types and proportions of assets needed, but the firm must rigorously evaluate each investment opportunity.</p>
+          <p class="body">The formal process for making these decisions is called <strong>capital budgeting</strong> — the planning, evaluation, and control of a firm's long-term investments. It involves identifying investment opportunities, estimating future cash flows, assessing risks, and applying decision-making techniques to determine whether an investment adds value.</p>
+          <div class="pq">
+            <div class="pq-text">Capital budgeting is about deciding which long-term investments are worth the money and managing them over their life to ensure they continue to create value for the firm.</div>
+            <div class="pq-src">— Corporate Finance Foundations</div>
+          </div>
+          <p class="body">Capital budgeting decisions are uniquely consequential because they involve <strong>large sums of capital</strong>, they are often <strong>irreversible</strong> once made, and they have a <strong>lasting impact on long-term profitability</strong>. A wrong investment decision cannot easily be undone, which is why rigorous evaluation techniques are indispensable.</p>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">What capital budgeting involves</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Identify opportunities</strong> — new projects, expansions, replacements, acquisitions, new markets, or technology upgrades</li>
+              <li><strong style="color:var(--white)">Estimate cash flows</strong> — project future revenues, costs, and net cash flows for the life of each investment</li>
+              <li><strong style="color:var(--white)">Assess risk</strong> — sensitivity analysis, scenario analysis, and discount rate adjustments to account for uncertainty</li>
+              <li><strong style="color:var(--white)">Apply decision criteria</strong> — Net Present Value (NPV), Internal Rate of Return (IRR), Payback Period</li>
+              <li><strong style="color:var(--white)">Accept or reject</strong> — invest only in projects that generate positive NPV or exceed the hurdle rate</li>
+              <li><strong style="color:var(--white)">Monitor expenditures</strong> — post-investment review to ensure the project delivers the expected return</li>
+            </ul>
+          </div>
+          <div class="ac bl" style="margin-top:1rem">
+            <div class="ac-hd">Key evaluation techniques</div>
+            <div class="d-row"><span class="d-lbl">Net Present Value (NPV)</span><span class="d-val" style="color:var(--blue)">Primary</span></div>
+            <div class="d-row"><span class="d-lbl">Internal Rate of Return (IRR)</span><span class="d-val" style="color:var(--blue)">Common</span></div>
+            <div class="d-row"><span class="d-lbl">Payback Period</span><span class="d-val" style="color:var(--white-3)">Supplementary</span></div>
+            <div class="d-row"><span class="d-lbl">Profitability Index</span><span class="d-val" style="color:var(--white-3)">Supplementary</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCING DECISION -->
+    <div class="tab-panel" id="dec2">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>financing decision</strong> asks: how should the firm's long-term investments be funded? This is the <strong>right side of the balance sheet</strong> — the mix of debt and equity used to finance the firm's assets. The answer determines the firm's <strong>capital structure</strong>: the proportions of funding from current liabilities, long-term debt, and equity.</p>
+          <p class="body">Think of the firm as a <strong>pie</strong>. The total size of the pie is the value of the firm. The financing decision is not about making the pie bigger — that is the investment decision. It is about <strong>how to slice the pie</strong> between debt holders and equity holders. The critical insight from modern corporate finance theory is that the optimal capital structure minimises the firm's overall cost of capital while managing financial risk.</p>
+          <p class="body">The key tension is between <strong>debt financing</strong> (cheaper due to interest tax shields, but creates fixed obligations and financial risk) and <strong>equity financing</strong> (more flexible, no repayment pressure, but dilutes ownership and is typically more expensive than debt). The firm must balance these trade-offs carefully in light of its cash flow stability, asset type, and growth prospects.</p>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Debt financing — characteristics</div>
+            <ul class="blist">
+              <li>Loan or debt security — firm promises to repay principal plus contractual interest</li>
+              <li>Interest is tax-deductible — creates a valuable <strong style="color:var(--white)">interest tax shield</strong></li>
+              <li>Debt holders are senior — paid before equity holders in liquidation</li>
+              <li>Fixed obligations increase <strong style="color:var(--white)">financial risk</strong> and probability of distress</li>
+              <li>Does not dilute existing shareholders' ownership stakes</li>
+            </ul>
+          </div>
+          <div class="ac pu" style="margin-top:1rem">
+            <div class="ac-hd">Equity financing — characteristics</div>
+            <ul class="blist">
+              <li>Firm sells shares and gives up a fraction of ownership to investors</li>
+              <li>Shareholders receive <strong style="color:var(--white)">residual cash flows</strong> — only paid after all obligations are met</li>
+              <li>No fixed repayment — equity is permanent capital with no maturity date</li>
+              <li>More expensive than debt — shareholders bear more risk and demand a higher return</li>
+              <li>Dilutes ownership and may dilute earnings per share (EPS)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASH FLOW MANAGEMENT -->
+    <div class="tab-panel" id="dec3">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>management of cash flows decision</strong> focuses on the <strong>upper portion of the balance sheet</strong> — specifically, how the firm manages the gap between cash inflows and cash outflows in its day-to-day operations. There is almost always a <strong>timing mismatch</strong> between when cash comes in (customers paying) and when cash must go out (paying suppliers, wages, rent, utilities).</p>
+          <p class="body">The formal measure of this challenge is <strong>Net Working Capital (NWC)</strong>, defined as current assets minus current liabilities. If NWC is positive, the firm has a buffer of liquid assets over near-term obligations. If NWC is zero, the firm is exactly balanced. If NWC is <strong>negative</strong>, the firm is relying on future cash inflows to cover current obligations — a sign of <strong>inefficient cash management</strong> or structural fragility.</p>
+          <p class="body">Financial managers must actively plan, monitor, and control these short-term flows to ensure the firm can always meet its obligations. Failure to manage working capital is a common cause of corporate failure even in otherwise profitable businesses.</p>
+        </div>
+        <div>
+          <div class="ac ye">
+            <div class="ac-hd">Net Working Capital — what it tells you</div>
+            <div class="formula" style="margin:0 0 1rem 0">
+              <div class="f-label">Formula</div>
+              <div class="f-eq">NWC = Current Assets − Current Liabilities</div>
+            </div>
+            <div class="d-row"><span class="d-lbl">NWC = 0</span><span class="d-val" style="color:var(--yellow)">Fine, but improve</span></div>
+            <div class="d-row"><span class="d-lbl">NWC &gt; 0</span><span class="d-val" style="color:var(--green)">Healthy buffer</span></div>
+            <div class="d-row"><span class="d-lbl">NWC &lt; 0</span><span class="d-val" style="color:var(--red)">Inefficient / risky</span></div>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Sources of cash timing mismatch</div>
+            <ul class="blist">
+              <li>Customers pay on credit terms (30–90 days) while suppliers must be paid sooner</li>
+              <li>Inventory sits unsold — tying up cash that could be deployed elsewhere</li>
+              <li>Seasonal revenue spikes create temporary gaps that must be bridged with working capital facilities</li>
+              <li>Rapid growth requires more working capital even as profitability improves</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYOUT DECISION -->
+    <div class="tab-panel" id="dec4">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>payout decision</strong> asks: how should the firm return cash to investors? This concerns the <strong>lower right side of the balance sheet</strong> — specifically the equity claims. The firm's <strong>payout policy</strong> determines what fraction of earnings is retained within the business for future investment versus distributed to shareholders as a reward for their capital.</p>
+          <p class="body">There are two main payout mechanisms. <strong>Cash dividends</strong> are direct periodic payments to shareholders, signalling financial stability and rewarding income-seeking investors. <strong>Share repurchases (buybacks)</strong> are when the firm uses cash to buy back its own shares from the open market, reducing shares outstanding, increasing earnings per share, and returning cash in a <strong>more tax-efficient way</strong> in most jurisdictions (capital gains tax versus income tax on dividends).</p>
+          <p class="body">Repurchased shares are typically cancelled or held as treasury stock. Buybacks also signal management's confidence that the stock is undervalued. The payout decision is ultimately a balance between <strong>rewarding investors now</strong> versus <strong>retaining capital to fund future growth</strong>.</p>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Factors shaping the payout decision</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Cash availability</strong> — the firm must have sufficient liquidity before committing to payouts</li>
+              <li><strong style="color:var(--white)">Future investment opportunities</strong> — high-growth firms retain more; mature firms pay more</li>
+              <li><strong style="color:var(--white)">Shareholder expectations</strong> — income investors expect consistent dividends; growth investors prefer buybacks</li>
+              <li><strong style="color:var(--white)">Tax implications</strong> — buybacks are often more tax-efficient than dividends for investors</li>
+              <li><strong style="color:var(--white)">Earnings stability</strong> — firms with volatile earnings are cautious about committing to regular dividends</li>
+              <li><strong style="color:var(--white)">Debt obligations</strong> — paying bondholders faster (deleveraging) may take priority over equity payouts</li>
+            </ul>
+          </div>
+          <div class="ac te" style="margin-top:1rem">
+            <div class="ac-hd">Share buyback — how it works</div>
+            <div class="ac-body">The firm uses cash to buy shares from the open market or directly from shareholders → shares outstanding fall → earnings per share (EPS) rises → remaining shareholders own a larger fraction of the firm → cash returned in a tax-efficient manner → repurchased shares cancelled or held as treasury stock.</div>
+            <div class="ac-stat">Signal effect: buybacks communicate management's belief the stock is undervalued</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /decisionPanels -->
+
+  <!-- IMPORTANCE BARS -->
+  <div class="ac or fu" style="margin-bottom:1.5rem;margin-top:2rem">
+    <div class="ac-hd">Relative complexity &amp; impact of each decision — practitioner view</div>
+    <div id="decisionBars">
+      <div class="bar-row"><div class="bar-lbl">Investment decision (capital budgeting)</div><div class="bar-wrap"><div class="bar-fill" data-w="95" style="background:#f56a00"></div></div><div class="bar-val" style="color:#f56a00">HIGHEST</div></div>
+      <div class="bar-row"><div class="bar-lbl">Financing decision (capital structure)</div><div class="bar-wrap"><div class="bar-fill" data-w="88" style="background:#f0b429"></div></div><div class="bar-val" style="color:#f0b429">VERY HIGH</div></div>
+      <div class="bar-row"><div class="bar-lbl">Management of operating cash flows</div><div class="bar-wrap"><div class="bar-fill" data-w="78" style="background:#3d8ef0"></div></div><div class="bar-val" style="color:#3d8ef0">HIGH</div></div>
+      <div class="bar-row"><div class="bar-lbl">Payout decision (dividends &amp; buybacks)</div><div class="bar-wrap"><div class="bar-fill" data-w="68" style="background:#00c875"></div></div><div class="bar-val" style="color:#00c875">HIGH</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: BALANCE SHEET ── -->
+<div id="balancesheet" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">02</div>
+    <h2 class="sec-title">The Balance Sheet &amp; Accounting Equation</h2>
+  </div>
+
+  <p class="body fu">The balance sheet is the foundational document of financial analysis. It shows the financial position of a business at a <strong>single point in time</strong> — a snapshot of what the firm owns, what it owes, and what belongs to shareholders. Every corporate finance concept — from capital structure to working capital to leverage — is ultimately rooted in the balance sheet.</p>
+
+  <div class="formula fu">
+    <div class="f-label">The Fundamental Accounting Equation</div>
+    <div class="f-eq">Assets = Liabilities + Shareholders' Equity</div>
+    <div class="f-note">This equation always balances because every asset is financed either by borrowing (liabilities) or by owners' funds (equity). What the company owns = what it owes + what belongs to owners.</div>
+  </div>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Assets — ordered by liquidity (most → least)</div>
+        <div class="tl-yr" style="margin-top:.8rem;margin-bottom:.4rem">CURRENT ASSETS (convert to cash within 1 year)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Cash &amp; equivalents</strong> — already cash; the most liquid asset of all</li>
+          <li><strong style="color:var(--white)">Accounts receivable</strong> — money owed by customers for credit sales; converts soon</li>
+          <li><strong style="color:var(--white)">Inventories</strong> — raw materials, work-in-progress, finished goods; must be sold first</li>
+          <li><strong style="color:var(--white)">Other current assets</strong> — prepaid expenses, short-term deposits</li>
+        </ul>
+        <div class="tl-yr" style="margin-top:1rem;margin-bottom:.4rem">LONG-TERM ASSETS (used &gt;1 year)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Land</strong> — not depreciated because it does not wear out or become obsolete</li>
+          <li><strong style="color:var(--white)">Buildings &amp; equipment</strong> — depreciated over their useful life (systematic cost allocation)</li>
+          <li><strong style="color:var(--white)">Net PPE</strong> — gross property, plant &amp; equipment minus accumulated depreciation</li>
+          <li><strong style="color:var(--white)">Goodwill &amp; intangibles</strong> — brand value, patents, trademarks, acquisition goodwill</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Liabilities — ordered by maturity (earliest → latest)</div>
+        <div class="tl-yr" style="margin-top:.8rem;margin-bottom:.4rem">CURRENT LIABILITIES (due within 1 year)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Accounts payable</strong> — money owed to suppliers for goods/services purchased on credit</li>
+          <li><strong style="color:var(--white)">Notes payable / short-term debt</strong> — loans or borrowings due within one year</li>
+          <li><strong style="color:var(--white)">Current maturities of LT debt</strong> — the portion of long-term loans due this year</li>
+          <li><strong style="color:var(--white)">Other current liabilities</strong> — accrued expenses, taxes payable</li>
+        </ul>
+        <div class="tl-yr" style="margin-top:1rem;margin-bottom:.4rem">LONG-TERM LIABILITIES (due after 1 year)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Long-term debt</strong> — loans and bonds with repayment periods beyond one year</li>
+          <li><strong style="color:var(--white)">Capital lease obligations</strong> — long-term lease commitments treated as debt</li>
+          <li><strong style="color:var(--white)">Deferred taxes</strong> — taxes owed in future due to timing differences in accounting vs tax rules</li>
+        </ul>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">Shareholders' equity</div>
+        <div class="ac-body">The residual claim on the firm after all liabilities are satisfied. Includes share capital (what shareholders paid in) and <strong>retained earnings</strong> (cumulative profits not distributed as dividends). Equity grows when the firm earns net income and shrinks when it incurs losses or pays dividends.</div>
+        <div class="ac-stat">Ending Equity = Beginning Equity + Net Income − Dividends</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pq fu">
+    <div class="pq-text">Liquidity ordering of assets tells you how quickly the firm can generate cash. Maturity ordering of liabilities tells you when the firm needs cash. Together, these orderings reveal the firm's liquidity risk at a glance.</div>
+    <div class="pq-src">— Balance Sheet Fundamentals</div>
+  </div>
+
+  <!-- CASH FLOW CYCLE -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">How Firms Create Value: The Cash Flow Cycle</h2>
+  </div>
+  <p class="body fu">Value is not created by holding assets — it is created by <strong>generating more cash flow than was invested</strong>. The cash flows paid to bondholders and shareholders must exceed the cash flows they originally put into the firm. This is the basic test of value creation in corporate finance.</p>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">1. Investors provide capital</div>
+      <div class="ac-body">Bondholders lend money (buying bonds or providing loans). Shareholders invest in exchange for ownership stakes. This capital flows into the firm via financial markets — the primary market for new issuances.</div>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">2. Firm invests in assets</div>
+      <div class="ac-body">Capital is deployed into current assets (cash, inventory, receivables) and fixed assets (machinery, buildings, technology). These assets are used to produce goods and services and generate operating cash flows.</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">3. Assets generate cash flows</div>
+      <div class="ac-body">Operating activities generate cash. This is split three ways: taxes go to government, some cash is paid out to investors (dividends, interest, principal), and some is retained and reinvested to reduce future financing needs.</div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">Core principle — value creation</div>
+    <div class="verdict-text">Firms raise funds from financial markets, invest in assets to generate operating cash flows, pay taxes and return cash to investors, and reinvest retained earnings. Value is created when the cash flows returned to investors exceed the cash flows originally provided by them — when the firm earns a return above its cost of capital.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2b: INCOME STATEMENT ── -->
+<div id="incomestatement" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">02b</div>
+    <h2 class="sec-title">The Income Statement</h2>
+  </div>
+
+  <p class="body fu">While the balance sheet is a <strong>snapshot</strong> of a firm's position at a single point in time, the income statement is a <strong>flow statement</strong> — it records all revenues earned and all expenses incurred during a period, and establishes the net income or net loss for that period. Think of the balance sheet as two photographs (opening and closing) and the income statement as the film that shows everything that happened between them.</p>
+
+  <div class="pq fu">
+    <div class="pq-text">The income statement is the flow of cash between two balance sheets. The balance sheet alone cannot tell you how the firm's cash was generated — only the income statement can explain that journey from revenue to profit.</div>
+    <div class="pq-src">— Corporate Finance Foundations</div>
+  </div>
+
+  <!-- INCOME STATEMENT STRUCTURE -->
+  <div class="g2 fu">
+    <div>
+      <p class="body">The income statement cascades downward through several layers of profit, each one stripping away another category of cost. This <strong>waterfall structure</strong> is deliberate — it separates operating performance from financing decisions from tax obligations, allowing analysts to evaluate each layer independently.</p>
+      <p class="body">The key insight is that <strong>EBIT (Earnings Before Interest and Taxes)</strong> belongs entirely to capital providers (both debt and equity), while the net income that ultimately reaches the bottom of the statement belongs solely to equity holders. This is why EBIT-based ratios allow fair comparison across firms with different capital structures — they measure operating performance before any financing decisions affect the result.</p>
+      <div class="ac or" style="margin-top:1rem">
+        <div class="ac-hd">The profit waterfall — five layers</div>
+        <div class="d-row"><span class="d-lbl">① Revenue</span><span class="d-val" style="color:var(--white)">Price × Quantity sold</span></div>
+        <div class="d-row"><span class="d-lbl">② Gross Profit</span><span class="d-val" style="color:var(--green)">Revenue − COGS</span></div>
+        <div class="d-row"><span class="d-lbl">③ EBIT (Operating Income)</span><span class="d-val" style="color:var(--blue)">Gross Profit − OpEx</span></div>
+        <div class="d-row"><span class="d-lbl">④ EBT (Earnings Before Tax)</span><span class="d-val" style="color:var(--yellow)">EBIT ± Non-op items</span></div>
+        <div class="d-row"><span class="d-lbl">⑤ Net Income</span><span class="d-val" style="color:var(--orange)">EBT − Tax</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Key line items explained</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Revenue / Net Sales</strong> — total sales minus any returns, discounts, and allowances. The top line.</li>
+          <li><strong style="color:var(--white)">Cost of Goods Sold (COGS)</strong> — direct costs of producing goods or services: raw materials, direct labour, manufacturing overhead</li>
+          <li><strong style="color:var(--white)">Gross Profit</strong> — what is left after paying to produce; measures core production profitability</li>
+          <li><strong style="color:var(--white)">SG&amp;A</strong> — Selling, General &amp; Administrative expenses: salaries, rent, marketing, management costs — the overhead of running the business</li>
+          <li><strong style="color:var(--white)">D&amp;A</strong> — Depreciation and Amortisation: non-cash allocation of asset costs over time (see EBITDA note)</li>
+          <li><strong style="color:var(--white)">EBIT</strong> — operating profit; belongs to all capital providers; the purest measure of operating performance</li>
+          <li><strong style="color:var(--white)">Interest expense</strong> — cost of debt financing; below EBIT because it is a financing decision, not an operating one</li>
+          <li><strong style="color:var(--white)">Net Income</strong> — the bottom line; belongs entirely to equity holders; flows into retained earnings on the balance sheet</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL INCOME STATEMENT EXAMPLE -->
+  <div class="sec-hd fu" style="margin-top:1.75rem">
+    <h2 class="sec-title" style="font-size:20px">Example Income Statement — Meridian Manufacturing plc (£m)</h2>
+  </div>
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">Income Statement — year ended 31 December 2024 (£m)</div><div class="chart-src">Margin analysis shown right column</div></div>
+    <div class="fs-box" style="border-top-color:var(--blue)">
+      <div class="fs-box-hd" style="color:var(--blue)">Consolidated Income Statement</div>
+      <table class="is-table">
+        <thead><tr><th style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);background:var(--panel-2);padding:.65rem 1rem;text-align:left;border-bottom:2px solid rgba(61,142,240,.3)">Line Item</th><th style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);background:var(--panel-2);padding:.65rem 1rem;text-align:right;border-bottom:2px solid rgba(61,142,240,.3)">£m</th><th style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);background:var(--panel-2);padding:.65rem 1rem;text-align:right;border-bottom:2px solid rgba(61,142,240,.3)">% of Revenue</th></tr></thead>
+        <tr><td class="is-label" style="font-weight:600;color:var(--white)">Net Sales Revenue</td><td class="is-num" style="font-weight:600;color:var(--white)">2,262</td><td class="is-margin" style="color:var(--white-3)">100.0%</td></tr>
+        <tr><td colspan="3" class="is-section">Cost of Sales</td></tr>
+        <tr><td class="is-indent">Raw materials consumed</td><td class="is-neg">(980)</td><td class="is-sub">43.3%</td></tr>
+        <tr><td class="is-indent">Direct labour costs</td><td class="is-neg">(430)</td><td class="is-sub">19.0%</td></tr>
+        <tr><td class="is-indent">Manufacturing overhead</td><td class="is-neg">(245)</td><td class="is-sub">10.8%</td></tr>
+        <tr><td class="is-total is-label">Total Cost of Goods Sold</td><td class="is-neg is-total">(1,655)</td><td class="is-sub is-total">73.2%</td></tr>
+        <tr style="background:rgba(0,200,117,.05)"><td class="is-grand is-label">Gross Profit</td><td class="is-num is-grand">607</td><td class="is-margin" style="color:var(--green)">▲ 26.8%</td></tr>
+        <tr><td colspan="3" class="is-section">Operating Expenses</td></tr>
+        <tr><td class="is-indent">Selling, general &amp; administrative (SG&amp;A)</td><td class="is-neg">(248)</td><td class="is-sub">11.0%</td></tr>
+        <tr><td class="is-indent">Research &amp; development</td><td class="is-neg">(58)</td><td class="is-sub">2.6%</td></tr>
+        <tr><td class="is-indent">Depreciation &amp; amortisation (non-cash)</td><td class="is-neg">(82)</td><td class="is-sub">3.6%</td></tr>
+        <tr><td class="is-total is-label">Total Operating Expenses</td><td class="is-neg is-total">(388)</td><td class="is-sub is-total">17.2%</td></tr>
+        <tr style="background:rgba(61,142,240,.05)"><td class="is-grand is-label">EBIT — Operating Income</td><td class="is-num is-grand">219</td><td class="is-margin" style="color:var(--blue)">▲ 9.7%</td></tr>
+        <tr><td colspan="3" class="is-section">Non-Operating / Financing Items</td></tr>
+        <tr><td class="is-indent">Interest income (on cash deposits)</td><td class="is-num">8</td><td class="is-sub">0.4%</td></tr>
+        <tr><td class="is-indent">Interest expense (on debt)</td><td class="is-neg">(49)</td><td class="is-sub">2.2%</td></tr>
+        <tr><td class="is-indent">Other non-operating items</td><td class="is-neg">(4)</td><td class="is-sub">0.2%</td></tr>
+        <tr><td class="is-grand is-label">Earnings Before Tax (EBT)</td><td class="is-num is-grand">174</td><td class="is-margin" style="color:var(--yellow)">▲ 7.7%</td></tr>
+        <tr><td colspan="3" class="is-section">Taxation</td></tr>
+        <tr><td class="is-indent">Income tax expense (effective rate 26%)</td><td class="is-neg">(88)</td><td class="is-sub">3.9%</td></tr>
+        <tr style="background:rgba(245,106,0,.06)"><td class="is-grand is-label" style="font-size:14px;font-weight:700">Net Income (Profit after Tax)</td><td class="is-num is-grand" style="font-size:15px;color:var(--orange)">86</td><td class="is-margin" style="color:var(--orange)">▲ 3.8%</td></tr>
+        <tr><td colspan="3" class="is-section">Supplemental Disclosures</td></tr>
+        <tr><td class="is-indent">EBITDA (EBIT + D&amp;A = 219 + 82)</td><td class="is-num">301</td><td class="is-margin" style="color:var(--green)">13.3%</td></tr>
+        <tr><td class="is-indent">Depreciation &amp; amortisation (included above, non-cash)</td><td class="is-num">82</td><td class="is-sub"></td></tr>
+        <tr><td class="is-indent">Retained earnings addition (Net Income − Dividends)</td><td class="is-num">54</td><td class="is-sub"></td></tr>
+        <tr><td class="is-indent">Dividends declared</td><td class="is-neg">(32)</td><td class="is-sub"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- LINK TO BALANCE SHEET -->
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">How income statement links to balance sheet</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Net income → Retained Earnings</strong> — profit earned increases equity via retained earnings</li>
+        <li><strong style="color:var(--white)">Dividends → Reduce Retained Earnings</strong> — cash paid to shareholders reduces equity directly</li>
+        <li><strong style="color:var(--white)">D&amp;A → Reduces PPE</strong> — accumulated depreciation reduces the book value of assets each period</li>
+        <li>The income statement is the <strong style="color:var(--white)">bridge</strong> between two consecutive balance sheets</li>
+      </ul>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">EBIT vs EBITDA — the critical distinction</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">EBIT = 219</strong> — after D&amp;A; reflects true economic cost of using assets; used in interest coverage and ROIC</li>
+        <li><strong style="color:var(--white)">EBITDA = 301</strong> — adds back D&amp;A (non-cash); proxy for operating cash generation; used in EV multiples and credit analysis</li>
+        <li>D&amp;A of £82m is a non-cash charge — it reduces accounting profit but <strong style="color:var(--white)">does not reduce cash</strong></li>
+        <li>EBITDA ≠ free cash flow — it ignores capital expenditures, working capital changes, and tax payments</li>
+      </ul>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Profit margin cascade</div>
+      <div class="d-row"><span class="d-lbl">Gross Margin</span><span class="d-val" style="color:var(--green)">26.8%</span></div>
+      <div class="d-row"><span class="d-lbl">EBITDA Margin</span><span class="d-val" style="color:var(--green)">13.3%</span></div>
+      <div class="d-row"><span class="d-lbl">EBIT (Operating) Margin</span><span class="d-val" style="color:var(--blue)">9.7%</span></div>
+      <div class="d-row"><span class="d-lbl">EBT Margin</span><span class="d-val" style="color:var(--yellow)">7.7%</span></div>
+      <div class="d-row"><span class="d-lbl">Net Profit Margin</span><span class="d-val" style="color:var(--orange)">3.8%</span></div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">Key insight — income statement vs balance sheet</div>
+    <div class="verdict-text">The income statement tells you how the business performed over a period; the balance sheet tells you where it stands at the end. Net income — the income statement's bottom line — flows directly into retained earnings on the balance sheet, permanently linking the two statements. Every pound of profit the firm keeps, rather than distributing as dividends, becomes part of the equity base it will use to generate future returns.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: FINANCIAL MARKETS ── -->
+<div id="markets" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">03</div>
+    <h2 class="sec-title">Financial Markets: Structure &amp; Composition</h2>
+  </div>
+
+  <p class="body fu">Firms need cash to invest in new projects. Financial markets are the mechanism through which that cash is raised. Understanding the structure of financial markets — primary vs secondary, money vs capital, debt vs equity — is essential to understanding how the financing decision operates in practice.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Money markets vs capital markets</div>
+        <div class="d-row"><span class="d-lbl">Money markets</span><span class="d-val">Short-term debt &lt;1yr</span></div>
+        <div class="d-row"><span class="d-lbl">Trading venue</span><span class="d-val" style="color:var(--white-3)">Primarily OTC</span></div>
+        <div class="d-row"><span class="d-lbl">Examples</span><span class="d-val" style="color:var(--white-3)">LIBOR, EURIBOR</span></div>
+        <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+        <div class="d-row"><span class="d-lbl">Capital markets</span><span class="d-val">Long-term debt &gt;1yr + equity</span></div>
+        <div class="d-row"><span class="d-lbl">Trading venue</span><span class="d-val" style="color:var(--white-3)">Exchanges (NYSE, LSE)</span></div>
+        <div class="d-row"><span class="d-lbl">Examples</span><span class="d-val" style="color:var(--white-3)">Bonds, equities</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Primary markets vs secondary markets</div>
+        <div class="ac-body" style="margin-bottom:.75rem"><strong>Primary markets:</strong> The firm issues securities (stocks or bonds) for the <strong>first time</strong>. This is where the firm actually raises new capital. Mechanisms include IPOs (Initial Public Offerings), SEOs (Seasoned Equity Offerings), and private placement. The firm receives the proceeds.</div>
+        <div class="ac-body"><strong>Secondary markets:</strong> Buying and selling of <strong>previously issued</strong> securities between investors. The firm receives no cash from secondary market transactions — only investors trade with each other. Key functions: price discovery and liquidity provision. Examples: NYSE, Euronext, LSE.</div>
+        <div class="ac-stat">Secondary market liquidity makes primary market issuance possible — investors need to know they can exit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac gr">
+      <div class="ac-hd">Equity issuance routes</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Private negotiation</strong> — sold to a small number of institutional investors directly (private placement)</li>
+        <li><strong style="color:var(--white)">IPO</strong> — Initial Public Offering; first listing on a public exchange, raising capital from the general public</li>
+        <li><strong style="color:var(--white)">SEO</strong> — Seasoned Equity Offering; further shares issued by a company already listed</li>
+        <li>Equity gives up ownership but creates no fixed repayment obligation</li>
+      </ul>
+    </div>
+    <div class="ac pu">
+      <div class="ac-hd">Debt issuance routes</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Bank loans (private credit)</strong> — bilateral or syndicated loan agreements; more common in continental Europe and for small firms</li>
+        <li><strong style="color:var(--white)">Bonds (public debt)</strong> — debt securities traded in financial markets; accessible at scale for large firms</li>
+        <li>Debt is cheaper than equity but creates fixed obligations that can lead to distress</li>
+        <li>Publicly issued bonds are tradeable in secondary markets, providing liquidity for bondholders</li>
+      </ul>
+    </div>
+    <div class="ac te">
+      <div class="ac-hd">Banking system &amp; other markets</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Bank lending</strong> — firms can bypass capital markets entirely and borrow from banks; standard route for SMEs</li>
+        <li><strong style="color:var(--white)">Interbank market</strong> — where banks lend to each other (LIBOR, EURIBOR benchmark these rates)</li>
+        <li><strong style="color:var(--white)">Foreign exchange market</strong> — spot FX transactions for international trade and cross-border investment</li>
+        <li>Bank financing is more flexible but typically more expensive than public debt at scale</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: RATIO ANALYSIS ── -->
+<div id="ratios" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">04</div>
+    <h2 class="sec-title">Financial Ratio Analysis</h2>
+  </div>
+
+  <p class="body fu">Financial ratios are the primary toolkit for evaluating a firm's performance. They transform raw accounting numbers into standardised metrics that can be compared over time (against the firm's own history) or across companies (relative to industry peers). Seven categories of ratios cover the full spectrum of corporate performance — from profitability to solvency to market valuation.</p>
+
+  <!-- RATIO TABS -->
+  <div class="tabs fu" id="ratioTabs">
+    <div class="tab on" onclick="switchTab('r1',this,'ratioTabs','ratioPanels')">Profitability</div>
+    <div class="tab" onclick="switchTab('r2',this,'ratioTabs','ratioPanels')">Liquidity</div>
+    <div class="tab" onclick="switchTab('r3',this,'ratioTabs','ratioPanels')">Working Capital</div>
+    <div class="tab" onclick="switchTab('r4',this,'ratioTabs','ratioPanels')">Interest Coverage</div>
+    <div class="tab" onclick="switchTab('r5',this,'ratioTabs','ratioPanels')">Leverage</div>
+    <div class="tab" onclick="switchTab('r6',this,'ratioTabs','ratioPanels')">Valuation</div>
+    <div class="tab" onclick="switchTab('r7',this,'ratioTabs','ratioPanels')">Operating Returns</div>
+  </div>
+  <div id="ratioPanels">
+
+    <!-- PROFITABILITY -->
+    <div class="tab-panel on" id="r1">
+      <p class="body">Profitability ratios measure how efficiently a firm converts revenue into profit at different stages of the income statement. They require both the balance sheet (for equity) and the <strong>income statement</strong> — which records the flow of revenues and expenses between balance sheet dates, establishing net income for the period.</p>
+      <div class="g3">
+        <div class="ac or">
+          <div class="ac-hd">Gross Margin</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">Gross Profit / Sales</div>
+            <div class="f-note">= (Sales − Cost of Sales) / Sales</div>
+          </div>
+          <div class="ac-body">Measures the firm's ability to sell a product for <strong>more than it costs to produce</strong>. A high gross margin means the core business model is inherently profitable before any operating expenses are deducted. It reflects pricing power and production efficiency.</div>
+        </div>
+        <div class="ac ye">
+          <div class="ac-hd">Operating Margin</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">Operating Income / Sales</div>
+            <div class="f-note">= (Gross Profit − Operating Expenses) / Sales</div>
+          </div>
+          <div class="ac-body">Reveals how much a company earns <strong>before interest and taxes</strong> from each dollar of sales. This is the profit from actual operations — after all operating costs (salaries, rent, D&amp;A) but before financing costs. Compares across firms with different capital structures.</div>
+        </div>
+        <div class="ac gr">
+          <div class="ac-hd">Net Profit Margin</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">Net Income / Sales</div>
+          </div>
+          <div class="ac-body">Shows the fraction of each dollar of revenue available to <strong>equity holders</strong> after the firm has paid all expenses, interest, and taxes. The bottom-line profitability measure. Low margins don't necessarily indicate poor performance — high-volume, low-margin businesses (e.g. supermarkets) can still be highly profitable in absolute terms.</div>
+        </div>
+      </div>
+      <div class="ac bl fu">
+        <div class="ac-hd">Income statement — simplified structure &amp; link to equity</div>
+        <div class="g2" style="margin-top:.8rem;margin-bottom:0">
+          <ul class="blist">
+            <li><strong style="color:var(--white)">Operating Revenue</strong> = Price × Quantity sold</li>
+            <li><strong style="color:var(--white)">Operating Costs</strong> = Cost × Quantity + Depreciation</li>
+            <li><strong style="color:var(--white)">Operating Income (EBIT)</strong> = Op Revenue − Op Costs</li>
+            <li><strong style="color:var(--white)">Net Income</strong> = EBIT + Financial Revenue − Financial Expenses − Tax</li>
+          </ul>
+          <ul class="blist">
+            <li>Net income <strong style="color:var(--white)">increases retained earnings</strong> → increases book equity</li>
+            <li>Net loss <strong style="color:var(--white)">reduces retained earnings</strong> → reduces book equity</li>
+            <li>Dividends paid <strong style="color:var(--white)">reduce retained earnings</strong> directly</li>
+            <li><strong style="color:var(--white)">Key link:</strong> Income Statement → Retained Earnings → Balance Sheet Equity</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIQUIDITY -->
+    <div class="tab-panel" id="r2">
+      <p class="body">Liquidity ratios assess the firm's ability to meet its <strong>short-term obligations</strong> using available assets. Creditors use these ratios to evaluate whether the firm has sufficient working capital to avoid a cash shortfall. Each ratio is progressively more stringent — the cash ratio is the most conservative test.</p>
+      <div class="g3">
+        <div class="ac or">
+          <div class="ac-hd">Current Ratio</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">Current Assets / Current Liabilities</div>
+          </div>
+          <div class="ac-body">The broadest liquidity measure. Includes all current assets, including inventory. A ratio above 1.0 means the firm has more short-term assets than short-term obligations. Benchmark: typically 1.5–2.0x is considered healthy, though this varies significantly by industry.</div>
+          <div class="ac-stat">Example: 761 / 486 = 1.63×</div>
+        </div>
+        <div class="ac ye">
+          <div class="ac-hd">Quick Ratio (Acid Test)</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">(Cash + ST Investments + AR) / CL</div>
+          </div>
+          <div class="ac-body">More stringent than the current ratio because <strong>inventory is excluded</strong>. Inventory must first be sold (and the sale collected) before it becomes cash — making it less immediately liquid. The quick ratio asks: can we pay our obligations without relying on selling inventory? A conservative worst-case test.</div>
+          <div class="ac-stat">Example: (761 − 269) / 486 = 1.01×</div>
+        </div>
+        <div class="ac re">
+          <div class="ac-hd">Cash Ratio</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">Cash / Current Liabilities</div>
+          </div>
+          <div class="ac-body">The most stringent liquidity test. Uses only actual cash (and cash equivalents) — the most liquid asset. Asks: if every short-term obligation came due today, could we pay immediately with cash on hand? Very low ratios are common and not necessarily alarming — most firms are not expected to hold enough cash to repay all current liabilities at once.</div>
+          <div class="ac-stat">Example: 140 / 486 = 0.29×</div>
+        </div>
+      </div>
+      <div class="pq">
+        <div class="pq-text">Why is inventory excluded from the quick ratio? Because inventory must first be sold, the sale may be on credit, and collection may take weeks — making it unreliable in a short-term cash crunch. The quick ratio gives a more conservative, realistic picture of immediate liquidity.</div>
+        <div class="pq-src">— Liquidity Ratio Foundations</div>
+      </div>
+    </div>
+
+    <!-- WORKING CAPITAL -->
+    <div class="tab-panel" id="r3">
+      <p class="body">Working capital ratios measure how efficiently the firm manages the cycle of cash → inventory → sales → receivables → cash. Together, these ratios form the <strong>Cash Conversion Cycle (CCC)</strong> — the number of days the firm's cash is tied up in operations before being recovered as revenue.</p>
+      <div class="g2">
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Accounts Receivable Days (DSO)</div>
+            <div class="formula" style="margin:.5rem 0">
+              <div class="f-eq">AR Days = AR / (Sales / 365)</div>
+            </div>
+            <div class="ac-body">Measures the average number of days it takes to <strong>collect cash from customers</strong> after a credit sale. Lower is better — it means faster collection and improved cash flow. High AR days may indicate weak credit control or customers in financial difficulty.</div>
+            <div class="ac-body" style="margin-top:.6rem"><strong>Example:</strong> AR = 294, Sales = 2,262 → AR Days = 294 / (2,262/365) ≈ <strong>47 days</strong>. Customers take 47 days on average to pay.</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Inventory Days (Days Inventory Held)</div>
+            <div class="formula" style="margin:.5rem 0">
+              <div class="f-eq">Inventory Days = Inventory / (COGS / 365)</div>
+            </div>
+            <div class="ac-body">Measures how many days inventory sits on the shelf before being sold. Lower is better — faster turnover means less capital tied up in stock and lower obsolescence risk. Cost of Sales is used (not revenue) because inventory is recorded at cost.</div>
+            <div class="ac-body" style="margin-top:.6rem"><strong>Example:</strong> Inventory = 269, COGS = 1,655 → Inventory Days = 269 / (1,655/365) ≈ <strong>59 days</strong>.</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Accounts Payable Days</div>
+            <div class="formula" style="margin:.5rem 0">
+              <div class="f-eq">AP Days = AP / (COGS / 365)</div>
+            </div>
+            <div class="ac-body">Measures the average number of days the firm <strong>takes to pay its suppliers</strong>. Higher payable days improve short-term cash flow (the firm is essentially borrowing from suppliers). But excessively high payable days can damage supplier relationships and result in less favourable purchase terms.</div>
+          </div>
+          <div class="ac gr" style="margin-top:1rem">
+            <div class="ac-hd">Cash Conversion Cycle (CCC)</div>
+            <div class="formula" style="margin:.5rem 0">
+              <div class="f-eq">CCC = AR Days + Inv Days − AP Days</div>
+            </div>
+            <div class="ac-body">The CCC measures the number of days cash is tied up in the operating cycle. A <strong>lower CCC is better</strong> — it means the firm converts its operations into cash more quickly. Negative CCC (common in supermarkets and software) means the firm collects from customers before it has to pay suppliers — a powerful cash flow advantage.</div>
+            <div class="ac-stat">Turnover ratios = 365 / Days ratio. Higher turnover = shorter days = more efficient</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEREST COVERAGE -->
+    <div class="tab-panel" id="r4">
+      <div class="g2">
+        <div>
+          <p class="body">Interest coverage ratios measure the firm's ability to <strong>service its debt obligations</strong> from operating earnings. Lenders use these ratios to assess whether a borrower is earning enough to comfortably cover its interest payments. They are also called solvency ratios because they test the firm's financial sustainability under its current debt load.</p>
+          <div class="formula">
+            <div class="f-label">EBIT-based Interest Coverage</div>
+            <div class="f-eq">Interest Coverage = EBIT / Interest Expense</div>
+            <div class="f-note">How many times over the firm can cover interest from operating profit</div>
+          </div>
+          <div class="formula">
+            <div class="f-label">EBITDA-based Interest Coverage</div>
+            <div class="f-eq">Interest Coverage = EBITDA / Interest Expense</div>
+            <div class="f-note">Adds back non-cash D&amp;A — a better proxy for cash available to service debt</div>
+          </div>
+          <div class="pq">
+            <div class="pq-text">EBITDA is a proxy for operating cash flow, not actual cash flow. It is commonly used in credit analysis because it removes non-cash depreciation and amortisation — costs that reduce accounting profit but do not reduce the firm's ability to pay interest in cash.</div>
+            <div class="pq-src">— Interest Coverage &amp; EBITDA Analysis</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Industry benchmarks</div>
+            <div class="d-row"><span class="d-lbl">High-quality borrowers</span><span class="d-val" style="color:var(--green)">&gt; 5×</span></div>
+            <div class="d-row"><span class="d-lbl">Acceptable for most lenders</span><span class="d-val" style="color:var(--yellow)">2.5× – 5×</span></div>
+            <div class="d-row"><span class="d-lbl">Warning zone</span><span class="d-val" style="color:var(--orange)">1.5× – 2.5×</span></div>
+            <div class="d-row"><span class="d-lbl">Lenders question repayment</span><span class="d-val" style="color:var(--red)">&lt; 1.5×</span></div>
+            <div class="d-row"><span class="d-lbl">Example firm</span><span class="d-val">219 / 49 ≈ 4.5×</span></div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">EBIT vs EBITDA — what's the difference?</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">EBIT</strong> = Operating profit after D&amp;A → reflects the full economic cost of using assets</li>
+              <li><strong style="color:var(--white)">EBITDA</strong> = EBIT + Depreciation + Amortisation → removes non-cash charges to approximate cash generation</li>
+              <li>D&amp;A is a <strong style="color:var(--white)">non-cash expense</strong> — cash left the firm when the asset was bought, not when depreciation is recorded each year</li>
+              <li>EBITDA ≠ cash flow — it ignores capex, working capital changes, and tax payments</li>
+            </ul>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Why depreciation &amp; amortisation exist</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Matching principle</strong> — spread asset cost over the years the asset helps generate revenue</li>
+              <li><strong style="color:var(--white)">True cost of operations</strong> — machines wear out; this cost must be reflected in profit</li>
+              <li><strong style="color:var(--white)">Tax shield</strong> — D&amp;A reduces taxable income, creating real cash savings</li>
+              <li>Depreciation applies to tangible assets; amortisation to intangible assets (patents, software)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVERAGE -->
+    <div class="tab-panel" id="r5">
+      <div class="g2">
+        <div>
+          <p class="body"><strong>Leverage ratios</strong> measure the extent to which a firm relies on <strong>debt as a source of financing</strong>. More leverage amplifies both returns to equity holders (in good times) and losses (in bad times). High leverage increases financial risk — the probability that the firm cannot service its debt obligations, potentially leading to financial distress or bankruptcy.</p>
+          <div class="formula">
+            <div class="f-label">Debt-to-Equity Ratio</div>
+            <div class="f-eq">Total Debt / Total Equity</div>
+            <div class="f-note">The most commonly cited leverage ratio. Example: (486 + 588) / 805 = 1.33 = 133%</div>
+          </div>
+          <div class="formula">
+            <div class="f-label">Debt-to-Capital Ratio</div>
+            <div class="f-eq">Total Debt / (Total Equity + Total Debt)</div>
+            <div class="f-note">What fraction of the firm's total capital is debt-funded?</div>
+          </div>
+          <div class="formula">
+            <div class="f-label">Net Debt</div>
+            <div class="f-eq">Total Debt − Excess Cash &amp; ST Investments</div>
+            <div class="f-note">More relevant than gross debt — a firm with more cash than debt has no effective leverage</div>
+          </div>
+          <div class="formula">
+            <div class="f-label">Debt-to-Enterprise Value</div>
+            <div class="f-eq">Net Debt / (Market Value of Equity + Net Debt)</div>
+            <div class="f-note">Uses market values, not book values — more forward-looking</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Example — leverage ratios from sample firm</div>
+            <div class="d-row"><span class="d-lbl">Total debt (ST + LT)</span><span class="d-val">486 + 588 = £1,074m</span></div>
+            <div class="d-row"><span class="d-lbl">Total equity (book)</span><span class="d-val">£805m</span></div>
+            <div class="d-row"><span class="d-lbl">Total assets</span><span class="d-val">£1,879m</span></div>
+            <div class="d-row"><span class="d-lbl">Debt-to-Assets</span><span class="d-val" style="color:var(--orange)">57%</span></div>
+            <div class="d-row"><span class="d-lbl">Debt-to-Equity</span><span class="d-val" style="color:var(--orange)">133%</span></div>
+          </div>
+          <div class="ac pu" style="margin-top:1rem">
+            <div class="ac-hd">Equity multiplier</div>
+            <div class="formula" style="margin:.5rem 0">
+              <div class="f-eq">Equity Multiplier = Total Assets / Book Equity</div>
+              <div class="f-note">= 1,879 / 805 ≈ 2.33. Equivalent to 1 + Debt/Equity = 1 + 1.33</div>
+            </div>
+            <div class="ac-body">Captures the <strong>amplification of accounting returns</strong> that results from leverage. A multiplier of 2.33 means the firm holds £2.33 of assets per £1 of equity — the remainder is funded by debt. This magnifies ROE relative to ROA.</div>
+          </div>
+          <div class="ac bl" style="margin-top:1rem">
+            <div class="ac-hd">Enterprise Value (EV)</div>
+            <div class="ac-body">EV = Market Value of Equity + Net Debt. It represents the total value of the company defined in terms of how it is financed. EV is capital-structure-neutral — useful for comparing firms with different debt levels. It is the value an acquirer would need to pay to own the whole business (assuming the acquirer also inherits the debt).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUATION -->
+    <div class="tab-panel" id="r6">
+      <div class="g2">
+        <div>
+          <p class="body">Valuation ratios compare a firm's <strong>market value</strong> to its accounting metrics to assess whether it is over- or under-valued relative to peers. Unlike other ratios that use book values, valuation ratios incorporate the <strong>market's forward-looking expectations</strong> about future profitability and growth.</p>
+          <div class="formula">
+            <div class="f-label">Price-to-Earnings (P/E) Ratio</div>
+            <div class="f-eq">P/E = Market Cap / Net Income = Share Price / EPS</div>
+            <div class="f-note">How many dollars investors pay per dollar of current earnings</div>
+          </div>
+          <p class="body">A high P/E ratio typically reflects high expected growth (investors paying a premium for future earnings) or low perceived risk. A low P/E may indicate undervaluation, slow expected growth, or high risk. Because P/E uses net income — which is affected by the firm's debt structure — it has limited usefulness comparing firms with <strong>very different leverage levels</strong>.</p>
+          <div class="formula">
+            <div class="f-label">EV-based multiples (capital-structure-neutral)</div>
+            <div class="f-eq">EV / Revenue &nbsp;&nbsp;·&nbsp;&nbsp; EV / EBIT &nbsp;&nbsp;·&nbsp;&nbsp; EV / EBITDA</div>
+            <div class="f-note">EV multiples are preferred for comparing firms across different capital structures</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">P/E ratio — key properties</div>
+            <ul class="blist">
+              <li>Highest P/E ratios in <strong style="color:var(--white)">high-growth industries</strong> (technology, biotech) — market pays for future earnings</li>
+              <li>Lower P/E for <strong style="color:var(--white)">riskier firms</strong> — investors demand more current earnings per dollar paid</li>
+              <li>P/E is <strong style="color:var(--white)">not meaningful if earnings are negative</strong> — use EV/Revenue instead</li>
+              <li>Sensitive to capital structure — two identical businesses with different leverage will show different P/E ratios</li>
+            </ul>
+          </div>
+          <div class="ac gr" style="margin-top:1rem">
+            <div class="ac-hd">Why EV multiples are preferred</div>
+            <ul class="blist">
+              <li>EV includes debt — reflects the full cost of ownership, not just equity value</li>
+              <li>EBITDA and EBIT are pre-interest — not affected by capital structure choices</li>
+              <li>Allows apples-to-apples comparison across firms with different debt levels</li>
+              <li>EV/Revenue used when EBIT is negative — common for early-stage firms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPERATING RETURNS -->
+    <div class="tab-panel" id="r7">
+      <p class="body">Operating return ratios evaluate how efficiently the firm generates profit from the capital invested in it. They answer the question: for every pound of capital put into this business, how many pounds of profit does it generate? The three key ratios — ROE, ROA, and ROIC — each have different strengths and limitations.</p>
+      <div class="g3">
+        <div class="ac or">
+          <div class="ac-hd">Return on Equity (ROE)</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">ROE = Net Income / Book Value of Equity</div>
+            <div class="f-note">Example: 86 / 805 ≈ 10.7%</div>
+          </div>
+          <div class="ac-body">Measures the return earned on shareholders' past investments. A high ROE may indicate the firm finds very profitable opportunities — but it can also be inflated by high leverage (the equity multiplier effect). ROE is <strong>highly sensitive to capital structure</strong>.</div>
+        </div>
+        <div class="ac ye">
+          <div class="ac-hd">Return on Assets (ROA)</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">ROA = (Net Income + Interest) / Book Assets</div>
+            <div class="f-note">Example: 86 / 1,879 ≈ 4.6%</div>
+          </div>
+          <div class="ac-body">Less sensitive to leverage than ROE because interest expense is added back to numerator (reflecting returns to all capital providers) and total assets fund both debt and equity. However, ROA is sensitive to working capital — an equal increase in receivables and payables raises total assets without changing earnings, mechanically lowering ROA.</div>
+        </div>
+        <div class="ac gr">
+          <div class="ac-hd">Return on Invested Capital (ROIC)</div>
+          <div class="formula" style="margin:.5rem 0">
+            <div class="f-eq">ROIC = EBIT×(1−t) / (Equity + Net Debt)</div>
+          </div>
+          <div class="ac-body">The most analytically rigorous return measure. Uses after-tax operating profit (NOPAT) relative to the capital actually invested in the business (equity plus net debt, excluding excess cash). <strong>ROIC is the most useful measure for assessing genuine business performance</strong> because it eliminates distortions from both leverage and working capital fluctuations.</div>
+          <div class="ac-stat">Example: 219 / (1,118 + 761 − 486) ≈ 15.7%</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /ratioPanels -->
+
+  <!-- WORKED EXAMPLE -->
+  <div class="sec-hd fu" style="margin-top:2.5rem">
+    <h2 class="sec-title" style="font-size:20px">Worked Example — Meridian Manufacturing plc (£ million)</h2>
+  </div>
+
+  <!-- BALANCE SHEET — two-column format -->
+  <div class="chart-box fu" style="margin-bottom:1.25rem">
+    <div class="chart-hd"><div class="chart-title">Balance Sheet — as at 31 December 2024 (£m)</div><div class="chart-src">Assets = Liabilities + Shareholders' Equity</div></div>
+    <div class="fs-split">
+      <!-- LEFT: ASSETS -->
+      <div class="fs-box">
+        <div class="fs-box-hd">Assets</div>
+        <table class="fs-table">
+          <tr><td colspan="2" class="fs-section">Current Assets</td></tr>
+          <tr><td class="fs-indent">Cash &amp; equivalents</td><td class="fs-num">140</td></tr>
+          <tr><td class="fs-indent">Accounts receivable</td><td class="fs-num">294</td></tr>
+          <tr><td class="fs-indent">Inventories</td><td class="fs-num">269</td></tr>
+          <tr><td class="fs-indent">Other current assets</td><td class="fs-num">58</td></tr>
+          <tr><td class="fs-total">Total Current Assets</td><td class="fs-num fs-total">761</td></tr>
+          <tr><td colspan="2" class="fs-section">Long-Term Assets</td></tr>
+          <tr><td class="fs-indent">Land</td><td class="fs-num">185</td></tr>
+          <tr><td class="fs-indent">Buildings</td><td class="fs-num">420</td></tr>
+          <tr><td class="fs-indent">Equipment &amp; machinery</td><td class="fs-num">615</td></tr>
+          <tr><td class="fs-indent">Less: accumulated depreciation</td><td class="fs-neg">(312)</td></tr>
+          <tr><td class="fs-indent">Net PPE</td><td class="fs-num">908</td></tr>
+          <tr><td class="fs-indent">Goodwill &amp; intangibles</td><td class="fs-num">155</td></tr>
+          <tr><td class="fs-indent">Other long-term assets</td><td class="fs-num">55</td></tr>
+          <tr><td class="fs-total">Total Long-Term Assets</td><td class="fs-num fs-total">1,118</td></tr>
+          <tr><td class="fs-grand">TOTAL ASSETS</td><td class="fs-num fs-grand">1,879</td></tr>
+        </table>
+      </div>
+      <!-- RIGHT: LIABILITIES + EQUITY -->
+      <div class="fs-box">
+        <div class="fs-box-hd">Liabilities &amp; Shareholders' Equity</div>
+        <table class="fs-table">
+          <tr><td colspan="2" class="fs-section">Current Liabilities</td></tr>
+          <tr><td class="fs-indent">Accounts payable</td><td class="fs-num">218</td></tr>
+          <tr><td class="fs-indent">Notes payable / short-term debt</td><td class="fs-num">87</td></tr>
+          <tr><td class="fs-indent">Current maturities of LT debt</td><td class="fs-num">96</td></tr>
+          <tr><td class="fs-indent">Accrued expenses &amp; other</td><td class="fs-num">85</td></tr>
+          <tr><td class="fs-total">Total Current Liabilities</td><td class="fs-num fs-total">486</td></tr>
+          <tr><td colspan="2" class="fs-section">Long-Term Liabilities</td></tr>
+          <tr><td class="fs-indent">Long-term debt</td><td class="fs-num">492</td></tr>
+          <tr><td class="fs-indent">Capital lease obligations</td><td class="fs-num">36</td></tr>
+          <tr><td class="fs-indent">Deferred tax liabilities</td><td class="fs-num">44</td></tr>
+          <tr><td class="fs-indent">Other long-term liabilities</td><td class="fs-num">16</td></tr>
+          <tr><td class="fs-total">Total Long-Term Liabilities</td><td class="fs-num fs-total">588</td></tr>
+          <tr><td class="fs-total">Total Liabilities</td><td class="fs-num fs-total">1,074</td></tr>
+          <tr><td colspan="2" class="fs-section">Shareholders' Equity</td></tr>
+          <tr><td class="fs-indent">Share capital (common stock)</td><td class="fs-num">250</td></tr>
+          <tr><td class="fs-indent">Additional paid-in capital</td><td class="fs-num">310</td></tr>
+          <tr><td class="fs-indent">Retained earnings</td><td class="fs-num">245</td></tr>
+          <tr><td class="fs-total">Total Shareholders' Equity</td><td class="fs-num fs-total">805</td></tr>
+          <tr><td class="fs-grand">TOTAL LIABILITIES &amp; EQUITY</td><td class="fs-num fs-grand">1,879</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCOME STATEMENT — cascading waterfall format -->
+  <div class="chart-box fu" style="margin-bottom:1.25rem">
+    <div class="chart-hd"><div class="chart-title">Income Statement — year ended 31 December 2024 (£m)</div><div class="chart-src">Revenue → Gross Profit → EBIT → EBT → Net Income</div></div>
+    <div class="fs-box" style="border-top-color:var(--blue)">
+      <div class="fs-box-hd" style="color:var(--blue)">Income Statement</div>
+      <table class="is-table">
+        <tr><td colspan="3" class="is-section">Revenue</td></tr>
+        <tr><td class="is-label">Net sales revenue</td><td class="is-num">2,262</td><td class="is-margin"></td></tr>
+        <tr><td colspan="3" class="is-section">Cost of Sales</td></tr>
+        <tr><td class="is-indent">Raw materials consumed</td><td class="is-neg">(980)</td><td></td></tr>
+        <tr><td class="is-indent">Direct labour</td><td class="is-neg">(430)</td><td></td></tr>
+        <tr><td class="is-indent">Manufacturing overhead</td><td class="is-neg">(245)</td><td></td></tr>
+        <tr><td class="is-total is-label">Total Cost of Sales</td><td class="is-neg is-total">(1,655)</td><td></td></tr>
+        <tr><td class="is-grand is-label">Gross Profit</td><td class="is-num is-grand">607</td><td class="is-margin" style="color:var(--green);font-family:var(--mono);font-size:10px;text-align:right">Margin: 26.8%</td></tr>
+        <tr><td colspan="3" class="is-section">Operating Expenses</td></tr>
+        <tr><td class="is-indent">Selling, general &amp; administrative (SG&amp;A)</td><td class="is-neg">(248)</td><td></td></tr>
+        <tr><td class="is-indent">Research &amp; development</td><td class="is-neg">(58)</td><td></td></tr>
+        <tr><td class="is-indent">Depreciation &amp; amortisation</td><td class="is-neg">(82)</td><td></td></tr>
+        <tr><td class="is-total is-label">Total Operating Expenses</td><td class="is-neg is-total">(388)</td><td></td></tr>
+        <tr><td class="is-grand is-label">Operating Income (EBIT)</td><td class="is-num is-grand">219</td><td class="is-margin" style="color:var(--green);font-family:var(--mono);font-size:10px;text-align:right">Margin: 9.7%</td></tr>
+        <tr><td colspan="3" class="is-section">Non-Operating Items</td></tr>
+        <tr><td class="is-indent">Interest income</td><td class="is-num">8</td><td></td></tr>
+        <tr><td class="is-indent">Interest expense</td><td class="is-neg">(49)</td><td></td></tr>
+        <tr><td class="is-indent">Other non-operating income / (expense)</td><td class="is-sub">(4)</td><td></td></tr>
+        <tr><td class="is-grand is-label">Earnings Before Tax (EBT)</td><td class="is-num is-grand">174</td><td></td></tr>
+        <tr><td colspan="3" class="is-section">Tax</td></tr>
+        <tr><td class="is-indent">Income tax expense (26% effective rate)</td><td class="is-neg">(88)</td><td></td></tr>
+        <tr style="background:rgba(245,106,0,.06)"><td class="is-grand is-label" style="font-size:14px">Net Income</td><td class="is-num is-grand" style="font-size:15px;color:var(--orange)">86</td><td class="is-margin" style="color:var(--green);font-family:var(--mono);font-size:10px;text-align:right">Margin: 3.8%</td></tr>
+        <tr><td colspan="3" class="is-section">Supplemental — Non-Cash &amp; Other</td></tr>
+        <tr><td class="is-indent">EBITDA (EBIT + D&amp;A)</td><td class="is-num">301</td><td class="is-margin" style="color:var(--green);font-family:var(--mono);font-size:10px;text-align:right">Margin: 13.3%</td></tr>
+        <tr><td class="is-indent">Depreciation &amp; amortisation (non-cash)</td><td class="is-num">82</td><td></td></tr>
+        <tr><td class="is-indent">Dividends declared per share</td><td class="is-num">£0.38</td><td></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Liquidity ratios</div>
+      <div class="d-row"><span class="d-lbl">Current Ratio</span><span class="d-val">761/486 = 1.63×</span></div>
+      <div class="d-row"><span class="d-lbl">Quick Ratio</span><span class="d-val">(761−269)/486 = 1.01×</span></div>
+      <div class="d-row"><span class="d-lbl">Cash Ratio</span><span class="d-val">140/486 = 0.29×</span></div>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Efficiency &amp; coverage ratios</div>
+      <div class="d-row"><span class="d-lbl">AR Days</span><span class="d-val">294/(2262/365) ≈ 47d</span></div>
+      <div class="d-row"><span class="d-lbl">Inventory Days</span><span class="d-val">269/(1655/365) ≈ 59d</span></div>
+      <div class="d-row"><span class="d-lbl">Interest Coverage</span><span class="d-val">219/49 ≈ 4.5×</span></div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Return ratios</div>
+      <div class="d-row"><span class="d-lbl">Net Profit Margin</span><span class="d-val">86/2262 = 3.8%</span></div>
+      <div class="d-row"><span class="d-lbl">ROA</span><span class="d-val">86/1879 = 4.6%</span></div>
+      <div class="d-row"><span class="d-lbl">ROE</span><span class="d-val">86/805 = 10.7%</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: DUPONT IDENTITY ── -->
+<div id="dupont" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">05</div>
+    <h2 class="sec-title">The DuPont Identity — Decomposing ROE</h2>
+  </div>
+
+  <p class="body fu">The DuPont Identity is one of the most powerful analytical tools in corporate finance. It <strong>decomposes Return on Equity (ROE) into its three fundamental drivers</strong>, revealing exactly where a firm's equity returns come from — and where they can be improved. Rather than treating ROE as a single number, DuPont forces you to understand the operating mechanics behind it.</p>
+
+  <div class="formula fu">
+    <div class="f-label">The DuPont Identity</div>
+    <div class="f-eq">ROE = Net Profit Margin × Asset Turnover × Equity Multiplier</div>
+    <div class="f-note">= (Net Income / Sales) × (Sales / Total Assets) × (Total Assets / Book Equity)</div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Component 1 — Net Profit Margin</div>
+      <div class="formula" style="margin:.5rem 0">
+        <div class="f-eq">Net Income / Sales</div>
+      </div>
+      <div class="ac-body">Measures <strong>overall profitability</strong> — how much of each pound of revenue is kept as profit after all expenses and taxes. A higher margin indicates the firm is more efficient at converting sales into bottom-line profit, whether through pricing power, cost discipline, or both.</div>
+      <div class="ac-stat">Example: 86 / 2,262 ≈ 3.8%</div>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Component 2 — Asset Turnover</div>
+      <div class="formula" style="margin:.5rem 0">
+        <div class="f-eq">Sales / Total Assets</div>
+      </div>
+      <div class="ac-body">Measures <strong>asset efficiency</strong> — how much revenue the firm generates for every pound of assets deployed. A higher turnover indicates assets are being used productively. Asset-heavy industries (utilities, manufacturing) typically have low turnover; asset-light industries (consulting, software) have high turnover.</div>
+      <div class="ac-stat">Example: 2,262 / 1,879 ≈ 1.2×</div>
+    </div>
+    <div class="ac pu">
+      <div class="ac-hd">Component 3 — Equity Multiplier</div>
+      <div class="formula" style="margin:.5rem 0">
+        <div class="f-eq">Total Assets / Book Equity</div>
+      </div>
+      <div class="ac-body">Measures <strong>financial leverage</strong> — how many pounds of assets the firm holds per pound of equity. The greater the reliance on debt financing, the higher this multiplier will be. Leverage amplifies both positive and negative outcomes for equity holders. It is equivalent to (1 + Debt/Equity).</div>
+      <div class="ac-stat">Example: 1,879 / 805 ≈ 2.33 = 1 + 1.33</div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">Combining the three components from our example firm:</p>
+      <div class="formula">
+        <div class="f-label">DuPont Calculation — Example Firm</div>
+        <div class="f-eq">ROE = 3.8% × 1.2 × 2.33 ≈ 10.7%</div>
+        <div class="f-note">Net Profit Margin × Asset Turnover × Equity Multiplier</div>
+      </div>
+      <p class="body">This breakdown is far more informative than simply reporting ROE = 10.7%. It tells us that the firm's equity returns are moderate in isolation (3.8% margin), the assets are generating reasonable revenue (1.2× turnover), and leverage is amplifying those returns by a factor of 2.33. If ROE needed to improve, management now knows exactly which lever to pull.</p>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">How to improve ROE via DuPont</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Improve margin</strong> — raise prices, cut costs, optimise product mix, improve operating efficiency</li>
+          <li><strong style="color:var(--white)">Improve asset turnover</strong> — generate more revenue per pound of assets; reduce idle assets; improve inventory and receivables management</li>
+          <li><strong style="color:var(--white)">Increase leverage</strong> — use more debt financing; but this increases financial risk — there are limits</li>
+        </ul>
+        <div class="ac-stat">Two firms with same ROE may have very different risk/quality profiles — DuPont reveals why</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE: WHY DUPONT MATTERS -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">Expanding DuPont: Linking to Market Value</h2>
+  </div>
+  <p class="body fu">The DuPont system can be extended further to incorporate <strong>market valuation</strong> — connecting accounting performance (ROE) to the market's forward-looking assessment (P/E ratio) to explain a firm's market-to-book ratio. This full expansion reveals the three drivers of shareholder wealth: operating performance, financial leverage, and market expectations of growth.</p>
+  <div class="g3 fu">
+    <div class="ac bl">
+      <div class="ac-hd">From ROE to market-to-book</div>
+      <div class="ac-body">Market-to-book = Market Value of Equity / Book Value of Equity. For most successful firms, this exceeds 1.0 because the market value of assets <strong>in productive use</strong> exceeds their historical accounting cost. The gap is driven by intangible assets, goodwill, growth options, and market confidence in management.</div>
+      <div class="ac-stat">High market-to-book = market believes significant value exists beyond the balance sheet</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Market Value Added (MVA)</div>
+      <div class="ac-body">MVA = Market Value of Equity − Capital Contributed by Shareholders. It represents the total value a firm has created above and beyond the capital shareholders invested. Positive MVA indicates the firm has created value; negative MVA means it has destroyed capital. MVA is the most comprehensive external measure of whether management is succeeding.</div>
+      <div class="ac-stat">MVA > 0 = value created · MVA < 0 = value destroyed</div>
+    </div>
+    <div class="ac re">
+      <div class="ac-hd">Book value vs market value</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Book value</strong> = accounting value; based on historical costs; backward-looking</li>
+        <li><strong style="color:var(--white)">Market value</strong> = what someone is willing to pay; forward-looking; incorporates expectations</li>
+        <li>Gap arises from intangibles, growth options, and assets not marked-to-market</li>
+        <li>Use market values for investment and financing decisions; book values for financial analysis and reporting</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: MARKET VALUE SUMMARY ── -->
+<div id="marketvalue" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">06</div>
+    <h2 class="sec-title">Market Value, Book Value &amp; Key Concepts Summary</h2>
+  </div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell">
+      <div class="og-icon">📊</div>
+      <div class="og-lbl">DuPont ROE drivers</div>
+      <div class="og-val">3</div>
+      <div class="og-sub">Margin × Asset Turnover × Equity Multiplier. Each can be independently improved.</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">⚖️</div>
+      <div class="og-lbl">Core accounting equation</div>
+      <div class="og-val">A = L + E</div>
+      <div class="og-sub">Always balances. Every asset is funded by debt or equity — no exceptions.</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">🎯</div>
+      <div class="og-lbl">Best performance measure</div>
+      <div class="og-val">ROIC</div>
+      <div class="og-sub">EBIT(1−t) / Invested Capital. Eliminates leverage and working capital distortions.</div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">Key formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Assets = Liabilities + Equity</strong> — fundamental accounting equation; always holds</li>
+        <li><strong style="color:var(--white)">NWC = Current Assets − Current Liabilities</strong> — measures short-term liquidity buffer</li>
+        <li><strong style="color:var(--white)">Gross Margin = Gross Profit / Sales</strong> — core production profitability</li>
+        <li><strong style="color:var(--white)">EBITDA = EBIT + D&amp;A</strong> — operating cash-flow proxy (not actual cash flow)</li>
+        <li><strong style="color:var(--white)">Interest Coverage = EBIT / Interest</strong> — benchmark &gt;5× for high-quality borrowers</li>
+        <li><strong style="color:var(--white)">ROE = Margin × Turnover × Equity Multiplier</strong> — the DuPont decomposition</li>
+        <li><strong style="color:var(--white)">ROIC = EBIT(1−t) / (Equity + Net Debt)</strong> — best measure of business performance</li>
+        <li><strong style="color:var(--white)">EV = Market Cap + Net Debt</strong> — total firm value regardless of capital structure</li>
+        <li><strong style="color:var(--white)">P/E = Market Cap / Net Income</strong> — market's multiple on current earnings</li>
+        <li><strong style="color:var(--white)">CCC = AR Days + Inv Days − AP Days</strong> — days cash is tied up in the operating cycle</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Depreciation is NOT a cash outflow</strong> — cash leaves when the asset is purchased, not year-by-year as depreciation is recorded</li>
+        <li><strong style="color:var(--white)">EBITDA ≠ cash flow</strong> — it ignores capex, working capital changes, and actual tax payments; never confuse the two</li>
+        <li><strong style="color:var(--white)">High ROE ≠ good performance</strong> — a highly leveraged firm will have a mechanically high ROE; use ROIC to strip out this distortion</li>
+        <li><strong style="color:var(--white)">Dividends are NOT an expense</strong> — they reduce retained earnings directly, not via the income statement</li>
+        <li><strong style="color:var(--white)">Negative NWC ≠ always bad</strong> — supermarkets and some tech firms run negative NWC by design (collect before paying suppliers)</li>
+        <li><strong style="color:var(--white)">Market value ≠ book value</strong> — book value is historical cost accounting; market value reflects forward-looking investor expectations</li>
+        <li><strong style="color:var(--white)">P/E is useless for negative earnings firms</strong> — use EV/Revenue or EV/EBITDA instead</li>
+        <li><strong style="color:var(--white)">High inventory days are not always bad</strong> — context matters; compare to industry benchmarks, not absolute levels</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONCEPT TIMELINE -->
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 1</div>
+      <div class="tl-card">
+        <div class="tl-title">Understand the balance sheet — the foundation of everything</div>
+        <div class="tl-text">Assets = Liabilities + Equity always. Assets ordered by liquidity; liabilities by maturity. Current vs long-term distinction is critical for working capital and solvency analysis. Every corporate finance decision maps to one side of the balance sheet.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 2</div>
+      <div class="tl-card">
+        <div class="tl-title">Map the four decisions to the balance sheet</div>
+        <div class="tl-text">Investment decision = left side (assets). Financing decision = right side (debt/equity). Working capital management = top portion of both sides. Payout decision = lower right (equity). Every management decision has a balance sheet home.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 3</div>
+      <div class="tl-card">
+        <div class="tl-title">Calculate and interpret ratios from the income statement and balance sheet</div>
+        <div class="tl-text">Seven ratio categories cover the full performance spectrum. Always compare ratios to industry peers and historical trends — absolute values are rarely informative in isolation. Understand why each ratio is constructed the way it is before memorising the formula.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 4</div>
+      <div class="tl-card">
+        <div class="tl-title">Apply the DuPont identity to decompose ROE</div>
+        <div class="tl-text">ROE = Margin × Turnover × Equity Multiplier. A firm with high ROE driven by a high equity multiplier (leverage) has a very different risk profile from one with high ROE driven by superior margins. DuPont separates operating performance from financial engineering.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 5</div>
+      <div class="tl-card">
+        <div class="tl-title">Connect book value to market value and the firm's ultimate objective</div>
+        <div class="tl-text">Market value captures what investors believe the firm will generate in the future. Book value captures historical cost. The gap between them — market value added (MVA) — is the truest measure of whether management is creating or destroying value. The firm's ultimate objective is to maximise this gap.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Corporate Finance Foundations</div>
+    <div class="verdict-text">Corporate finance reduces to a single idea: use capital efficiently to generate cash flows that exceed what investors put in. Every ratio, formula, and framework — from the balance sheet equation to the DuPont identity — is ultimately a tool for measuring whether the firm is succeeding at that objective, and for identifying precisely where it can do better.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Corporate Finance: Principles &amp; Practice · Berk &amp; DeMarzo · Ross, Westerfield &amp; Jordan<br>
+    Topics: Capital Budgeting · Balance Sheet Analysis · Financial Ratios · DuPont Identity · Market Value<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script>
+/* ── SCROLL PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('prog').style.width = (s / h * 100) + '%';
+});
+
+/* ── NAV ACTIVE ── */
+const sections = ['decisions','balancesheet','incomestatement','markets','ratios','dupont','marketvalue'];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  let cur = sections[0];
+  sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
+  document.querySelectorAll('.nl').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+});
+
+/* ── INTERSECTION OBSERVER ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fu, .tl-item').forEach(el => io.observe(el));
+
+/* ── BAR METERS ── */
+const barIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      barIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const barSection = document.getElementById('decisionBars');
+if (barSection) barIO.observe(barSection.closest('.ac'));
+
+/* ── TABS ── */
+function switchTab(panelId, btn, tabsId, panelsId) {
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+</script>
+</body>
+</html>
