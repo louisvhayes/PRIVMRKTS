@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Value of Money — Foundations, Formulas & Applications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}
+.ac.gr{border-top:2px solid var(--green)}
+.ac.re{border-top:2px solid var(--red)}
+.ac.bl{border-top:2px solid var(--blue)}
+.ac.ye{border-top:2px solid var(--yellow)}
+.ac.pu{border-top:2px solid var(--purple)}
+.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}
+.ac.gr .ac-hd{color:var(--green)}
+.ac.re .ac-hd{color:var(--red)}
+.ac.bl .ac-hd{color:var(--blue)}
+.ac.ye .ac-hd{color:var(--yellow)}
+.ac.pu .ac-hd{color:var(--purple)}
+.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}
+.ac.gr .ac-stat{color:var(--green)}
+.ac.re .ac-stat{color:var(--red)}
+.ac.bl .ac-stat{color:var(--blue)}
+.ac.ye .ac-stat{color:var(--yellow)}
+.ac.pu .ac-stat{color:var(--purple)}
+.ac.te .ac-stat{color:var(--teal)}
+
+.blist{list-style:none;font-size:13px;color:var(--white-2);line-height:1}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.d-sub{font-family:var(--mono);font-size:10px;color:var(--green);text-align:right}
+
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.04em;text-align:right}
+.chart-wrap{position:relative;width:100%}
+
+.bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.bar-lbl{font-size:12px;color:var(--white-2);width:230px;flex-shrink:0}
+.bar-wrap{flex:1;height:5px;background:var(--panel-2);border-radius:0;overflow:hidden}
+.bar-fill{height:100%;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:10px;font-weight:600;width:70px;text-align:right;flex-shrink:0}
+
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
+.flow-node{flex:1;min-width:130px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;position:relative;cursor:default;transition:border-color .2s,background .2s}
+.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
+.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
+.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
+.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono);font-size:13px;color:var(--white)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+
+/* AMORTISATION TABLE */
+.amort-wrap{overflow-x:auto;margin:1rem 0}
+.amort-table{width:100%;border-collapse:collapse;font-size:12px}
+.amort-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);background:var(--panel-2);padding:.6rem 1rem;text-align:right;border-bottom:2px solid var(--orange-line)}
+.amort-table th:first-child{text-align:center}
+.amort-table td{font-family:var(--mono);padding:.45rem 1rem;border-bottom:1px solid var(--border);color:var(--white-2);text-align:right}
+.amort-table td:first-child{text-align:center;color:var(--orange);font-weight:600}
+.amort-table tr:last-child td{border-bottom:none}
+.amort-table .at-interest{color:var(--red)}
+.amort-table .at-principal{color:var(--blue)}
+.amort-table .at-closing{color:var(--white);font-weight:600}
+.amort-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+
+/* TIMELINE — cash flow diagram */
+.cf-timeline{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:1.5rem;background:var(--panel);border:1px solid var(--border-2);margin:1rem 0}
+.cf-period{display:flex;flex-direction:column;align-items:center;min-width:80px;flex:1}
+.cf-line{width:100%;height:2px;background:var(--border-2);position:relative;margin-top:28px}
+.cf-line::before{content:'';position:absolute;left:0;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.cf-line:last-child::after{content:'→';position:absolute;right:-10px;top:-10px;color:var(--orange);font-size:18px;font-family:var(--mono)}
+.cf-t{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:6px}
+.cf-val{font-family:var(--mono);font-size:11px;font-weight:600;margin-bottom:4px}
+.cf-val.pos{color:var(--green)}
+.cf-val.neg{color:var(--red)}
+.cf-val.pv{color:var(--orange)}
+
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
+
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  .bar-lbl{width:140px}
+  .flow{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#foundations">Foundations</a>
+    <a class="nl" href="#multiperiod">Multi-Period</a>
+    <a class="nl" href="#compounding">Compounding</a>
+    <a class="nl" href="#cashflows">Cash Flow Streams</a>
+    <a class="nl" href="#annuities">Annuities</a>
+    <a class="nl" href="#exercises">Worked Exercises</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 2</div>
+      <h1>Time Value<br>of <em>Money</em></h1>
+      <p class="hero-lead">A pound today is worth more than a pound tomorrow. From single-period discounting to growing perpetuities, annuities, and mortgage amortisation — a complete deep-dive into how we value streams of cash flows across time, and why every investment decision depends on getting this right.</p>
+      <div class="meta-row">
+        <span>TVM Foundations</span>
+        <span>PV · FV · Compounding · Perpetuities · Annuities</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core formulas at a glance</div>
+      <div class="sp-row">
+        <div class="sp-lbl">Future Value (multi-period)</div>
+        <div class="sp-right"><div class="sp-val">FV = C₀(1+r)ᵀ</div><div class="sp-sub">Compound growth over T periods</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Present Value (multi-period)</div>
+        <div class="sp-right"><div class="sp-val">PV = Cᴛ/(1+r)ᵀ</div><div class="sp-sub">Discounting back to today</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Perpetuity PV</div>
+        <div class="sp-right"><div class="sp-val">PV = C/r</div><div class="sp-sub">Constant cash flow forever</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Growing Perpetuity PV</div>
+        <div class="sp-right"><div class="sp-val">PV = C/(r−g)</div><div class="sp-sub">Growing at rate g forever</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Effective Annual Rate</div>
+        <div class="sp-right"><div class="sp-val">EAR = (1+r/m)ᵐ−1</div><div class="sp-sub">True annual cost of compounding</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Key principle</div>
+        <div class="sp-right"><div class="sp-val">£ today &gt; £ future</div><div class="sp-sub">Certain &gt; risky · Early &gt; late</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: FOUNDATIONS ── -->
+<div id="foundations" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">01</div>
+    <h2 class="sec-title">Foundations: Why Time Matters</h2>
+  </div>
+
+  <p class="body fu">The time value of money (TVM) is the single most important concept in finance. It underpins every investment decision, every valuation model, and every capital budgeting calculation. The core idea is deceptively simple: <strong>a pound today is worth more than a pound in the future</strong>. But understanding exactly why — and how to quantify that difference — is the foundation of all financial analysis.</p>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Why a pound today is more valuable</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Opportunity cost</strong> — money today can be invested immediately and begin earning returns</li>
+        <li><strong style="color:var(--white)">Inflation</strong> — purchasing power erodes over time; a pound buys less in the future</li>
+        <li><strong style="color:var(--white)">Risk</strong> — future payments are uncertain; a promise to pay is not the same as cash in hand</li>
+        <li><strong style="color:var(--white)">Preference</strong> — humans inherently prefer consumption now over consumption later</li>
+      </ul>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">Two fundamental valuation questions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Future Value (FV)</strong> — if I invest £X today at rate r for T periods, how much will I have at the end?</li>
+        <li><strong style="color:var(--white)">Present Value (PV)</strong> — if I am promised £X at a future date, what is that promise worth in today's money?</li>
+        <li>All TVM problems are variations of these two questions — even the most complex annuity or perpetuity reduces to PV or FV</li>
+        <li>The <strong style="color:var(--white)">discount rate r</strong> is the bridge between present and future — it encodes opportunity cost and risk</li>
+      </ul>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">The two core preferences in finance</div>
+      <ul class="blist">
+        <li>A pound <strong style="color:var(--white)">today</strong> is preferred to a pound in the <strong style="color:var(--white)">future</strong> — time preference</li>
+        <li>A <strong style="color:var(--white)">certain</strong> pound is preferred to a <strong style="color:var(--white)">risky</strong> one — risk preference</li>
+        <li>These two preferences drive the entire structure of interest rates and discount rates in finance</li>
+        <li>A higher discount rate reflects higher risk or a stronger preference for receiving cash sooner</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ONE PERIOD FV/PV -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">The One-Period Case: FV and PV</h2>
+  </div>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The simplest TVM case involves a single cash flow today and a single cash flow in one period's time. This one-period building block is the foundation for everything that follows — multi-period compounding, annuities, and perpetuities are all extensions of this same core logic.</p>
+
+      <div class="formula">
+        <div class="f-label">Future Value — One Period</div>
+        <div class="f-eq">FV = C₀ × (1 + r)</div>
+        <div class="f-note">C₀ = cash flow today · r = interest rate per period<br>Invest C₀ today at rate r; receive FV next period</div>
+      </div>
+
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Present Value — One Period</div>
+        <div class="f-eq">PV = C₁ / (1 + r)</div>
+        <div class="f-note">C₁ = cash flow at date 1 · r = interest rate per period<br>Discounting: finding the value today of a future cash flow</div>
+      </div>
+
+      <div class="pq">
+        <div class="pq-text">Discounting is simply the reverse of compounding. If you know the future value, divide by (1+r) to find today's value. If you know today's value, multiply by (1+r) to find the future value.</div>
+        <div class="pq-src">— Time Value of Money Foundations</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">One-period FV example</div>
+        <div class="ac-body" style="margin-bottom:.75rem">Invest <strong>£100</strong> at <strong>5%</strong> interest for one year:</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">FV = 100 × (1 + 0.05) = £105</div>
+        </div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">£100</strong> — principal repayment (100 × 1)</li>
+          <li><strong style="color:var(--white)">£5</strong> — interest earned (100 × 0.05)</li>
+          <li><strong style="color:var(--white)">£105</strong> — total future value at year-end</li>
+        </ul>
+      </div>
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">One-period PV example</div>
+        <div class="ac-body" style="margin-bottom:.75rem">You are promised <strong>£100</strong> in one year. Interest rate is <strong>5%</strong>. What is it worth today?</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">PV = 100 / 1.05 = £95.24</div>
+        </div>
+        <div class="ac-body">This is the amount you would need to deposit today at 5% to have exactly £100 in one year. The £95.24 and the future £100 are economically equivalent at a 5% discount rate.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: MULTI-PERIOD ── -->
+<div id="multiperiod" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">02</div>
+    <h2 class="sec-title">Multi-Period Compounding &amp; Discounting</h2>
+  </div>
+
+  <p class="body fu">When we extend the one-period case to multiple periods, a powerful phenomenon emerges: <strong>compounding</strong>. Each period, the investment earns interest not just on the original principal but also on the interest accumulated in all previous periods. This creates exponential — not linear — growth, and it is the engine behind long-term wealth creation.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Future Value — Multi-Period</div>
+        <div class="f-eq">FV = C₀ × (1 + r)ᵀ</div>
+        <div class="f-note">C₀ = initial cash flow · r = rate per period · T = number of periods<br>(1+r)ᵀ is the future value factor (FVF)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Present Value — Multi-Period</div>
+        <div class="f-eq">PV = Cᴛ / (1 + r)ᵀ</div>
+        <div class="f-note">Cᴛ = cash flow at time T · 1/(1+r)ᵀ is the discount factor (DF)<br>Higher r or T → smaller discount factor → lower PV</div>
+      </div>
+
+      <div class="ac ye" style="margin-top:1rem">
+        <div class="ac-hd">Compounding vs simple interest — why it matters</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Deposit £100 at 10% p.a. for 5 years:</div>
+        <div class="d-row"><span class="d-lbl">Simple interest</span><span class="d-val" style="color:var(--white-3)">100 + 5×(100×0.10) = £150</span></div>
+        <div class="d-row"><span class="d-lbl">Compound interest</span><span class="d-val" style="color:var(--green)">100 × (1.10)⁵ = £161.05</span></div>
+        <div class="d-row"><span class="d-lbl">Extra from compounding</span><span class="d-val" style="color:var(--orange)">£11.05</span></div>
+        <div class="ac-body" style="margin-top:.6rem">The difference of £11.05 represents <strong>interest on interest</strong> — the core of compounding. Over longer periods and higher rates, this gap becomes enormous.</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd">
+          <div class="chart-title">Compound growth — £100 at 10% over 5 years</div>
+          <div class="chart-src">Year-by-year breakdown</div>
+        </div>
+        <div class="bar-row" style="border-top:1px solid var(--border)">
+          <div class="bar-lbl">Year 0 (today)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="62" style="background:var(--blue)"></div></div>
+          <div class="bar-val" style="color:var(--blue)">£100.00</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Year 1</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="68" style="background:var(--blue)"></div></div>
+          <div class="bar-val" style="color:var(--blue)">£110.00</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Year 2</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="74" style="background:var(--green)"></div></div>
+          <div class="bar-val" style="color:var(--green)">£121.00</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Year 3</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="81" style="background:var(--green)"></div></div>
+          <div class="bar-val" style="color:var(--green)">£133.10</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Year 4</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="89" style="background:var(--yellow)"></div></div>
+          <div class="bar-val" style="color:var(--yellow)">£146.41</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Year 5</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="100" style="background:var(--orange)"></div></div>
+          <div class="bar-val" style="color:var(--orange)">£161.05</div>
+        </div>
+      </div>
+
+      <div class="ac or">
+        <div class="ac-hd">PV discounting example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">How much to invest today to have <strong>£5,000</strong> in <strong>5 years</strong> at <strong>10%</strong>?</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">PV = 5,000 / (1.10)⁵ = £3,104.61</div>
+        </div>
+        <div class="ac-body">Deposit £3,104.61 today at 10% per year. After 5 years it will have grown to exactly £5,000. The £1,895.39 difference is the interest accumulated via compounding.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOLVING FOR r: WHAT RATE IS ENOUGH? -->
+  <div class="g2 fu" style="margin-top:1rem">
+    <div class="ac pu">
+      <div class="ac-hd">Solving for the required rate — "What rate is enough?"</div>
+      <div class="ac-body" style="margin-bottom:.75rem">College will cost <strong>£50,000</strong> in <strong>12 years</strong>. You have <strong>£5,000</strong> today. What return must you earn?</div>
+      <div class="formula" style="margin:.5rem 0;border-left-color:var(--purple)">
+        <div class="f-eq">5,000 × (1 + r)¹² = 50,000</div>
+        <div class="f-note">→ (1+r)¹² = 10 &nbsp;&nbsp; → 1+r = 10^(1/12) &nbsp;&nbsp; → r ≈ 21.15% per year</div>
+      </div>
+      <div class="ac-body">You need to earn approximately <strong>21.15% per year</strong> for 12 years to turn £5,000 into £50,000. This illustrates how TVM can be rearranged to solve for any unknown: FV, PV, r, or T.</div>
+      <div class="ac-stat">Rearranging: r = (FV/PV)^(1/T) − 1 is the general formula for solving for the rate</div>
+    </div>
+    <div class="ac te">
+      <div class="ac-hd">The four TVM variables — any one can be the unknown</div>
+      <div class="d-row"><span class="d-lbl">Solve for FV</span><span class="d-val" style="color:var(--teal)">FV = PV × (1+r)ᵀ</span></div>
+      <div class="d-row"><span class="d-lbl">Solve for PV</span><span class="d-val" style="color:var(--teal)">PV = FV / (1+r)ᵀ</span></div>
+      <div class="d-row"><span class="d-lbl">Solve for r</span><span class="d-val" style="color:var(--teal)">(FV/PV)^(1/T) − 1</span></div>
+      <div class="d-row"><span class="d-lbl">Solve for T</span><span class="d-val" style="color:var(--teal)">ln(FV/PV) / ln(1+r)</span></div>
+      <div style="margin-top:.8rem;font-size:12.5px;color:var(--white-2);line-height:1.7">Every TVM problem gives you three of these four variables and asks you to find the fourth. Mastering rearrangement is the key skill.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: COMPOUNDING PERIODS & EAR ── -->
+<div id="compounding" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">03</div>
+    <h2 class="sec-title">Compounding Frequency &amp; the Effective Annual Rate</h2>
+  </div>
+
+  <p class="body fu">In practice, interest is rarely compounded just once per year. Mortgages compound monthly, bonds typically semi-annually, and savings accounts may compound daily. The <strong>quoted annual rate</strong> (also called the nominal rate or APR) tells you the rate before accounting for intra-year compounding. The <strong>Effective Annual Rate (EAR)</strong> tells you the true annual cost or return after accounting for how often compounding actually occurs.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Future Value — m Compounding Periods per Year</div>
+        <div class="f-eq">FV = C₀ × (1 + r/m)^(m×T)</div>
+        <div class="f-note">r = quoted annual rate · m = compounding frequency per year<br>T = years · r/m = rate per compounding period</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Effective Annual Rate (EAR)</div>
+        <div class="f-eq">EAR = (1 + r/m)ᵐ − 1</div>
+        <div class="f-note">The annual rate that produces the same end-of-year result as the given compounding frequency. Always use EAR when comparing across products with different compounding frequencies.</div>
+      </div>
+
+      <p class="body">The key insight is that <strong>more frequent compounding produces a higher effective return</strong> for the same quoted rate. A 12% rate compounded monthly is not the same as 12% compounded annually — the monthly version is actually more expensive (for a borrower) or more lucrative (for a lender).</p>
+
+      <div class="ac re">
+        <div class="ac-hd">Why more frequent compounding increases the effective rate</div>
+        <ul class="blist">
+          <li>With monthly compounding, interest earned in January earns interest in February — before the year is out</li>
+          <li>With annual compounding, that same interest sits idle until the following year before itself earning interest</li>
+          <li>The more frequent the compounding, the more periods interest has to <strong style="color:var(--white)">compound on itself</strong> within the year</li>
+          <li>In the limit (continuous compounding): EAR = e^r − 1, where e ≈ 2.71828</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd">
+          <div class="chart-title">£100 at 12% nominal — effect of compounding frequency after 3 years</div>
+          <div class="chart-src">FV comparison</div>
+        </div>
+        <div class="bar-row" style="border-top:1px solid var(--border)">
+          <div class="bar-lbl">Annual (m=1)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="85" style="background:var(--white-3)"></div></div>
+          <div class="bar-val" style="color:var(--white-3)">£140.49</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Semi-annual (m=2)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="90" style="background:var(--blue)"></div></div>
+          <div class="bar-val" style="color:var(--blue)">£141.85</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Quarterly (m=4)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="94" style="background:var(--green)"></div></div>
+          <div class="bar-val" style="color:var(--green)">£142.58</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Monthly (m=12)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="97" style="background:var(--yellow)"></div></div>
+          <div class="bar-val" style="color:var(--yellow)">£143.08</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">Daily (m=365)</div>
+          <div class="bar-wrap"><div class="bar-fill" data-w="99" style="background:var(--orange)"></div></div>
+          <div class="bar-val" style="color:var(--orange)">£143.30</div>
+        </div>
+      </div>
+
+      <div class="ac or">
+        <div class="ac-hd">EAR examples — 12% nominal rate</div>
+        <div class="d-row"><span class="d-lbl">Annual (m=1)</span><span class="d-val">EAR = 12.00%</span></div>
+        <div class="d-row"><span class="d-lbl">Semi-annual (m=2)</span><span class="d-val" style="color:var(--blue)">EAR = 12.36%</span></div>
+        <div class="d-row"><span class="d-lbl">Quarterly (m=4)</span><span class="d-val" style="color:var(--green)">EAR = 12.55%</span></div>
+        <div class="d-row"><span class="d-lbl">Monthly (m=12)</span><span class="d-val" style="color:var(--yellow)">EAR = 12.68%</span></div>
+        <div class="d-row"><span class="d-lbl">Daily (m=365)</span><span class="d-val" style="color:var(--orange)">EAR = 12.75%</span></div>
+        <div style="font-size:11px;color:var(--white-3);margin-top:.6rem;font-family:var(--mono)">Same nominal rate — very different true costs</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: CASH FLOW STREAMS ── -->
+<div id="cashflows" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">04</div>
+    <h2 class="sec-title">Special Cases of Cash Flow Streams</h2>
+  </div>
+
+  <p class="body fu">Most real-world financial instruments — bonds, loans, dividend-paying stocks, rental properties, pension plans — can be modelled as one of four special cash flow patterns. Mastering their PV formulas eliminates the need to discount each payment individually and makes complex valuations tractable.</p>
+
+  <div class="flow fu">
+    <div class="flow-node">
+      <div class="fn-num">A</div>
+      <div class="fn-title">Perpetuity</div>
+      <div class="fn-body">Constant payment C forever. PV = C/r</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">B</div>
+      <div class="fn-title">Growing Perpetuity</div>
+      <div class="fn-body">Payment grows at rate g forever. PV = C/(r−g)</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">C</div>
+      <div class="fn-title">Annuity</div>
+      <div class="fn-body">Constant payment C for T periods. PV = C × annuity factor</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="fn-num">D</div>
+      <div class="fn-title">Growing Annuity</div>
+      <div class="fn-body">Payment grows at rate g for T periods. PV = growing annuity formula</div>
+    </div>
+  </div>
+
+  <!-- PERPETUITY & GROWING PERPETUITY TABS -->
+  <div class="tabs fu" id="cfTabs">
+    <div class="tab on" onclick="switchTab('cf1',this,'cfTabs','cfPanels')">Perpetuity</div>
+    <div class="tab" onclick="switchTab('cf2',this,'cfTabs','cfPanels')">Growing Perpetuity</div>
+    <div class="tab" onclick="switchTab('cf3',this,'cfTabs','cfPanels')">Growing Perpetuity — Delayed</div>
+  </div>
+  <div id="cfPanels">
+
+    <div class="tab-panel on" id="cf1">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>perpetuity</strong> is a constant stream of cash flows that lasts forever. The first payment occurs at date 1. Despite paying out infinitely, a perpetuity has a finite present value because each successive payment is discounted more heavily than the last — the discount factor shrinks towards zero as time approaches infinity.</p>
+          <div class="formula">
+            <div class="f-label">Perpetuity Present Value</div>
+            <div class="f-eq">PV = C / r</div>
+            <div class="f-note">C = constant cash flow per period · r = discount rate per period<br>Assumes first payment at date 1 (end of first period)</div>
+          </div>
+          <p class="body">The intuition: if you deposit PV = C/r at rate r, you will earn exactly C in interest each period forever — and never need to touch the principal. The cash flows are paid entirely from interest.</p>
+          <div class="ac or">
+            <div class="ac-hd">Real-world examples of perpetuities</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Consols</strong> — UK government bonds historically issued with no maturity date; pay a fixed coupon forever</li>
+              <li><strong style="color:var(--white)">Preferred shares</strong> — fixed dividend payments with no redemption date are often modelled as perpetuities</li>
+              <li><strong style="color:var(--white)">Endowment funds</strong> — designed to pay out a fixed percentage of capital annually in perpetuity</li>
+              <li><strong style="color:var(--white)">Land rents</strong> — ground rents on long leaseholds can be modelled as perpetuities in valuation</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Perpetuity worked example</div>
+            <div class="ac-body" style="margin-bottom:.75rem">What is the PV of a perpetuity of <strong>£15 per year</strong> if the discount rate is <strong>10%</strong>?</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+              <div class="f-eq">PV = 15 / 0.10 = £150</div>
+            </div>
+            <div class="ac-body">Interpretation: £150 deposited today at 10% per year will generate exactly £15 of interest every year forever. The £150 principal is never consumed.</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Why perpetuity PV is finite despite infinite payments</div>
+            <ul class="blist">
+              <li>Each future payment is multiplied by a discount factor: 1/(1+r)ᵗ</li>
+              <li>As t → ∞, the discount factor → 0, so each distant payment contributes almost nothing to PV</li>
+              <li>The infinite sum C/r + C/r² + C/r³ + … converges to the geometric series C/r</li>
+              <li>At r=10%, a payment in year 100 has a PV of C × (1/1.10¹⁰⁰) ≈ C × 0.000073 — essentially zero</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="cf2">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>growing perpetuity</strong> extends the perpetuity by allowing each cash flow to be larger than the previous one by a constant growth rate g. The cash flows are: C, C(1+g), C(1+g)², … forever. This is the foundation of the <strong>Gordon Growth Model</strong> for stock valuation — where dividends grow at a constant rate forever.</p>
+          <div class="formula">
+            <div class="f-label">Growing Perpetuity Present Value</div>
+            <div class="f-eq">PV = C / (r − g)</div>
+            <div class="f-note">C = first cash flow (at date 1) · r = discount rate · g = constant growth rate<br>⚠ Requires r &gt; g — otherwise PV is infinite (the denominator must be positive)</div>
+          </div>
+          <p class="body">The constraint that <strong>r must exceed g</strong> is critical. If growth ever equalled or exceeded the discount rate, the sum of discounted cash flows would be infinite — meaning the asset would have an infinite value today, which is economically impossible in equilibrium.</p>
+          <div class="ac re">
+            <div class="ac-hd">The Gordon Growth Model — stock valuation application</div>
+            <div class="ac-body">For a stock that pays a dividend D₁ next year, growing at rate g forever, with required return r:</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--red)">
+              <div class="f-eq">P₀ = D₁ / (r − g)</div>
+            </div>
+            <div class="ac-body">This is one of the most important formulas in equity valuation. It shows that stock price rises when dividends increase, required return falls, or the long-run growth rate increases.</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Growing perpetuity — worked example</div>
+            <div class="ac-body" style="margin-bottom:.75rem">PV of a perpetuity of <strong>£15 per year</strong> that grows at <strong>5%</strong> forever, discounted at <strong>10%</strong>?</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--green)">
+              <div class="f-eq">PV = 15 / (0.10 − 0.05) = 15 / 0.05 = £300</div>
+            </div>
+            <div class="ac-body">Compare to the flat perpetuity: PV was £150 with no growth. The same first payment of £15 is now worth £300 because each future payment is larger than in the flat case. Growth doubles the value.</div>
+            <div class="d-row"><span class="d-lbl">Flat perpetuity (g=0)</span><span class="d-val" style="color:var(--white-3)">PV = £150</span></div>
+            <div class="d-row"><span class="d-lbl">Growing perpetuity (g=5%)</span><span class="d-val" style="color:var(--green)">PV = £300</span></div>
+            <div class="d-row"><span class="d-lbl">Value added by growth</span><span class="d-val" style="color:var(--orange)">+£150</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="cf3">
+      <div class="g2">
+        <div>
+          <p class="body">A common complication is when the <strong>first cash flow is delayed</strong> — the stream starts not at date 1 but at some later date. The standard formula always gives the PV <strong>one period before</strong> the first payment. If the first payment is at date 2 instead of date 1, the formula gives PV at date 1, which must then be discounted back one further period to date 0.</p>
+          <div class="formula">
+            <div class="f-label">Delayed Growing Perpetuity — two steps</div>
+            <div class="f-eq">Step 1: PV₁ = C / (r − g)</div>
+            <div class="f-note">This gives the value ONE period before the first payment</div>
+          </div>
+          <div class="formula" style="border-left-color:var(--blue)">
+            <div class="f-label" style="color:var(--blue)">Step 2: Discount back to date 0</div>
+            <div class="f-eq">PV₀ = PV₁ / (1 + r)</div>
+            <div class="f-note">Divide by (1+r) for each period between date 0 and PV₁</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac pu">
+            <div class="ac-hd">Delayed growing perpetuity — worked example</div>
+            <div class="ac-body" style="margin-bottom:.6rem">First payment of <strong>£15</strong> occurs at <strong>date 2</strong> (not date 1). Growing at <strong>5%</strong>, discount rate <strong>10%</strong>.</div>
+            <div class="d-row"><span class="d-lbl">Step 1: PV at date 1</span><span class="d-val" style="color:var(--purple)">15 / (0.10−0.05) = £300</span></div>
+            <div class="d-row"><span class="d-lbl">Step 2: Discount to date 0</span><span class="d-val" style="color:var(--orange)">300 / 1.10 = £272.73</span></div>
+            <div class="ac-body" style="margin-top:.6rem">The one-year delay reduces the present value from £300 to £272.73 — a reduction of £27.27, which is exactly the opportunity cost of waiting one year at 10%. <strong>Every year of delay costs you 1/(1+r) in present value.</strong></div>
+            <div class="ac-stat">General rule: if first payment is at date n, compute PV at date n−1, then discount n−1 more years</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cfPanels -->
+</div>
+</div>
+
+<!-- ── SECTION 5: ANNUITIES ── -->
+<div id="annuities" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">05</div>
+    <h2 class="sec-title">Annuities &amp; Growing Annuities</h2>
+  </div>
+
+  <p class="body fu">An <strong>annuity</strong> is a stream of equal cash flows paid at regular intervals for a fixed number of periods. Unlike a perpetuity, it has a definite end date. Annuities are ubiquitous in finance: mortgages, car loans, bond coupons, pension payments, and lease agreements are all annuities. The growing annuity extends this to cash flows that increase at a constant rate each period.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Annuity Present Value</div>
+        <div class="f-eq">PV = C × [1 − (1+r)^(−T)] / r</div>
+        <div class="f-note">C = constant cash flow per period · r = discount rate per period · T = number of periods<br>The term in brackets is the annuity factor (AF). Note: AF = (1 − DF) / r where DF = 1/(1+r)ᵀ</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Growing Annuity Present Value</div>
+        <div class="f-eq">PV = C/(r−g) × [1 − ((1+g)/(1+r))ᵀ]</div>
+        <div class="f-note">C = first cash flow · g = growth rate · r = discount rate · T = number of periods<br>Reduces to annuity formula when g=0; reduces to growing perpetuity when T→∞</div>
+      </div>
+      <p class="body">The annuity formula is simply the difference between two perpetuities: one starting at date 1 (which gives all payments from date 1 to infinity) minus one starting at date T+1 (which removes all payments beyond T). This <strong>"perpetuity difference"</strong> trick is a powerful way to derive and remember the formula.</p>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Annuity — car loan example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">You can afford <strong>£400 per month</strong>. Interest rate: <strong>7% per year</strong> (= 0.5833%/month). Loan term: <strong>36 months</strong>. What car can you afford?</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">PV = 400 × [1 − (1 + 0.07/12)^(−36)] / (0.07/12)</div>
+          <div class="f-note">= 400 × annuity factor = £12,954.59</div>
+        </div>
+        <div class="ac-body">You can afford a car priced at up to <strong>£12,954.59</strong>. The 36 monthly payments of £400 (total: £14,400) repay both the £12,954.59 principal and £1,445.41 of interest.</div>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">Growing annuity — retirement savings example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Retirement plan pays <strong>£20,000/year</strong> for <strong>40 years</strong>, increasing by <strong>3%/year</strong>. Discount rate: <strong>10%</strong>.</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--green)">
+          <div class="f-eq">PV = 20,000/(0.10−0.03) × [1−(1.03/1.10)⁴⁰]</div>
+          <div class="f-note">= 285,714.29 × 0.9282 = £265,121.57</div>
+        </div>
+        <div class="ac-body">The retirement plan is worth <strong>£265,121.57</strong> at retirement. Despite starting at just £20,000/year, the 3% annual growth significantly increases total value — compare to flat annuity which would give only ~£195,000.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MORTGAGE AMORTISATION -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">Mortgage Amortisation — How Each Payment Splits</h2>
+  </div>
+
+  <p class="body fu">A mortgage is an annuity: a fixed periodic payment that repays both principal and interest over a set term. The clever and important feature is that although the <em>total payment</em> stays constant, the <strong>split between interest and principal changes each period</strong>. Early payments are mostly interest; late payments are mostly principal. This is called an <strong>amortisation schedule</strong>.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Mortgage setup — example</div>
+        <div class="d-row"><span class="d-lbl">Principal (PV)</span><span class="d-val">£250,000</span></div>
+        <div class="d-row"><span class="d-lbl">Annual interest rate</span><span class="d-val">6% p.a.</span></div>
+        <div class="d-row"><span class="d-lbl">Semi-annual rate (rₛ)</span><span class="d-val">3% per semester</span></div>
+        <div class="d-row"><span class="d-lbl">Term</span><span class="d-val">10 semesters (5 years)</span></div>
+        <div class="d-row"><span class="d-lbl">Constant payment C</span><span class="d-val" style="color:var(--orange)">£29,307.63</span></div>
+      </div>
+
+      <div class="formula" style="margin-top:1rem">
+        <div class="f-label">Solving for the constant payment C</div>
+        <div class="f-eq">250,000 = C × [1 − (1.03)^(−10)] / 0.03</div>
+        <div class="f-note">→ C = 250,000 / annuity factor = £29,307.63 per semester</div>
+      </div>
+
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">How one row of the schedule is calculated</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Opening Balance</strong> — the outstanding principal at the start of the period</li>
+          <li><strong style="color:var(--white)">Interest</strong> = rₛ × Opening Balance (3% × outstanding principal)</li>
+          <li><strong style="color:var(--white)">Principal</strong> = C − Interest (the remainder of the payment reduces debt)</li>
+          <li><strong style="color:var(--white)">Closing Balance</strong> = Opening Balance − Principal repaid</li>
+          <li>Repeat each semester using that period's opening (= previous closing) balance</li>
+        </ul>
+        <div class="ac-stat">Semester 1 interest: 0.03 × £250,000 = £7,500 · Principal: £29,307.63 − £7,500 = £21,807.63</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box">
+        <div class="chart-hd"><div class="chart-title">Amortisation schedule — £250,000 mortgage at 3% per semester</div><div class="chart-src">10-semester term</div></div>
+        <div class="amort-wrap">
+          <table class="amort-table">
+            <thead>
+              <tr>
+                <th>Sem</th>
+                <th>Opening Balance</th>
+                <th>Interest</th>
+                <th>Principal</th>
+                <th>Closing Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>250,000.00</td><td class="at-interest">7,500.00</td><td class="at-principal">21,807.63</td><td class="at-closing">228,192.37</td></tr>
+              <tr><td>2</td><td>228,192.37</td><td class="at-interest">6,845.77</td><td class="at-principal">22,461.86</td><td class="at-closing">205,730.51</td></tr>
+              <tr><td>3</td><td>205,730.51</td><td class="at-interest">6,171.92</td><td class="at-principal">23,135.71</td><td class="at-closing">182,594.80</td></tr>
+              <tr><td>4</td><td>182,594.80</td><td class="at-interest">5,477.84</td><td class="at-principal">23,829.79</td><td class="at-closing">158,765.01</td></tr>
+              <tr><td>5</td><td>158,765.01</td><td class="at-interest">4,762.95</td><td class="at-principal">24,544.68</td><td class="at-closing">134,220.33</td></tr>
+              <tr><td>6</td><td>134,220.33</td><td class="at-interest">4,026.61</td><td class="at-principal">25,281.02</td><td class="at-closing">108,939.31</td></tr>
+              <tr><td>7</td><td>108,939.31</td><td class="at-interest">3,268.18</td><td class="at-principal">26,039.45</td><td class="at-closing">82,899.86</td></tr>
+              <tr><td>8</td><td>82,899.86</td><td class="at-interest">2,487.00</td><td class="at-principal">26,820.63</td><td class="at-closing">56,079.23</td></tr>
+              <tr><td>9</td><td>56,079.23</td><td class="at-interest">1,682.38</td><td class="at-principal">27,625.25</td><td class="at-closing">28,453.98</td></tr>
+              <tr><td>10</td><td>28,453.98</td><td class="at-interest">853.62</td><td class="at-principal">28,454.01</td><td class="at-closing">0.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Interest in <span style="color:var(--red)">red</span> · Principal in <span style="color:var(--blue)">blue</span> · Constant payment: £29,307.63 each period</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Key amortisation insight</div>
+      <div class="ac-body">As the outstanding balance falls each period, the <strong>interest component shrinks</strong> and the <strong>principal component grows</strong> — even though the total payment stays exactly constant. By semester 10, nearly all of the payment is principal repayment and almost none is interest.</div>
+      <div class="ac-stat">Semester 1 interest: £7,500 (25.6%) · Semester 10 interest: £854 (2.9%)</div>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">Total interest paid over life of loan</div>
+      <div class="d-row"><span class="d-lbl">Total payments made</span><span class="d-val">£293,076.30</span></div>
+      <div class="d-row"><span class="d-lbl">Principal repaid</span><span class="d-val" style="color:var(--blue)">£250,000.00</span></div>
+      <div class="d-row"><span class="d-lbl">Total interest paid</span><span class="d-val" style="color:var(--red)">£43,076.30</span></div>
+      <div class="d-row"><span class="d-lbl">Effective interest cost</span><span class="d-val" style="color:var(--orange)">17.2% of principal</span></div>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Why interest shrinks over time</div>
+      <ul class="blist">
+        <li>Interest is always calculated on the <strong style="color:var(--white)">remaining balance</strong> — not the original amount</li>
+        <li>Every principal payment reduces future interest charges permanently</li>
+        <li>Extra principal payments early in the life of a loan have a <strong style="color:var(--white)">disproportionately large</strong> impact on total interest paid</li>
+        <li>This is why overpaying a mortgage early is financially advantageous</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: WORKED EXERCISES ── -->
+<div id="exercises" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">06</div>
+    <h2 class="sec-title">Worked Exercises</h2>
+  </div>
+
+  <p class="body fu">The following exercises demonstrate the core TVM techniques applied to real decision-making scenarios. Every TVM problem follows the same logic: identify the cash flows, identify the timing, identify what you are solving for, and apply the right formula.</p>
+
+  <!-- EXERCISE TABS -->
+  <div class="tabs fu" id="exTabs">
+    <div class="tab on" onclick="switchTab('ex1',this,'exTabs','exPanels')">Exercise 1: Sell the Bike?</div>
+    <div class="tab" onclick="switchTab('ex2',this,'exTabs','exPanels')">Exercise 2: Mr. Rogers' Retirement</div>
+  </div>
+  <div id="exPanels">
+
+    <div class="tab-panel on" id="ex1">
+      <div class="g2">
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Exercise 1 — Present Value Comparison</div>
+            <div class="ac-body" style="margin-bottom:.75rem">You want to sell your <strong>Ducato bike</strong>. Two buyers make offers:</div>
+            <div class="d-row"><span class="d-lbl">Buyer 1</span><span class="d-val" style="color:var(--green)">£76,200 today</span></div>
+            <div class="d-row"><span class="d-lbl">Buyer 2</span><span class="d-val" style="color:var(--blue)">£93,750 in 2 years</span></div>
+            <div class="d-row"><span class="d-lbl">Interest rate</span><span class="d-val">11% per year</span></div>
+            <div style="margin-top:1rem;font-size:13px;color:var(--white-2)">To compare fairly, we must bring both offers to the <strong>same point in time</strong>. We discount Buyer 2's offer to today using the 11% rate.</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Solution — discount both to today</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+              <div class="f-eq">PV(Buyer 1) = £76,200 (already today)</div>
+            </div>
+            <div class="formula" style="border-left-color:var(--blue)">
+              <div class="f-eq">PV(Buyer 2) = 93,750 / (1.11)² = £76,089.60</div>
+            </div>
+            <div class="d-row"><span class="d-lbl">PV — Buyer 1</span><span class="d-val" style="color:var(--green)">£76,200.00</span></div>
+            <div class="d-row"><span class="d-lbl">PV — Buyer 2</span><span class="d-val" style="color:var(--red)">£76,089.60</span></div>
+            <div class="d-row"><span class="d-lbl">Difference</span><span class="d-val" style="color:var(--orange)">£110.40 in favour of Buyer 1</span></div>
+            <div style="margin-top:.75rem;font-size:13px;color:var(--white-2)"><strong>Decision: Sell to Buyer 1.</strong> Despite offering £17,550 less in nominal terms, Buyer 1's offer is worth more in present value because you can invest the money immediately at 11%.</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 1</div>
+        <div class="verdict-text">You can never directly compare cash flows at different points in time. A larger number in the future is not necessarily worth more than a smaller number today. Always bring all cash flows to the same date — today is the most convenient — before comparing. The discount rate is the cost of time.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ex2">
+      <div class="g2">
+        <div>
+          <div class="ac pu">
+            <div class="ac-hd">Exercise 2 — Growing Annuity + FV Compounding</div>
+            <div class="ac-body" style="margin-bottom:.75rem">Mr. Rogers saves for retirement:</div>
+            <div class="d-row"><span class="d-lbl">Current salary</span><span class="d-val">$50,000</span></div>
+            <div class="d-row"><span class="d-lbl">Annual contribution</span><span class="d-val">2% of salary</span></div>
+            <div class="d-row"><span class="d-lbl">First contribution</span><span class="d-val">In 1 year (t=1)</span></div>
+            <div class="d-row"><span class="d-lbl">Salary growth rate g</span><span class="d-val">4% per year</span></div>
+            <div class="d-row"><span class="d-lbl">Account interest rate r</span><span class="d-val">8% per year</span></div>
+            <div class="d-row"><span class="d-lbl">Saving period T</span><span class="d-val">40 years</span></div>
+            <div style="margin-top:.75rem;font-size:13px;color:var(--white-2)"><strong>Question:</strong> How much will Mr. Rogers have after 40 years?</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Solution — two-step approach</div>
+            <div class="tl-yr" style="margin-top:.5rem">STEP 1: First contribution</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">C₁ = 0.02 × $50,000 × 1.04 = $1,040</div>
+              <div class="f-note">Salary at t=1 is 50,000 × 1.04; contribution is 2% of that</div>
+            </div>
+            <div class="tl-yr" style="margin-top:.75rem">STEP 2: PV of growing annuity at t=0</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">PV₀ = (1,040 / (0.08−0.04)) × [1 − (1.04/1.08)⁴⁰]</div>
+              <div class="f-note">= 26,000 × 0.7790 ≈ $20,254.12</div>
+            </div>
+            <div class="tl-yr" style="margin-top:.75rem">STEP 3: Compound PV forward 40 years at 8%</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--orange)">
+              <div class="f-eq">FV₄₀ = 20,254.12 × (1.08)⁴⁰ ≈ $440,011</div>
+            </div>
+            <div style="margin-top:.6rem;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--orange)">Mr. Rogers will have ≈ $440,011 at retirement.</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 2</div>
+        <div class="verdict-text">For growing annuity problems requiring a future value: always find the PV first (using the growing annuity formula), then compound that PV forward to the target date. The two-step approach — PV then FV — works for any stream of cash flows regardless of complexity. Also notice how even modest contributions (just 2% of salary) compounded over 40 years accumulate to a very substantial sum — the power of time and compounding.</div>
+      </div>
+    </div>
+
+  </div><!-- /exPanels -->
+
+  <!-- SUMMARY GRID -->
+  <div class="sec-hd fu" style="margin-top:2.5rem">
+    <h2 class="sec-title" style="font-size:20px">Complete Formula Reference</h2>
+  </div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell">
+      <div class="og-icon">📐</div>
+      <div class="og-lbl">Core FV/PV formulas</div>
+      <div class="og-val">4</div>
+      <div class="og-sub">One-period, multi-period, solving for r, solving for T — all variations of the same equation</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">♾️</div>
+      <div class="og-lbl">Perpetuity PV</div>
+      <div class="og-val">C/r</div>
+      <div class="og-sub">Simplest formula in finance. Growing version: C/(r−g). Requires r &gt; g.</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">📅</div>
+      <div class="og-lbl">Annuity PV factor</div>
+      <div class="og-val">[1−(1+r)⁻ᵀ]/r</div>
+      <div class="og-sub">Multiply by C to get annuity PV. Divide PV by factor to solve for payment C.</div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All TVM formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">FV = C₀(1+r)ᵀ</strong> — compound a single cash flow forward T periods</li>
+        <li><strong style="color:var(--white)">PV = Cᴛ/(1+r)ᵀ</strong> — discount a single future cash flow back to today</li>
+        <li><strong style="color:var(--white)">FV = C₀(1+r/m)^(mT)</strong> — FV with m compounding periods per year</li>
+        <li><strong style="color:var(--white)">EAR = (1+r/m)ᵐ − 1</strong> — true annual rate accounting for intra-year compounding</li>
+        <li><strong style="color:var(--white)">PV(Perpetuity) = C/r</strong> — constant cash flow forever, first payment at t=1</li>
+        <li><strong style="color:var(--white)">PV(Growing Perpetuity) = C/(r−g)</strong> — requires r &gt; g; first payment C at t=1</li>
+        <li><strong style="color:var(--white)">PV(Annuity) = C × [1−(1+r)^(−T)]/r</strong> — T equal payments, first at t=1</li>
+        <li><strong style="color:var(--white)">PV(Growing Annuity) = C/(r−g) × [1−((1+g)/(1+r))ᵀ]</strong> — growing payments for T periods</li>
+        <li><strong style="color:var(--white)">r = (FV/PV)^(1/T) − 1</strong> — solve for the implied rate of return</li>
+        <li><strong style="color:var(--white)">T = ln(FV/PV) / ln(1+r)</strong> — solve for the number of periods</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Never compare cash flows at different times directly</strong> — always discount or compound to a common date first</li>
+        <li><strong style="color:var(--white)">Period consistency</strong> — if payments are monthly, the rate r must also be per month (divide annual rate by 12)</li>
+        <li><strong style="color:var(--white)">Growing perpetuity requires r &gt; g</strong> — if g ≥ r the formula gives a negative or infinite value, which is meaningless</li>
+        <li><strong style="color:var(--white)">Perpetuity/annuity formula gives PV one period before first payment</strong> — if first payment is at t=2, formula gives PV at t=1; discount one more year back to t=0</li>
+        <li><strong style="color:var(--white)">EAR ≠ quoted rate when m &gt; 1</strong> — always use EAR when comparing products with different compounding frequencies</li>
+        <li><strong style="color:var(--white)">Compounding is exponential, not linear</strong> — simple interest gives 150; compound gives 161.05 at 10%/5yrs</li>
+        <li><strong style="color:var(--white)">Higher discount rate = lower PV</strong> — a higher r makes the future worth less in today's terms; do not invert this</li>
+        <li><strong style="color:var(--white)">FV then discount ≠ same as PV then compound</strong> — they are equivalent only if you use the correct period rate consistently throughout</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONCEPT TIMELINE -->
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 1 — Master one-period FV and PV</div>
+      <div class="tl-card">
+        <div class="tl-title">FV = C₀(1+r) and PV = C₁/(1+r)</div>
+        <div class="tl-text">Everything in TVM is an extension of these two expressions. FV is compounding forward; PV is discounting back. The interest rate r bridges past and future. Understand why £1 today and £(1+r) in one year are equivalent before moving on.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 2 — Extend to multiple periods and understand compounding</div>
+      <div class="tl-card">
+        <div class="tl-title">FV = C₀(1+r)ᵀ — the power of exponents</div>
+        <div class="tl-text">The jump from one period to many is just replacing (1+r) with (1+r)ᵀ. But the behaviour changes dramatically — growth becomes exponential. Practice with different T and r values to develop intuition for how much compounding adds. The "Rule of 72" (years to double ≈ 72/r%) is a useful mental shortcut.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 3 — Understand compounding frequency and EAR</div>
+      <div class="tl-card">
+        <div class="tl-title">EAR = (1+r/m)ᵐ − 1 — the true cost of borrowing</div>
+        <div class="tl-text">A 12% rate means very different things depending on whether it is compounded annually, monthly, or daily. EAR standardises all rates to an annual basis for fair comparison. Always ask: what is the compounding frequency? Then compute EAR before comparing.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 4 — Apply perpetuity and growing perpetuity formulas</div>
+      <div class="tl-card">
+        <div class="tl-title">PV = C/r and PV = C/(r−g) — infinite streams, finite values</div>
+        <div class="tl-text">The elegance of these formulas is that they collapse an infinite sum into a simple fraction. The growing perpetuity is the foundation of the Gordon Growth Model. Always check: is first payment at date 1? If it's delayed, remember to discount back one additional period per year of delay.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 5 — Master annuities and build amortisation schedules</div>
+      <div class="tl-card">
+        <div class="tl-title">PV = C × [1−(1+r)^(−T)]/r — finite streams, mortgages, loans</div>
+        <div class="tl-text">Annuities are perpetuity differences: a T-period annuity = perpetuity starting t=1 minus perpetuity starting t=T+1. Once you can price an annuity, you can price any loan or bond. The amortisation schedule shows the mechanics: constant total payment, shifting mix of interest and principal.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Time Value of Money</div>
+    <div class="verdict-text">Every financial valuation — a stock, a bond, a business, a project — is just a collection of future cash flows discounted back to today at an appropriate rate. The time value of money is not a technique; it is the bedrock logic of all of finance. Master the four formulas (FV, PV, perpetuity, annuity) and the ability to rearrange them, and you hold the key to every valuation problem you will ever encounter.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Time Value of Money · Clara Martínez-Toledano · Corporate Finance Module 2<br>
+    Topics: FV · PV · Compounding · EAR · Perpetuities · Annuities · Amortisation · Growing Annuity<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* SCROLL PROGRESS */
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('prog').style.width = (s / h * 100) + '%';
+});
+
+/* NAV ACTIVE */
+const sections = ['foundations','multiperiod','compounding','cashflows','annuities','exercises'];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  let cur = sections[0];
+  sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
+  document.querySelectorAll('.nl').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+});
+
+/* INTERSECTION OBSERVER */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fu, .tl-item').forEach(el => io.observe(el));
+
+/* BAR METERS */
+const barIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      barIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.chart-box').forEach(el => barIO.observe(el));
+
+/* TABS */
+function switchTab(panelId, btn, tabsId, panelsId) {
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+</script>
+</body>
+</html>
