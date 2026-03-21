@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonds — Valuation, Yield Curves & Term Structure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}
+.ac.gr{border-top:2px solid var(--green)}
+.ac.re{border-top:2px solid var(--red)}
+.ac.bl{border-top:2px solid var(--blue)}
+.ac.ye{border-top:2px solid var(--yellow)}
+.ac.pu{border-top:2px solid var(--purple)}
+.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}
+.ac.gr .ac-hd{color:var(--green)}
+.ac.re .ac-hd{color:var(--red)}
+.ac.bl .ac-hd{color:var(--blue)}
+.ac.ye .ac-hd{color:var(--yellow)}
+.ac.pu .ac-hd{color:var(--purple)}
+.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}
+.ac.gr .ac-stat{color:var(--green)}
+.ac.re .ac-stat{color:var(--red)}
+.ac.bl .ac-stat{color:var(--blue)}
+.ac.ye .ac-stat{color:var(--yellow)}
+.ac.pu .ac-stat{color:var(--purple)}
+.ac.te .ac-stat{color:var(--teal)}
+
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.04em;text-align:right}
+.chart-wrap{position:relative;width:100%}
+
+.bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.bar-lbl{font-size:12px;color:var(--white-2);width:200px;flex-shrink:0}
+.bar-wrap{flex:1;height:5px;background:var(--panel-2);overflow:hidden}
+.bar-fill{height:100%;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:11px;font-weight:600;width:80px;text-align:right;flex-shrink:0}
+
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
+.flow-node{flex:1;min-width:120px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;cursor:default;transition:border-color .2s,background .2s}
+.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
+.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
+.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
+.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+
+/* CASH FLOW TIMELINE */
+.cft{display:flex;align-items:flex-end;gap:0;overflow-x:auto;padding:1.5rem 1rem 1rem;background:var(--panel);border:1px solid var(--border-2);margin:1rem 0;position:relative}
+.cft::before{content:'';position:absolute;left:1.5rem;right:1.5rem;bottom:2.6rem;height:2px;background:var(--border-2)}
+.cft-period{display:flex;flex-direction:column;align-items:center;flex:1;min-width:60px;position:relative}
+.cft-arrow{font-family:var(--mono);font-size:11px;font-weight:600;margin-bottom:4px}
+.cft-arrow.up{color:var(--green)}
+.cft-arrow.down{color:var(--red)}
+.cft-dot{width:9px;height:9px;border-radius:50%;background:var(--orange);margin-bottom:0;z-index:1}
+.cft-t{font-family:var(--mono);font-size:9px;color:var(--white-3);margin-top:6px}
+.cft-val{font-family:var(--mono);font-size:10px;color:var(--white-2);text-align:center}
+
+/* YIELD CURVE VISUAL */
+.yc-container{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.yc-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3);margin-bottom:1.25rem}
+
+/* PRICE-YIELD TABLE */
+.py-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:1rem 0}
+.py-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.6rem 1rem;text-align:right;border-bottom:2px solid var(--orange-line);background:var(--panel-2);color:var(--orange)}
+.py-table th:first-child{text-align:left}
+.py-table td{font-family:var(--mono);padding:.45rem 1rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2)}
+.py-table td:first-child{text-align:left;color:var(--white-3)}
+.py-table tr.par td{color:var(--orange);font-weight:600;background:var(--orange-dim)}
+.py-table tr.premium td:last-child{color:var(--green)}
+.py-table tr.discount td:last-child{color:var(--red)}
+
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
+
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  .bar-lbl{width:130px}
+  .flow{flex-direction:column}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#definition">Bond Basics</a>
+    <a class="nl" href="#valuation">Valuation</a>
+    <a class="nl" href="#bondtypes">Bond Types</a>
+    <a class="nl" href="#ytm">Yield to Maturity</a>
+    <a class="nl" href="#termstructure">Term Structure</a>
+    <a class="nl" href="#forwardrates">Forward Rates</a>
+    <a class="nl" href="#theories">Yield Curve Theories</a>
+    <a class="nl" href="#exercises">Exercises</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 3</div>
+      <h1>Bonds:<br><em>Valuation, Yields</em><br>&amp; Term Structure</h1>
+      <p class="hero-lead">From the anatomy of a coupon bond to zero-coupon pricing, yield to maturity, spot rates, forward rates, and the three competing theories of the yield curve — a complete deep-dive into how debt securities are valued and what interest rate markets tell us about the future.</p>
+      <div class="meta-row">
+        <span>Fixed Income Foundations</span>
+        <span>Coupon Bonds · ZCBs · YTM · Spot &amp; Forward Rates</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core concepts at a glance</div>
+      <div class="sp-row">
+        <div class="sp-lbl">Bond value general formula</div>
+        <div class="sp-right"><div class="sp-val">PV(coupons) + PV(F)</div><div class="sp-sub">Annuity + terminal lump sum</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Zero-coupon bond price</div>
+        <div class="sp-right"><div class="sp-val">F / (1+y)ᵀ</div><div class="sp-sub">Single cash flow at maturity</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Coupon rate &gt; YTM</div>
+        <div class="sp-right"><div class="sp-val">Premium</div><div class="sp-sub">Price &gt; par value</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Coupon rate &lt; YTM</div>
+        <div class="sp-right"><div class="sp-val">Discount</div><div class="sp-sub">Price &lt; par value</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Forward rate formula</div>
+        <div class="sp-right"><div class="sp-val">[(1+rₙ)ⁿ/(1+rₜ)ᵀ]^(1/N)−1</div><div class="sp-sub">No-arbitrage implied rate</div></div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-lbl">Consol (perpetuity) price</div>
+        <div class="sp-right"><div class="sp-val">PV = C/y</div><div class="sp-sub">Fixed coupon paid forever</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: DEFINITION ── -->
+<div id="definition" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">01</div>
+    <h2 class="sec-title">What is a Bond?</h2>
+  </div>
+
+  <p class="body fu">A bond is a <strong>legally binding agreement between a borrower (the issuer) and a lender (the bondholder)</strong> that can be traded as a security on financial markets. Unlike a bank loan, which is a private bilateral contract, a bond is a standardised instrument: once issued, it can be bought and sold freely, meaning the identity of the lender can change throughout the bond's life. The issuer's obligation — to pay coupons and repay the face value at maturity — remains fixed regardless of who holds the bond.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">The six key terms of every bond</div>
+        <div class="d-row"><span class="d-lbl">Issuer</span><span class="d-val" style="color:var(--white-3)">Government or corporate</span></div>
+        <div class="d-row"><span class="d-lbl">Face / Par Value (F)</span><span class="d-val">Principal; basis for coupons</span></div>
+        <div class="d-row"><span class="d-lbl">Redemption Value</span><span class="d-val">Amount repaid at maturity</span></div>
+        <div class="d-row"><span class="d-lbl">Coupon Rate (C)</span><span class="d-val">Interest rate paid on face value</span></div>
+        <div class="d-row"><span class="d-lbl">Coupon Dates</span><span class="d-val">Annual (EU) or semi-annual (US)</span></div>
+        <div class="d-row"><span class="d-lbl">Maturity Date (T)</span><span class="d-val">Date face value is repaid</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Anatomy — coupon bond cash flows</div>
+        <div class="ac-body" style="margin-bottom:.75rem">A bond with face value £100, 6.375% coupon, 10 years, annual payments:</div>
+        <div class="cft">
+          <div class="cft-period"><div class="cft-arrow up">£6.375</div><div class="cft-dot"></div><div class="cft-t">t=1</div></div>
+          <div class="cft-period"><div class="cft-arrow up">£6.375</div><div class="cft-dot"></div><div class="cft-t">t=2</div></div>
+          <div class="cft-period"><div class="cft-arrow" style="color:var(--white-3)">···</div><div class="cft-dot" style="background:var(--border-2)"></div><div class="cft-t">···</div></div>
+          <div class="cft-period"><div class="cft-arrow up">£6.375</div><div class="cft-dot"></div><div class="cft-t">t=9</div></div>
+          <div class="cft-period"><div class="cft-arrow up" style="font-size:10px">£106.375</div><div class="cft-dot" style="background:var(--orange);width:12px;height:12px"></div><div class="cft-t">t=10</div></div>
+        </div>
+        <div class="ac-body">Each coupon = F × coupon rate = 100 × 0.06375 = <strong>£6.375</strong>. At maturity, the issuer pays the final coupon <em>plus</em> the full face value of £100 — a total of <strong>£106.375</strong> in year 10.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac gr">
+      <div class="ac-hd">Government bonds — issuers &amp; examples</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Gilts</strong> — UK government bonds issued by HM Treasury / Debt Management Office</li>
+        <li><strong style="color:var(--white)">US Treasuries</strong> — US federal government bonds; most liquid bond market in the world</li>
+        <li><strong style="color:var(--white)">Bunds</strong> — German federal government bonds; benchmark for Eurozone risk-free rates</li>
+        <li>Government bonds are the closest proxy for <strong style="color:var(--white)">risk-free</strong> instruments in their currency</li>
+      </ul>
+    </div>
+    <div class="ac pu">
+      <div class="ac-hd">Corporate bonds — key features</div>
+      <ul class="blist">
+        <li>Issued by companies to raise debt capital without diluting equity ownership</li>
+        <li>Carry <strong style="color:var(--white)">credit risk</strong> — the risk the issuer defaults on coupon or principal payments</li>
+        <li><strong style="color:var(--white)">Credit spread</strong> = corporate yield − equivalent government bond yield; reflects default risk</li>
+        <li>Rated by agencies (Moody's, S&amp;P, Fitch): investment-grade (BBB− and above) vs high-yield ("junk")</li>
+      </ul>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Why bonds are tradeable — key properties</div>
+      <ul class="blist">
+        <li>Standardised terms allow anonymous trading on secondary markets</li>
+        <li>Price changes daily with interest rates — giving bondholders <strong style="color:var(--white)">capital gain/loss risk</strong> in addition to income</li>
+        <li>Bond investors can exit before maturity by selling to another investor at market price</li>
+        <li>Liquidity varies dramatically: Treasuries trade constantly; small corporate bonds may trade rarely</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: VALUATION ── -->
+<div id="valuation" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">02</div>
+    <h2 class="sec-title">How to Value a Bond</h2>
+  </div>
+
+  <p class="body fu">The value of any financial security is the <strong>present value of its expected future cash flows</strong>, discounted at the rate the market requires for that level of risk. For a bond, the future cash flows are perfectly known in advance (for fixed-rate bonds): a stream of coupon payments plus the face value at maturity. The only unknown is the <strong>discount rate</strong> — the yield to maturity (y) — which the market sets based on current interest rates, credit risk, and bond characteristics.</p>
+
+  <div class="formula fu">
+    <div class="f-label">General Bond Pricing Equation</div>
+    <div class="f-eq">Bond Price = Σ [C / (1+y)ᵗ] + F / (1+y)ᵀ</div>
+    <div class="f-note">C = periodic coupon payment · y = yield to maturity · F = face value · T = periods to maturity<br>The first term is the PV of the annuity of coupons; the second is the PV of the lump-sum face value</div>
+  </div>
+
+  <div class="formula fu" style="border-left-color:var(--blue)">
+    <div class="f-label" style="color:var(--blue)">Simplified using the Annuity Formula</div>
+    <div class="f-eq">Bond Price = C × [1 − (1+y)^(−T)] / y  +  F / (1+y)ᵀ</div>
+    <div class="f-note">The first term collapses the coupon stream into the annuity PV formula · Second term discounts the face value<br>This is the most operationally useful form of the bond pricing equation</div>
+  </div>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The two components of a bond's value are conceptually distinct:</p>
+      <div class="ac or">
+        <div class="ac-hd">Component 1 — PV of coupon stream (annuity)</div>
+        <div class="ac-body">The coupons form a fixed annuity — equal payments C at dates 1, 2, …, T. The PV of this annuity falls as yield rises (because the same cash flows are discounted more heavily). A bondholder who values income receives this component throughout the bond's life.</div>
+        <div class="ac-stat">PV(coupons) = C × [1−(1+y)^(−T)] / y</div>
+      </div>
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">Component 2 — PV of face value (terminal value)</div>
+        <div class="ac-body">The face value F is a single lump sum received at maturity T. Its present value shrinks dramatically as T increases or y rises. A 30-year ZCB at 6% discounts £100 to just £17.41 — illustrating how time and rates erode terminal value. This component is the bondholder's "return of principal."</div>
+        <div class="ac-stat">PV(face value) = F / (1+y)ᵀ</div>
+      </div>
+    </div>
+    <div>
+      <div class="pq">
+        <div class="pq-text">Interest rates and bond prices move in opposite directions. When yields rise, you discount future cash flows more heavily, so the present value — and therefore the market price — of every bond falls. This is the most important single relationship in fixed income.</div>
+        <div class="pq-src">— Bond Valuation Foundations</div>
+      </div>
+
+      <div class="ac ye">
+        <div class="ac-hd">The price-yield relationship — worked example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Bond: 6.375% coupon, 10 years, F=100, annual coupons</div>
+        <table class="py-table">
+          <thead><tr><th>Yield (y)</th><th>PV Coupons</th><th>PV Face</th><th>Bond Price</th></tr></thead>
+          <tbody>
+            <tr class="premium"><td>3%</td><td>54.37</td><td>74.41</td><td style="color:var(--green)">128.78 ▲ PREMIUM</td></tr>
+            <tr class="premium"><td>5%</td><td>49.25</td><td>61.39</td><td style="color:var(--green)">110.62 ▲ PREMIUM</td></tr>
+            <tr class="par"><td>6.375%</td><td>—</td><td>—</td><td>100.00 = PAR</td></tr>
+            <tr class="discount"><td>9%</td><td>40.88</td><td>42.24</td><td style="color:var(--red)">83.15 ▼ DISCOUNT</td></tr>
+            <tr class="discount"><td>12%</td><td>35.98</td><td>32.20</td><td style="color:var(--red)">68.18 ▼ DISCOUNT</td></tr>
+          </tbody>
+        </table>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">As y rises from 3% to 12%, price falls from £128.78 to £68.18 — a 47% decline</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREMIUM / DISCOUNT / PAR -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">Premium, Par &amp; Discount: The Three States of a Bond</h2>
+  </div>
+  <div class="g3 fu">
+    <div class="ac gr">
+      <div class="ac-hd">Premium Bond — coupon rate &gt; yield</div>
+      <div class="ac-body">The bond pays coupons that are <strong>more generous</strong> than what the market currently requires. To compensate, investors bid up the price above par — they pay extra upfront for the right to receive those above-market coupons. Over time, the premium amortises to par as maturity approaches.</div>
+      <div class="ac-stat">Example: 6.375% coupon, 5% yield → Price = £110.62 (above £100 par)</div>
+    </div>
+    <div class="ac or">
+      <div class="ac-hd">Par Bond — coupon rate = yield</div>
+      <div class="ac-body">When the coupon rate exactly equals the market yield, the bond is priced at exactly par (face value). This is the equilibrium state: the bondholder receives a market-rate return entirely through coupons, with no capital gain or loss at maturity. Newly issued bonds are typically priced at or near par.</div>
+      <div class="ac-stat">Example: 6.375% coupon, 6.375% yield → Price = £100.00 exactly</div>
+    </div>
+    <div class="ac re">
+      <div class="ac-hd">Discount Bond — coupon rate &lt; yield</div>
+      <div class="ac-body">The coupons are <strong>below market rate</strong>. Investors are only willing to buy at below par so that the combination of below-market coupons and capital appreciation (from price to par at maturity) delivers the required yield. The discount compensates for inadequate income.</div>
+      <div class="ac-stat">Example: 6.375% coupon, 9% yield → Price = £83.15 (below £100 par)</div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">Core intuition — premium vs discount</div>
+    <div class="verdict-text">The yield y is the rate that makes "what you pay today" exactly equal to the discounted value of "what you receive over the bond's life." If the coupon is high relative to the market, you must pay more today. If the coupon is low, you must pay less. The price adjusts until the bond's total return — coupons plus capital gain/loss — equals the market yield.</div>
+  </div>
+
+  <!-- CHART: Price-Yield Curve -->
+  <div class="chart-box fu" style="margin-top:1.75rem">
+    <div class="chart-hd">
+      <div class="chart-title">Price–Yield relationship — 6.375% coupon, 10-year bond, F=£100</div>
+      <div class="chart-src">Dashed lines mark par (y=6.375%, P=£100)</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="priceYieldChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem">As yield rises from 1% → 15%, price falls from ~£147 to ~£57. The curve is convex — price falls faster at low yields than at high yields.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: BOND TYPES ── -->
+<div id="bondtypes" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">03</div>
+    <h2 class="sec-title">Types of Bonds</h2>
+  </div>
+
+  <div class="tabs fu" id="typeTabs">
+    <div class="tab on" onclick="switchTab('t1',this,'typeTabs','typePanels')">Coupon Bonds</div>
+    <div class="tab" onclick="switchTab('t2',this,'typeTabs','typePanels')">Zero-Coupon Bonds</div>
+    <div class="tab" onclick="switchTab('t3',this,'typeTabs','typePanels')">Consols (Perpetuities)</div>
+  </div>
+  <div id="typePanels">
+
+    <!-- COUPON BONDS -->
+    <div class="tab-panel on" id="t1">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>coupon bond</strong> makes periodic interest payments — the coupons — throughout its life, plus repays the face value at maturity. It is the most common type of bond in global debt markets. Because the cash flows consist of a fixed annuity (the coupons) plus a terminal lump sum (the face value), the bond pricing formula is a direct application of TVM.</p>
+          <p class="body">Coupon payments are typically made <strong>annually in Europe</strong> and <strong>semi-annually in the United States</strong>. When coupons are semi-annual, the stated annual coupon rate is divided by two, the YTM per period is halved, and the number of periods is doubled. This affects the effective annual yield calculation.</p>
+          <div class="formula">
+            <div class="f-label">Coupon Bond Price — Annual Coupons</div>
+            <div class="f-eq">P = C × [1 − (1+y)^(−T)] / y  +  F / (1+y)ᵀ</div>
+            <div class="f-note">C = F × coupon rate · T = years to maturity · y = annual YTM</div>
+          </div>
+          <div class="formula" style="border-left-color:var(--blue)">
+            <div class="f-label" style="color:var(--blue)">Coupon Bond Price — Semi-Annual Coupons</div>
+            <div class="f-eq">P = (C/2) × [1−(1+y/2)^(−2T)] / (y/2)  +  F/(1+y/2)^(2T)</div>
+            <div class="f-note">Divide coupon and yield by 2 · Double the number of periods</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Coupon bond example — premium case</div>
+            <div class="ac-body" style="margin-bottom:.65rem"><strong>Bond:</strong> 6.375% coupon · F=100 · 10 years · annual · Required yield: 5%</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+              <div class="f-eq">P = 6.375/0.05 × [1−(1.05)^(−10)] + 100/(1.05)^10</div>
+              <div class="f-note">= 6.375 × 7.722 + 100 × 0.6139 = 49.24 + 61.39 = £110.62</div>
+            </div>
+            <div class="ac-body">Coupon rate (6.375%) &gt; yield (5%), so the bond trades at a <strong>premium</strong> of £10.62 above par. Investors pay extra today because they receive above-market coupons for 10 years.</div>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Coupon bond example — discount case</div>
+            <div class="ac-body" style="margin-bottom:.65rem"><strong>Same bond</strong> but required yield is now 9%:</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--red)">
+              <div class="f-eq">P = 6.375/0.09 × [1−(1.09)^(−10)] + 100/(1.09)^10</div>
+              <div class="f-note">= 6.375 × 6.418 + 100 × 0.4224 = 40.91 + 42.24 = £83.15</div>
+            </div>
+            <div class="ac-body">Coupon rate (6.375%) &lt; yield (9%), so the bond trades at a <strong>discount</strong> of £16.85 below par. The capital gain from £83.15 to £100 at maturity compensates for the below-market coupons.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZERO COUPON BONDS -->
+    <div class="tab-panel" id="t2">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>pure discount bond</strong> (or zero-coupon bond, ZCB) pays <em>no</em> periodic interest whatsoever. The entire return comes from the difference between the <strong>purchase price</strong> (always below par) and the <strong>face value</strong> received at maturity. The investor is lending money today and receiving a single payment at the end — a pure TVM problem.</p>
+          <p class="body">Because there is only one cash flow, the ZCB's YTM is exactly equal to the <strong>spot rate</strong> for that maturity. This is a critically important property: zero-coupon bonds are the purest measurement tools for the term structure of interest rates. Every point on the spot rate curve is conceptually equivalent to the yield on a ZCB of that maturity.</p>
+          <div class="formula">
+            <div class="f-label">Zero-Coupon Bond Price</div>
+            <div class="f-eq">P = F / (1 + y)ᵀ</div>
+            <div class="f-note">F = face value · y = YTM = spot rate for maturity T · T = years to maturity<br>The bond must always sell <strong>below par</strong> — it can never sell at or above par because the only return is price appreciation</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Zero-coupon bond — 30-year example</div>
+            <div class="ac-body" style="margin-bottom:.65rem">Find the value of a 30-year ZCB with £100 par and 6% YTM:</div>
+            <div class="cft" style="padding:1rem">
+              <div class="cft-period"><div class="cft-arrow down" style="color:var(--red);font-size:10px">Buy: £17.41</div><div class="cft-dot" style="background:var(--red)"></div><div class="cft-t">t=0</div></div>
+              <div class="cft-period"><div class="cft-arrow" style="color:var(--white-3)">no coupons ···</div><div class="cft-dot" style="background:var(--border-2)"></div><div class="cft-t">t=1…29</div></div>
+              <div class="cft-period"><div class="cft-arrow up" style="font-size:10px">Receive: £100</div><div class="cft-dot" style="background:var(--green);width:12px;height:12px"></div><div class="cft-t">t=30</div></div>
+            </div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+              <div class="f-eq">P = 100 / (1.06)^30 = £17.41</div>
+            </div>
+            <div class="ac-body">The investor pays £17.41 today and receives £100 in 30 years — a total return of 475% in nominal terms, but only 6% per year once time value is accounted for. The deep discount reflects the full weight of 30 years of compounding at 6%.</div>
+            <div class="ac-stat">Treasury Bills are classic short-term ZCBs — sold at discount, mature at face value</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSOLS -->
+    <div class="tab-panel" id="t3">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>consol</strong> (or perpetual bond) is a bond with no maturity date. It pays a fixed coupon C every period forever — making it a classic example of a <strong>perpetuity</strong>. The pricing formula is the same as the perpetuity formula from TVM: the present value of a constant infinite stream of cash flows.</p>
+          <p class="body">The UK government historically issued consols — perpetual gilts that paid a fixed coupon indefinitely with no redemption date. The last UK consols were finally redeemed in 2015, more than 300 years after some of the original issuances. Some were originally issued to consolidate debt from the South Sea Bubble of 1720.</p>
+          <div class="formula">
+            <div class="f-label">Consol (Perpetual Bond) Price</div>
+            <div class="f-eq">P = C / y</div>
+            <div class="f-note">C = fixed coupon payment per period · y = yield / discount rate<br>Note: same as the perpetuity PV formula — a consol IS a perpetuity</div>
+          </div>
+          <p class="body">The consol formula reveals a stark sensitivity to the discount rate. A consol paying £5/year at a 5% yield is worth £100. If yields rise to 10%, it is worth only £50 — a 50% price loss from a doubling of rates. This extreme interest-rate sensitivity is why long-duration bonds (and consols in particular) are highly volatile instruments.</p>
+        </div>
+        <div>
+          <div class="ac te">
+            <div class="ac-hd">Consol example &amp; interest rate sensitivity</div>
+            <div class="ac-body" style="margin-bottom:.65rem">A UK consol pays <strong>£5 per year</strong> forever. What is its price at different yields?</div>
+            <div class="d-row"><span class="d-lbl">y = 2%</span><span class="d-val" style="color:var(--green)">P = 5/0.02 = £250</span></div>
+            <div class="d-row"><span class="d-lbl">y = 5%</span><span class="d-val" style="color:var(--green)">P = 5/0.05 = £100</span></div>
+            <div class="d-row"><span class="d-lbl">y = 10%</span><span class="d-val" style="color:var(--yellow)">P = 5/0.10 = £50</span></div>
+            <div class="d-row"><span class="d-lbl">y = 20%</span><span class="d-val" style="color:var(--red)">P = 5/0.20 = £25</span></div>
+            <div class="ac-body" style="margin-top:.6rem">A yield doubling from 5% to 10% cuts the price in half. This inverse relationship is most extreme for consols because they have the longest possible duration — all future cash flows stretch infinitely into the future, maximising interest-rate sensitivity.</div>
+            <div class="ac-stat">Duration of a consol = (1+y)/y. At 5% yield, duration ≈ 21 years</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Why consols illustrate duration risk</div>
+            <ul class="blist">
+              <li>Every cash flow is far in the future — all are heavily discounted, making price very sensitive to rate changes</li>
+              <li>No principal repayment to "anchor" value at a near-term maturity date</li>
+              <li>Illustrates why pension funds and insurers matching ultra-long liabilities need very long-duration assets</li>
+            </ul>
+          </div>
+          <!-- Consol chart -->
+          <div class="chart-box" style="margin-top:1rem;border-top-color:var(--teal)">
+            <div class="chart-hd"><div class="chart-title" style="color:var(--teal)">Consol price vs yield — £5 annual coupon (P = 5/y)</div><div class="chart-src">Hyperbolic inverse curve</div></div>
+            <div class="chart-wrap" style="height:200px"><canvas id="consolChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /typePanels -->
+</div>
+</div>
+
+<!-- ── SECTION 4: YTM ── -->
+<div id="ytm" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">04</div>
+    <h2 class="sec-title">Yield to Maturity</h2>
+  </div>
+
+  <p class="body fu">The <strong>yield to maturity (YTM)</strong> is the single discount rate that makes the present value of all a bond's future cash flows exactly equal to its current market price. It is the <strong>internal rate of return (IRR) of the bond investment</strong> — the return an investor earns if they buy the bond today, hold it to maturity, and reinvest all coupons at the same rate. YTM is the most widely quoted measure of a bond's return.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">YTM — Implicit Definition</div>
+        <div class="f-eq">P = C × [1−(1+y)^(−T)] / y  +  F/(1+y)ᵀ</div>
+        <div class="f-note">Solve this equation for y given market price P, coupon C, face value F, maturity T<br>⚠ No closed-form solution in general — must use trial-and-error, interpolation, or Excel's RATE/YIELD function</div>
+      </div>
+      <div class="ac or" style="margin-top:1rem">
+        <div class="ac-hd">How to solve for YTM — trial and error</div>
+        <ul class="blist">
+          <li>Start with an educated guess: if P &lt; F, then YTM &gt; coupon rate (discount bond)</li>
+          <li>If P &gt; F, then YTM &lt; coupon rate (premium bond). Use this as your first bracket</li>
+          <li>Plug your guess into the pricing formula. If computed price &gt; market price, guess a <strong style="color:var(--white)">higher</strong> yield</li>
+          <li>If computed price &lt; market price, guess a <strong style="color:var(--white)">lower</strong> yield. Iterate until they converge</li>
+          <li>In Excel: use <code style="color:var(--orange)">=YIELD()</code> or <code style="color:var(--orange)">=IRR()</code> on the bond's cash flow stream</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">YTM with annual coupons — worked example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Bond: 10% annual coupon · 15 years · F=100 · Current price = 92.809</div>
+        <div class="ac-body" style="margin-bottom:.5rem"><strong>Step 1:</strong> Since P (92.809) &lt; F (100), the bond is at a discount → YTM &gt; 10% coupon rate.</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">92.809 = 10 × [1−(1+y)^(−15)] / y  +  100/(1+y)^15</div>
+          <div class="f-note">Solving by iteration: y = 11%</div>
+        </div>
+        <div class="ac-body"><strong>Verification:</strong> At y=11%: PV(coupons) = 10×7.191 = 71.91; PV(face) = 100/(1.11)¹⁵ = 20.90. Total = 92.81 ✓</div>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">YTM with semi-annual coupons — worked example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Bond: 10% annual coupon (semi-annual) · 20 years · F=100 · Price = 119.793</div>
+        <div class="ac-body" style="margin-bottom:.5rem">Since P (119.793) &gt; F (100) → premium → YTM &lt; 10% coupon rate. Semi-annual coupon = 5; periods = 40.</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--green)">
+          <div class="f-eq">119.793 = 5 × [1−(1+y)^(−40)] / y  +  100/(1+y)^40</div>
+          <div class="f-note">Solving: y (per period) = 4% → Annual EAR = (1.04)² − 1 = 8.16%</div>
+        </div>
+        <div class="ac-body">The semi-annual yield of 4% converts to an effective annual yield of <strong>8.16%</strong> — which is below the 10% coupon rate, consistent with a premium bond. Always convert semi-annual yields to EAR for fair comparison.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE TABLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">Price vs YTM — quick reference logic</div><div class="chart-src">Annual coupon bond</div></div>
+    <table class="py-table">
+      <thead><tr><th>Relationship</th><th>Bond State</th><th>Price vs Par</th><th>Capital Gain at Maturity</th><th>Investor Logic</th></tr></thead>
+      <tbody>
+        <tr class="premium"><td>Coupon rate &gt; YTM</td><td>Premium</td><td style="color:var(--green)">P &gt; F</td><td style="color:var(--red)">Capital loss (P→F)</td><td>High coupon offsets capital loss</td></tr>
+        <tr class="par"><td>Coupon rate = YTM</td><td>At Par</td><td style="color:var(--orange)">P = F</td><td>No change</td><td>Return comes entirely from coupons</td></tr>
+        <tr class="discount"><td>Coupon rate &lt; YTM</td><td>Discount</td><td style="color:var(--red)">P &lt; F</td><td style="color:var(--green)">Capital gain (P→F)</td><td>Low coupon offset by capital gain</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: TERM STRUCTURE ── -->
+<div id="termstructure" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">05</div>
+    <h2 class="sec-title">The Term Structure of Interest Rates</h2>
+  </div>
+
+  <p class="body fu">The <strong>term structure of interest rates</strong> (also called the yield curve) describes how bond yields change with maturity. Up until now, we have assumed a <em>flat yield curve</em> — the same discount rate for all maturities. In reality, <strong>yields vary substantially across maturities</strong>, and understanding the yield curve is one of the most important topics in fixed income and macroeconomics.</p>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The yield curve is typically upward-sloping (normal): longer-term bonds yield more than shorter-term bonds. But the curve can also be flat, inverted (short yields above long yields — typically associated with recession expectations), or humped. Each shape carries different information about market expectations and risk premia.</p>
+      <div class="ac or">
+        <div class="ac-hd">What the yield curve's slope tells us</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Normal (upward-sloping)</strong> — investors expect rates to rise, or demand extra compensation for holding long-term bonds. Most common shape in expansions.</li>
+          <li><strong style="color:var(--white)">Inverted (downward-sloping)</strong> — markets expect future short rates to fall, typically because a recession and central bank cuts are anticipated. Historically one of the best recession predictors.</li>
+          <li><strong style="color:var(--white)">Flat</strong> — transition state; market uncertain about rate direction. Often seen before curve inversions.</li>
+          <li><strong style="color:var(--white)">Humped</strong> — medium-term rates peak above both short and long rates. Seen in transitional monetary policy environments.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Term structure lessons from 2006–2008 (US)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">2006:</strong> Nearly flat/slightly inverted curve — Fed funds rate high (tight policy), markets beginning to price in future cuts as housing market stress emerged</li>
+          <li><strong style="color:var(--white)">2007:</strong> Curve began to steepen — Fed started cutting short rates as credit crisis emerged; long rates initially less reactive</li>
+          <li><strong style="color:var(--white)">2008:</strong> Aggressive steepening — Fed cut rates toward zero (ZLB); long rates fell less because investors revised long-run inflation and real rate expectations less violently than short-run path</li>
+          <li>Short maturities are dominated by <strong style="color:var(--white)">central bank policy</strong>; long maturities by <strong style="color:var(--white)">long-run inflation and real rate expectations</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: Yield Curve Shapes -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">The four yield curve shapes — stylised illustration</div>
+      <div class="chart-src">Illustrative rates — not market data</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="yieldCurveShapes"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem">Green = normal (expansion) · Red = inverted (recession signal) · Grey dashed = flat (transition) · Yellow = humped (mid-cycle)</div>
+  </div>
+
+  <!-- CHART: US Curves 2006-2008 -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">US Treasury yield curves — November 2006, 2007 &amp; 2008</div>
+      <div class="chart-src">Source: US Treasury / Federal Reserve — approximate data</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="usCurves"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem">2006 (orange): flat/inverted — tight Fed policy · 2007 (yellow): beginning to steepen as Fed cut short rates · 2008 (blue): steep curve after emergency cuts brought short rates to near-zero</div>
+  </div>
+
+  <!-- SPOT RATES -->
+  <div class="sec-hd fu" style="margin-top:2rem">
+    <h2 class="sec-title" style="font-size:20px">Spot Rates — Building Blocks of the Yield Curve</h2>
+  </div>
+  <div class="g2 fu">
+    <div>
+      <p class="body">A <strong>spot rate</strong> r(T) is the interest rate today for a risk-free cash flow paid <em>once</em> at time T. Spot rates are the fundamental building blocks of bond pricing. Because a zero-coupon bond involves exactly one cash flow at maturity T, its YTM is precisely the spot rate for that maturity. Spot rates are therefore sometimes called <strong>"zero rates."</strong></p>
+      <div class="formula">
+        <div class="f-label">Spot Rate from Zero-Coupon Bond</div>
+        <div class="f-eq">P = F / (1 + r(T))ᵀ  →  r(T) = (F/P)^(1/T) − 1</div>
+        <div class="f-note">The YTM of a ZCB is exactly the spot rate for maturity T<br>Example: £95 ZCB, F=£100, T=5 → r(5) = (100/95)^(1/5) − 1 = 1.031%</div>
+      </div>
+      <div class="ac ye">
+        <div class="ac-hd">Spot rates vs YTM for coupon bonds</div>
+        <div class="ac-body">A coupon bond pays cash flows at many different dates — each needs its own spot rate for proper discounting. The single YTM quoted for a coupon bond is an <strong>average of the spot rates</strong> across its payment dates, weighted by the size of each cash flow. The YTM is a summary statistic, not a fundamental rate.</div>
+        <div class="ac-stat">YTM = weighted average of spot rates r(1), r(2), …, r(T)</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Coupon bond priced using spot rates — example</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Bond: 4.5% annual coupon · F=100 · 3-year maturity<br>Spot rates: r(1)=3%, r(2)=4%, r(3)=5%</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">P = 4.5/1.03 + 4.5/1.04² + (4.5+100)/1.05³</div>
+          <div class="f-note">= 4.369 + 4.160 + 90.271 = £98.80</div>
+        </div>
+        <div class="ac-body">Each cash flow is discounted at its own maturity's spot rate. The t=1 coupon uses r(1)=3%, t=2 uses r(2)=4%, and t=3 coupon plus face value uses r(3)=5%. <strong>This is the correct pricing method</strong> — using a single YTM would only be an approximation.</div>
+        <div class="ac-stat">YTM of this bond ≈ 4.9% — not equal to any of the three spot rates; it is their weighted average</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: FORWARD RATES ── -->
+<div id="forwardrates" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">06</div>
+    <h2 class="sec-title">Forward Rates &amp; No-Arbitrage</h2>
+  </div>
+
+  <p class="body fu">A <strong>forward rate</strong> is an interest rate agreed upon today for a loan that begins at a future date. Forward rates are not directly observed — they are <em>implied by the spot curve</em> through a no-arbitrage argument. The key insight is that two investment strategies leading to the same outcome at the same future date must yield the same return. If they did not, a riskless arbitrage profit would be available.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">No-Arbitrage Condition — One-Year Forward Rate (T to T+1)</div>
+        <div class="f-eq">(1 + r_{T+1})^{T+1} = (1 + r_T)^T × (1 + f_{T,T+1})</div>
+        <div class="f-note">Strategy A: invest for T+1 years at the (T+1)-year spot rate r(T+1)<br>Strategy B: invest for T years at r(T), then roll over for 1 year at forward rate f<br>Both must give the same terminal wealth — otherwise arbitrage exists</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Solving for the Forward Rate</div>
+        <div class="f-eq">f_{T,T+1} = (1 + r_{T+1})^{T+1} / (1 + r_T)^T  − 1</div>
+        <div class="f-note">The forward rate is fully determined by the two spot rates r(T) and r(T+1)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">General Forward Rate (T to T+N)</div>
+        <div class="f-eq">f_{T,T+N} = [(1+r_{T+N})^{T+N} / (1+r_T)^T]^{1/N} − 1</div>
+        <div class="f-note">N-year forward rate starting at time T, implied by spot rates r(T) and r(T+N)</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Forward rate intuition — the no-arbitrage logic</div>
+        <div class="ac-body" style="margin-bottom:.75rem">Suppose you want to invest for 2 years. You have two equivalent strategies:</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Strategy A:</strong> Lock in the 2-year spot rate r(2) for the full 2 years today</li>
+          <li><strong style="color:var(--white)">Strategy B:</strong> Invest at the 1-year spot rate r(1) today, then at year 1 reinvest at whatever 1-year rate prevails</li>
+        </ul>
+        <div class="ac-body" style="margin-top:.5rem">The <strong>forward rate f(1,2)</strong> is the rate in Strategy B's second year that makes both strategies give identical terminal wealth. If Strategy B's second-year rate were any different from f(1,2), you could earn a risk-free profit by simultaneously entering both strategies in opposing directions.</div>
+        <div class="ac-stat">Forward rate = the implied future 1-year rate locked in by today's spot curve</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORWARD RATE EXAMPLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">Forward rate calculation — spot rates: r(1)=3%, r(2)=4%, r(3)=5%</div><div class="chart-src">No-arbitrage implied rates</div></div>
+    <div class="g2" style="margin:0">
+      <div>
+        <div class="tl-yr" style="margin-bottom:.5rem">Forward rate from Year 1 → Year 2</div>
+        <div class="formula" style="margin:.3rem 0">
+          <div class="f-eq">(1.04)² = (1.03) × (1 + f_{1,2})</div>
+          <div class="f-note">f_{1,2} = 1.04²/1.03 − 1 = 1.0816/1.03 − 1 ≈ 5.01%</div>
+        </div>
+        <div class="ac-body" style="font-size:12px;color:var(--white-2)">The market today implies that a 1-year loan starting in year 1 will cost approximately <strong>5.01%</strong> — higher than today's 1-year rate of 3%, consistent with an upward-sloping spot curve.</div>
+      </div>
+      <div>
+        <div class="tl-yr" style="margin-bottom:.5rem">Forward rate from Year 2 → Year 3</div>
+        <div class="formula" style="margin:.3rem 0">
+          <div class="f-eq">(1.05)³ = (1.04)² × (1 + f_{2,3})</div>
+          <div class="f-note">f_{2,3} = 1.05³/1.04² − 1 = 1.1576/1.0816 − 1 ≈ 7.03%</div>
+        </div>
+        <div class="ac-body" style="font-size:12px;color:var(--white-2)">The market implies a 1-year rate of <strong>7.03%</strong> starting in year 2. The forward rates (5.01%, 7.03%) are <em>higher</em> than the spot rates (3%, 4%, 5%), which is always the case when the spot curve slopes upward.</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;font-size:12px;color:var(--white-3);font-family:var(--mono)">Chaining: (1+r3)³ = (1+r1)(1+f12)(1+f23) = 1.03 × 1.0501 × 1.0703 = 1.1576 ✓</div>
+  </div>
+
+  <!-- CHART: Spot vs Forward side-by-side -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Spot rates vs implied forward rates — r(1)=3%, r(2)=4%, r(3)=5%</div>
+      <div class="chart-src">Forward rates always exceed spot rates on an upward-sloping curve</div>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="spotForwardChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem"><span style="color:#3d8ef0">■</span> Spot rates: 3%, 4%, 5% &nbsp;|&nbsp; <span style="color:#f56a00">■</span> Forward rates: 3%, 5.01%, 7.03% — the forward curve lies above the spot curve when spot is upward-sloping</div>
+  </div>
+
+  <div class="g2 fu">
+    <div class="ac bl">
+      <div class="ac-hd">Spot rates vs forward rates — the key relationship</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Spot rate r(T)</strong> — the return from today to maturity T; a "starting now" rate</li>
+        <li><strong style="color:var(--white)">Forward rate f(T, T+1)</strong> — the implied 1-year rate starting at time T; a "future" rate</li>
+        <li>When the <strong style="color:var(--white)">spot curve is upward-sloping</strong>, forward rates lie <em>above</em> spot rates (you must be compensated more in the future)</li>
+        <li>When the <strong style="color:var(--white)">spot curve is inverted</strong>, forward rates lie <em>below</em> spot rates (markets expect rates to fall)</li>
+        <li>Forward rates are NOT forecasts — they include <strong style="color:var(--white)">term premia</strong> in addition to rate expectations</li>
+      </ul>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Future spot rates — uncertainty &amp; forward rates</div>
+      <ul class="blist">
+        <li>Future spot rates are <strong style="color:var(--white)">unknown today</strong> — they depend on future monetary policy, inflation, and macro outcomes</li>
+        <li>Under <strong style="color:var(--white)">certainty</strong>, forward rates = future spot rates (no arbitrage + no risk premium)</li>
+        <li>In reality, forward rates = <strong style="color:var(--white)">expected future spot rates + term premium</strong></li>
+        <li>The term premium compensates investors for the risk of holding longer-dated bonds — even if they expect rates to stay flat</li>
+        <li>This is why forward rates <strong style="color:var(--white)">overstate</strong> future short rates on average — the premium biases them upward</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 7: THEORIES ── -->
+<div id="theories" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">07</div>
+    <h2 class="sec-title">Yield Curve Theories</h2>
+  </div>
+
+  <p class="body fu">Three competing theories attempt to explain <strong>why the yield curve has the shape it does</strong> at any given time. Each theory has different implications for what long-term yields tell us about future short rates, and each has empirical support in different environments. Understanding all three is essential for interpreting yield curve signals in practice.</p>
+
+  <div class="tabs fu" id="theoryTabs">
+    <div class="tab on" onclick="switchTab('th1',this,'theoryTabs','theoryPanels')">Expectations Theory</div>
+    <div class="tab" onclick="switchTab('th2',this,'theoryTabs','theoryPanels')">Liquidity Premium Theory</div>
+    <div class="tab" onclick="switchTab('th3',this,'theoryTabs','theoryPanels')">Market Segmentation</div>
+  </div>
+  <div id="theoryPanels">
+
+    <!-- EXPECTATIONS THEORY -->
+    <div class="tab-panel on" id="th1">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>Expectations Theory</strong> is the purest and most elegant explanation of the yield curve. It states that long-term yields are simply the <em>geometric average</em> of expected future short-term rates — with no additional risk premium for holding longer-term bonds. The yield curve's shape is entirely determined by the market's expectations for future monetary policy.</p>
+          <div class="formula">
+            <div class="f-label">Expectations Theory — Approximate Relationship</div>
+            <div class="f-eq">y(T) ≈ (1/T) × Σ E[r_{t+k}]  for k=0 to T−1</div>
+            <div class="f-note">y(T) = T-year spot yield · E[r_{t+k}] = expected one-year rate k years from now<br>Long yield = simple average of expected future one-year rates</div>
+          </div>
+          <div class="ac or">
+            <div class="ac-hd">Implications of the Expectations Theory</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Upward-sloping curve</strong> → markets expect future short rates to rise</li>
+              <li><strong style="color:var(--white)">Downward-sloping (inverted) curve</strong> → markets expect future short rates to fall — often signalling recession</li>
+              <li><strong style="color:var(--white)">Flat curve</strong> → markets expect short rates to remain roughly unchanged</li>
+              <li>Forward rates = unbiased forecasts of future spot rates (no term premium)</li>
+              <li>Investors are indifferent between long and short bonds of equal duration — perfect substitutes</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Strengths &amp; weaknesses</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Strength:</strong> Elegant, simple, and explains why inverted curves predict recessions (rate cut expectations)</li>
+              <li><strong style="color:var(--white)">Strength:</strong> Consistent with the no-arbitrage forward rate formula</li>
+              <li><strong style="color:var(--white)">Weakness:</strong> Empirically, forward rates consistently overpredict future short rates — suggesting term premia exist</li>
+              <li><strong style="color:var(--white)">Weakness:</strong> Cannot explain why the yield curve is usually upward-sloping even when short rates are expected to remain flat</li>
+              <li><strong style="color:var(--white)">Weakness:</strong> Assumes investors are perfectly indifferent to maturity — unrealistic for pension funds and insurers</li>
+            </ul>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Numerical example</div>
+            <div class="ac-body">If the 1-year rate is 3% today and the market expects the 1-year rate in year 2 to be 5%:</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--yellow)">
+              <div class="f-eq">y(2) ≈ (3% + 5%) / 2 = 4%</div>
+              <div class="f-note">The 2-year spot rate should equal the average of expected 1-year rates</div>
+            </div>
+            <div class="ac-body">An upward-sloping 2-year spot rate of 4% (above the current 1-year rate of 3%) implies the market expects year-2 short rates to be about 5%.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIQUIDITY PREMIUM THEORY -->
+    <div class="tab-panel" id="th2">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>Liquidity Premium Theory</strong> (also called the Term Premium Theory) extends expectations theory by adding a risk premium for holding longer-term bonds. Long-term bonds expose investors to more <strong>interest-rate risk</strong> — if rates rise unexpectedly, their price falls more than short-term bonds. Rational, risk-averse investors demand extra compensation for this risk: the <em>term premium</em> (LP_T).</p>
+          <div class="formula">
+            <div class="f-label">Liquidity Premium Theory</div>
+            <div class="f-eq">y(T) ≈ (1/T) × Σ E[r_{t+k}]  +  LP_T</div>
+            <div class="f-note">LP_T &gt; 0 and LP_{T+1} &gt; LP_T (term premium is positive and increasing with maturity)<br>Long yields = expected short rates + compensation for holding long-dated bonds</div>
+          </div>
+          <div class="ac gr">
+            <div class="ac-hd">Key implication — the most practically important theory</div>
+            <div class="ac-body" style="margin-bottom:.65rem">Because LP_T &gt; 0, the yield curve tends to be upward-sloping even when expected short rates are flat. This explains the <strong>empirical regularity</strong> that the yield curve is upward-sloping most of the time — not because rates are always expected to rise, but because long bonds always command a risk premium.</div>
+            <div class="d-row"><span class="d-lbl">Expected rates flat → curve</span><span class="d-val" style="color:var(--green)">Upward-sloping (LP effect)</span></div>
+            <div class="d-row"><span class="d-lbl">Expected rates falling → curve</span><span class="d-val" style="color:var(--yellow)">Flat or slightly inverted</span></div>
+            <div class="d-row"><span class="d-lbl">Steeply inverted curve → implies</span><span class="d-val" style="color:var(--red)">Sharp expected rate declines</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="ac pu">
+            <div class="ac-hd">Downward-sloping curve under LP theory — numerical example</div>
+            <div class="ac-body" style="margin-bottom:.65rem">Suppose: y(1)=4%, y(10)=3%, LP(10)=1%</div>
+            <div class="formula" style="margin:.5rem 0;border-left-color:var(--purple)">
+              <div class="f-eq">3% ≈ (1/10) × Σ E[r_{t+k}] + 1%</div>
+              <div class="f-note">→ Average expected short rate ≈ 2% over 10 years</div>
+            </div>
+            <div class="ac-body">Despite an inverted curve (10yr at 3% vs 1yr at 4%), the term premium of 1% means the market is actually pricing in an even sharper fall in short rates than the raw curve suggests. Expected future short rates of ~2% are well below today's 1-year rate of 4%. <strong>The inversion must overcome the LP to appear at all.</strong></div>
+            <div class="ac-stat">Inverted curve under LP theory → very strong expectation of rate cuts</div>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Why long bonds have more interest-rate risk</div>
+            <ul class="blist">
+              <li>A 1bp rise in yield reduces a 30-year bond's price ~15× more than a 1-year bond's price</li>
+              <li>Duration (interest-rate sensitivity) increases with maturity — longer bonds are riskier to hold</li>
+              <li>Investors are compensated for this risk via the term premium embedded in long yields</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKET SEGMENTATION -->
+    <div class="tab-panel" id="th3">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>Market Segmentation Theory</strong> takes a fundamentally different approach. Rather than assuming investors freely arbitrage across maturities, it argues that different investors have strong preferences for <em>specific maturity segments</em> — and these maturity-specific supply and demand forces, not rate expectations alone, determine yields in each segment.</p>
+          <p class="body">The weaker version of this theory — <strong>Preferred Habitat Theory</strong> — acknowledges that investors have maturity preferences but can be induced to move to other segments if offered a sufficiently large premium. This is the most realistic and nuanced view: investors have habitats but are not completely captive.</p>
+          <div class="ac or">
+            <div class="ac-hd">Natural maturity "habitats" — who operates where</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Short end (0–2 years)</strong> — money market funds, corporate treasurers, banks' liquidity portfolios; strong demand keeps short yields contained</li>
+              <li><strong style="color:var(--white)">Medium term (2–10 years)</strong> — most active segment; insurance companies, mutual funds, hedge funds; benchmark Treasuries/gilts in this range</li>
+              <li><strong style="color:var(--white)">Long end (10–30+ years)</strong> — pension funds and life insurers matching long-dated liabilities; strong structural demand for 20–30yr bonds keeps long yields lower than expectations theory would predict</li>
+              <li><strong style="color:var(--white)">Ultra-long (30–50 years)</strong> — specialist buyers only; UK DMO issues 50yr gilts; limited demand from anyone except liability-driven investors</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="ac te">
+            <div class="ac-hd">Implications for the yield curve shape</div>
+            <ul class="blist">
+              <li>The yield curve reflects not just rate expectations but also <strong style="color:var(--white)">structural supply and demand</strong> at each maturity</li>
+              <li>Government debt issuance decisions (e.g., issuing more short-term bills vs long bonds) can <strong style="color:var(--white)">directly shift</strong> the yield curve even without changing rate expectations</li>
+              <li><strong style="color:var(--white)">QE (Quantitative Easing)</strong> is the most powerful real-world example: by purchasing long-duration bonds, central banks reduce the supply available to private investors, pushing long yields down irrespective of rate expectations</li>
+              <li>The UK gilt market is strongly influenced by pension fund demand at the long end — regulatory LDI (liability-driven investment) mandates create large, inelastic demand for 30–50yr gilts</li>
+            </ul>
+          </div>
+          <div class="ac bl" style="margin-top:1rem">
+            <div class="ac-hd">BoE Gilt Curve — spot vs forward (hump-shaped)</div>
+            <div class="ac-body">The BoE's estimated gilt curve shows a <strong>hump-shaped forward curve</strong>: forward rates rise from near-zero at short maturities, peak around 10–15 years, then decline. This pattern reflects:</div>
+            <ul class="blist" style="margin-top:.5rem">
+              <li>Rising <strong style="color:var(--white)">expected rates + term premium</strong> at medium maturities</li>
+              <li>Very strong <strong style="color:var(--white)">pension fund demand</strong> at ultra-long maturities suppressing those yields and implied forward rates</li>
+              <li>Possibly <strong style="color:var(--white)">negative term premia</strong> at the very long end as captive buyers accept lower compensation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /theoryPanels -->
+
+  <!-- COMPARISON TABLE -->
+  <div class="chart-box fu" style="margin-top:1.5rem">
+    <div class="chart-hd"><div class="chart-title">Three theories — at-a-glance comparison</div><div class="chart-src">Yield curve interpretation framework</div></div>
+    <table class="py-table">
+      <thead><tr><th>Theory</th><th>Term Premium?</th><th>Upward slope implies</th><th>Inverted slope implies</th><th>Key assumption</th></tr></thead>
+      <tbody>
+        <tr><td>Expectations</td><td style="color:var(--red)">No (LP=0)</td><td>Rising expected short rates</td><td>Falling expected short rates</td><td>Bonds are perfect substitutes across maturities</td></tr>
+        <tr><td style="color:var(--green)">Liquidity Premium</td><td style="color:var(--green)">Yes (LP &gt; 0, rising)</td><td>Rising expected rates OR term premium</td><td>Sharp expected rate cuts (must overcome LP)</td><td>Long bonds riskier; investors demand premium</td></tr>
+        <tr><td>Market Segmentation</td><td>Supply &amp; demand driven</td><td>Low demand for long bonds</td><td>High demand for long / recession fear</td><td>Maturity segments have captive investors</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CHART: Three theories — yield curve shapes -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Three theories — implied yield curves (flat expected short rates scenario)</div>
+      <div class="chart-src">Illustrative — assumes flat expected future short rates of 3%</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="theoriesChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem">
+      <span style="color:#888480">── ──</span> Expectations: flat curve when expected rates are flat &nbsp;|&nbsp;
+      <span style="color:#00c875">——</span> LP Theory: upward-sloping even with flat rate expectations (term premium rises with maturity) &nbsp;|&nbsp;
+      <span style="color:#f0b429">——</span> Market Seg: hump-shaped due to supply/demand at each segment
+    </div>
+  </div>
+
+  <!-- CHART: BoE gilt curve (spot + instantaneous forward) -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">BoE-style gilt curve — spot (zero) curve vs instantaneous forward curve</div>
+      <div class="chart-src">Stylised representation of BoE estimated gilt curves</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="boeGiltChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem">
+      <span style="color:#3d8ef0">——</span> Spot curve r(T): rises then gently falls at ultra-long maturities &nbsp;|&nbsp;
+      <span style="color:#f56a00">——</span> Forward curve f(T): hump-shaped — peaks around 10–15 years then declines, reflecting pension demand suppressing ultra-long yields
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 8: EXERCISES ── -->
+<div id="exercises" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu">
+    <div class="sec-num">08</div>
+    <h2 class="sec-title">Worked Exercises</h2>
+  </div>
+
+  <div class="tabs fu" id="exTabs">
+    <div class="tab on" onclick="switchTab('ex1',this,'exTabs','exPanels')">Exercise 1: Inverted Curve &amp; LP Theory</div>
+    <div class="tab" onclick="switchTab('ex2',this,'exTabs','exPanels')">Exercise 2: BoE Gilt Curve Analysis</div>
+  </div>
+  <div id="exPanels">
+
+    <div class="tab-panel on" id="ex1">
+      <div class="g2">
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Question — downward-sloping curve under LP theory</div>
+            <div class="ac-body" style="margin-bottom:.75rem">When the yield curve is <strong>downward-sloping</strong>, what can we say about <strong>future spot rates</strong> under the <strong>Liquidity Premium Theory</strong>?</div>
+            <div class="ac-body">Setup: Suppose y(1) = 4% and y(10) = 3% — the yield curve is inverted (short yields above long yields). Under LP theory, assume the 10-year term premium LP(10) = 1%.</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Solution — step by step</div>
+            <div class="tl-yr" style="margin-top:.25rem">STEP 1: Write the LP theory equation for the 10-year yield</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">y(10) ≈ (1/10) × Σ E[r_{t+k}] + LP(10)</div>
+            </div>
+            <div class="tl-yr" style="margin-top:.5rem">STEP 2: Substitute known values</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">3% ≈ (1/10) × Σ E[r_{t+k}] + 1%</div>
+              <div class="f-note">→ Average expected short rate ≈ 2%</div>
+            </div>
+            <div class="tl-yr" style="margin-top:.5rem">STEP 3: Interpret</div>
+            <div style="font-size:13px;color:var(--white-2);margin-top:.3rem">The market is pricing an average future short rate of <strong>~2%</strong> — well below the current 1-year rate of 4%. Despite the positive term premium of 1%, long yields are still <em>below</em> short yields, which means expected future short rates must have fallen sharply to pull the 10-year yield down to 3%. <strong>Under LP theory, an inverted curve is an even stronger signal of expected rate cuts than it appears under expectations theory alone.</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 1</div>
+        <div class="verdict-text">Under liquidity premium theory, any observed long yield already contains a positive term premium. An inverted curve means long yields are low despite that upward premium — implying that expected future short rates must be falling significantly. The more realistic the term premium assumption, the more dramatically the market must be pricing expected rate cuts when the curve inverts. This is why an inverted curve under LP theory is an even stronger recession signal than under the pure expectations view.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ex2">
+      <div class="g2">
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Question — interpreting the BoE gilt curve</div>
+            <div class="ac-body" style="margin-bottom:.75rem">The Bank of England estimates a <strong>gilt spot (zero) curve</strong> and an <strong>instantaneous forward curve</strong> from market prices of UK government bonds. What can we read from these?</div>
+            <div class="ac-body"><strong>Gilt:</strong> A UK government bond (HM Treasury / Debt Management Office) that pays coupons and repays face value at maturity. Gilt market prices allow the BoE to infer a risk-free term structure.</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">What each curve shows</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Spot curve r(T) (blue)</strong> — the yield on a zero-coupon gilt maturing at T. Rises from near 0% at short maturities to ~2.1% around 20–25 years, then gently declines to ~1.8% by 40 years. Upward-sloping in the medium term; slightly humped and declining at the very long end.</li>
+              <li><strong style="color:var(--white)">Instantaneous forward curve f(T) (orange)</strong> — the marginal rate implied for a borrowing/lending over an infinitesimally short period starting at horizon T. Peaks around 10–15 years before declining.</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="ac pu">
+            <div class="ac-hd">Interpretation — what the shape tells us</div>
+            <ul class="blist">
+              <li>The <strong style="color:var(--white)">hump-shaped forward curve</strong> peaking around 10–15 years suggests market-implied future short rates/term premia are highest in the medium term — not monotonically increasing with maturity</li>
+              <li><strong style="color:var(--white)">Declining forward rates beyond ~15 years</strong> (eventually falling below the spot curve) indicate lower implied marginal rates far in the future — consistent with lower long-run inflation/real rate expectations, or strong pension fund demand suppressing ultra-long yields</li>
+              <li>The <strong style="color:var(--white)">forward curve lying above the spot curve</strong> at all points up to ~25 years confirms the upward-sloping yield curve: forward rates must exceed spot rates when the spot curve slopes up (a mathematical necessity)</li>
+              <li>The <strong style="color:var(--white)">convergence of spot and forward curves</strong> at the very long end reflects strong structural demand from liability-driven investors (pension funds, insurers) compressing the term premium at ultra-long maturities</li>
+            </ul>
+            <div class="ac-stat">Preferred habitat theory best explains the BoE gilt curve — captive pension demand suppresses 30–50yr yields</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 2</div>
+        <div class="verdict-text">Real-world yield curves do not conform perfectly to any single theory. The BoE gilt curve shows the imprint of all three theories simultaneously: medium-term rates reflect rate expectations plus a term premium (LP theory), while ultra-long rates are depressed by structural pension fund demand for liability-matching assets (preferred habitat). Reading a yield curve requires holding all three theories in mind at once and judging which force is dominant at each maturity segment.</div>
+      </div>
+    </div>
+
+  </div><!-- /exPanels -->
+
+  <!-- SUMMARY -->
+  <div class="sec-hd fu" style="margin-top:2.5rem">
+    <h2 class="sec-title" style="font-size:20px">Complete Formula Reference</h2>
+  </div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell">
+      <div class="og-icon">🏦</div>
+      <div class="og-lbl">Bond types covered</div>
+      <div class="og-val">3</div>
+      <div class="og-sub">Coupon bonds · Zero-coupon bonds · Consols (perpetuities)</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">📉</div>
+      <div class="og-lbl">Price-yield direction</div>
+      <div class="og-val">Inverse</div>
+      <div class="og-sub">Yields rise → prices fall. The most important fixed income relationship.</div>
+    </div>
+    <div class="og-cell">
+      <div class="og-icon">📐</div>
+      <div class="og-lbl">Yield curve theories</div>
+      <div class="og-val">3</div>
+      <div class="og-sub">Expectations · Liquidity Premium · Market Segmentation / Preferred Habitat</div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All bond formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Coupon bond price = C×[1−(1+y)^(−T)]/y + F/(1+y)ᵀ</strong> — annuity of coupons + PV of face value</li>
+        <li><strong style="color:var(--white)">Zero-coupon bond price = F/(1+y)ᵀ</strong> — single cash flow; YTM equals spot rate</li>
+        <li><strong style="color:var(--white)">Consol price = C/y</strong> — fixed coupon forever; same as perpetuity PV formula</li>
+        <li><strong style="color:var(--white)">Coupon rate &gt; y → Premium; Coupon rate = y → Par; Coupon rate &lt; y → Discount</strong></li>
+        <li><strong style="color:var(--white)">Spot rate r(T) = (F/P)^(1/T) − 1</strong> — implied from ZCB price; the fundamental term structure measure</li>
+        <li><strong style="color:var(--white)">Coupon bond value = Σ C_t/(1+r_t)ᵗ + F/(1+r_T)ᵀ</strong> — discount each cash flow at its own spot rate</li>
+        <li><strong style="color:var(--white)">f_{T,T+1} = (1+r_{T+1})^{T+1}/(1+r_T)^T − 1</strong> — one-year forward rate implied by spot curve</li>
+        <li><strong style="color:var(--white)">f_{T,T+N} = [(1+r_{T+N})^{T+N}/(1+r_T)^T]^(1/N) − 1</strong> — N-year forward rate from T to T+N</li>
+        <li><strong style="color:var(--white)">EAR (semi-annual) = (1+y/2)² − 1</strong> — convert semi-annual YTM to effective annual rate</li>
+        <li><strong style="color:var(--white)">LP theory: y(T) ≈ avg[E(short rates)] + LP_T</strong> — long yields = rate expectations + term premium</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">YTM ≠ spot rate for coupon bonds</strong> — only for zero-coupon bonds. YTM is a weighted average of the spot rates across payment dates</li>
+        <li><strong style="color:var(--white)">Forward rates ≠ future spot rates</strong> — forward rates include term premia; they systematically overpredict actual future rates on average</li>
+        <li><strong style="color:var(--white)">Semi-annual coupons: divide coupon AND rate by 2, double periods</strong> — both adjustments required; easy to apply one and forget the other</li>
+        <li><strong style="color:var(--white)">An inverted curve doesn't necessarily mean rates will fall exactly as implied</strong> — under LP theory, the implied expected rate fall is even sharper than the raw curve suggests</li>
+        <li><strong style="color:var(--white)">Higher yield ≠ better investment</strong> — a high yield often signals higher credit risk or distress; compare apples to apples (same credit quality)</li>
+        <li><strong style="color:var(--white)">Premium bonds do NOT outperform discount bonds</strong> — given the same YTM, all bonds with the same maturity and credit quality deliver identical total returns</li>
+        <li><strong style="color:var(--white)">A falling bond price doesn't mean a loss if you hold to maturity</strong> — the YTM return is locked in at purchase; price moves only matter if you sell before maturity</li>
+        <li><strong style="color:var(--white)">Coupon rate and yield are different things</strong> — coupon rate is fixed at issuance; yield moves with market prices every day</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 1 — Master the bond anatomy and pricing equation</div>
+      <div class="tl-card">
+        <div class="tl-title">Bond = annuity of coupons + PV of face value</div>
+        <div class="tl-text">Every bond pricing problem reduces to this. The annuity formula handles the coupons; the single discount factor handles the face value. Know how to apply both for annual and semi-annual payments. Always check: is the computed price above, below, or equal to par? It should match the coupon-rate-vs-yield comparison.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 2 — Understand the price-yield inverse relationship deeply</div>
+      <div class="tl-card">
+        <div class="tl-title">Yields up → prices down. Always. No exceptions.</div>
+        <div class="tl-text">When market yields rise, all future cash flows are discounted more heavily, reducing present values. A bond paying fixed cash flows becomes less valuable when alternatives offer higher yields. This relationship is the foundation of all bond risk management. Duration measures the magnitude of this sensitivity.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 3 — Distinguish spot rates, YTM, and forward rates</div>
+      <div class="tl-card">
+        <div class="tl-title">Three different interest rates — three different questions</div>
+        <div class="tl-text">Spot rate r(T): the pure market rate for a single cash flow at time T — derived from ZCBs. YTM: a single blended rate summarising a coupon bond's total return — a weighted average of spot rates. Forward rate f(T,T+N): the rate implied for a future lending period — derived from two spot rates via no-arbitrage. Never confuse the three.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">STEP 4 — Apply the three yield curve theories to interpret the curve</div>
+      <div class="tl-card">
+        <div class="tl-title">No single theory is always right — use all three</div>
+        <div class="tl-text">In practice, the yield curve reflects rate expectations (Expectations Theory), risk premia (LP Theory), and structural supply/demand (Market Segmentation) simultaneously. An inverted curve is most powerful as a recession signal, but the strength of that signal depends on how large the term premium is. The BoE gilt curve shows all three forces operating at different maturities.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Bonds</div>
+    <div class="verdict-text">A bond is a promise of future cash flows, and its price is simply the present value of those promises — discounted at whatever rate the market demands for that level of risk and maturity. Every bond concept flows from this: premium vs discount pricing, yield to maturity, spot rates, forward rates, and even the competing theories of the yield curve are all different ways of asking the same question — how does the market today value cash flows that arrive at different points in the future?</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Bonds · Clara Martínez-Toledano · Corporate Finance Module 3<br>
+    Topics: Coupon Bonds · ZCBs · YTM · Spot Rates · Forward Rates · Term Structure · Yield Curve Theories<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── SCROLL PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('prog').style.width = (s / h * 100) + '%';
+});
+
+/* ── NAV ACTIVE ── */
+const sections = ['definition','valuation','bondtypes','ytm','termstructure','forwardrates','theories','exercises'];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  let cur = sections[0];
+  sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
+  document.querySelectorAll('.nl').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+});
+
+/* ── INTERSECTION OBSERVER ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fu, .tl-item').forEach(el => io.observe(el));
+
+/* ── BAR METERS ── */
+const barIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      barIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.chart-box').forEach(el => barIO.observe(el));
+
+/* ── TABS ── */
+function switchTab(panelId, btn, tabsId, panelsId) {
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+
+/* ── CHART DEFAULTS ── */
+Chart.defaults.color = '#888480';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+
+const gridColor = 'rgba(255,255,255,0.04)';
+const tickStyle = { color: '#888480', font: { size: 10 } };
+
+/* ── CHART 1: Price-Yield Curve (6.375% coupon, 10yr) ── */
+(function() {
+  const yields = [];
+  const prices = [];
+  for (let y = 1; y <= 15; y += 0.25) {
+    const r = y / 100;
+    const T = 10, C = 6.375, F = 100;
+    const p = C * (1 - Math.pow(1+r, -T)) / r + F * Math.pow(1+r, -T);
+    yields.push(y.toFixed(2));
+    prices.push(+p.toFixed(2));
+  }
+  new Chart(document.getElementById('priceYieldChart'), {
+    type: 'line',
+    data: {
+      labels: yields,
+      datasets: [{
+        label: 'Bond Price (£)',
+        data: prices,
+        borderColor: '#f56a00',
+        backgroundColor: 'rgba(245,106,0,0.08)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: c => `Yield: ${c[0].label}%`,
+            label: c => ` Price: £${c.parsed.y.toFixed(2)}`
+          }
+        },
+        annotation: {
+          annotations: {
+            par: { type:'line', yMin:100, yMax:100, borderColor:'rgba(240,180,41,0.5)', borderWidth:1.5, borderDash:[4,4] },
+            coupon: { type:'line', xMin:'6.375', xMax:'6.375', borderColor:'rgba(240,180,41,0.5)', borderWidth:1.5, borderDash:[4,4] }
+          }
+        }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:{...tickStyle, maxTicksLimit:10}, title:{display:true,text:'Yield to Maturity (%)',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback: v=>'£'+v}, title:{display:true,text:'Bond Price (£)',color:'#888480',font:{size:9}} }
+      }
+    }
+  });
+})();
+
+/* ── CHART 2: Yield Curve Shapes ── */
+(function() {
+  const mats = ['3m','6m','1y','2y','3y','5y','7y','10y','20y','30y'];
+  new Chart(document.getElementById('yieldCurveShapes'), {
+    type: 'line',
+    data: {
+      labels: mats,
+      datasets: [
+        {
+          label: 'Normal (upward)',
+          data: [2.5, 2.8, 3.2, 3.8, 4.2, 4.6, 4.9, 5.1, 5.3, 5.4],
+          borderColor: '#00c875', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.35, pointRadius: 3, pointBackgroundColor: '#00c875'
+        },
+        {
+          label: 'Inverted',
+          data: [5.4, 5.2, 4.9, 4.4, 4.0, 3.6, 3.3, 3.1, 2.9, 2.8],
+          borderColor: '#ff4050', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.35, pointRadius: 3, pointBackgroundColor: '#ff4050'
+        },
+        {
+          label: 'Flat',
+          data: [4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
+          borderColor: '#888480', backgroundColor: 'transparent', borderWidth: 2, tension: 0, pointRadius: 2, pointBackgroundColor: '#888480', borderDash:[5,4]
+        },
+        {
+          label: 'Humped',
+          data: [3.0, 3.5, 4.2, 5.1, 5.6, 5.8, 5.5, 5.0, 4.5, 4.2],
+          borderColor: '#f0b429', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#f0b429'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, labels: { color:'#888480', font:{size:10}, boxWidth:18, padding:14 } },
+        tooltip: { mode:'index', intersect:false, callbacks:{ label: c=>` ${c.dataset.label}: ${c.parsed.y}%` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:tickStyle, title:{display:true,text:'Maturity',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback:v=>v+'%'}, title:{display:true,text:'Yield (%)',color:'#888480',font:{size:9}}, min:1, max:7 }
+      }
+    }
+  });
+})();
+
+/* ── CHART 3: US Yield Curves 2006/2007/2008 ── */
+(function() {
+  const mats = ['3m','6m','1y','2y','5y','10y','20y','30y'];
+  new Chart(document.getElementById('usCurves'), {
+    type: 'line',
+    data: {
+      labels: mats,
+      datasets: [
+        {
+          label: 'Nov 2006 (flat/inverted)',
+          data: [5.15, 5.18, 5.21, 5.08, 4.72, 4.60, 4.71, 4.69],
+          borderColor: '#f56a00', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.3, pointRadius: 4, pointBackgroundColor:'#f56a00'
+        },
+        {
+          label: 'Nov 2007 (steepening)',
+          data: [4.20, 4.05, 3.89, 3.72, 3.99, 4.29, 4.54, 4.55],
+          borderColor: '#f0b429', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.3, pointRadius: 4, pointBackgroundColor:'#f0b429'
+        },
+        {
+          label: 'Nov 2008 (steep post-crisis)',
+          data: [0.07, 0.36, 1.02, 1.54, 2.75, 3.68, 4.28, 4.09],
+          borderColor: '#3d8ef0', backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.3, pointRadius: 4, pointBackgroundColor:'#3d8ef0'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, labels:{ color:'#888480', font:{size:10}, boxWidth:18, padding:14 } },
+        tooltip: { mode:'index', intersect:false, callbacks:{ label: c=>` ${c.dataset.label}: ${c.parsed.y}%` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:tickStyle, title:{display:true,text:'Maturity',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback:v=>v+'%'}, title:{display:true,text:'Yield (%)',color:'#888480',font:{size:9}}, min:0, max:6 }
+      }
+    }
+  });
+})();
+
+/* ── CHART 4: Spot vs Forward Rates (r1=3%, r2=4%, r3=5%) ── */
+(function() {
+  new Chart(document.getElementById('spotForwardChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Year 1', 'Year 2', 'Year 3'],
+      datasets: [
+        {
+          label: 'Spot Rate r(T)',
+          data: [3, 4, 5],
+          backgroundColor: 'rgba(61,142,240,0.75)',
+          borderColor: '#3d8ef0',
+          borderWidth: 0,
+          borderRadius: 2,
+        },
+        {
+          label: 'Forward Rate f(T-1,T)',
+          data: [3, 5.01, 7.03],
+          backgroundColor: 'rgba(245,106,0,0.75)',
+          borderColor: '#f56a00',
+          borderWidth: 0,
+          borderRadius: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:true, labels:{ color:'#888480', font:{size:10}, boxWidth:18, padding:14 } },
+        tooltip: { callbacks:{ label: c=>` ${c.dataset.label}: ${c.parsed.y}%` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:tickStyle },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback:v=>v+'%'}, min:0, max:9, title:{display:true,text:'Rate (%)',color:'#888480',font:{size:9}} }
+      }
+    }
+  });
+})();
+
+/* ── CHART 5: Three Yield Curve Theories — implied long yield decomposition ── */
+(function() {
+  const mats2 = ['1y','2y','3y','5y','7y','10y','15y','20y','30y'];
+  // Expectations: long yield = avg expected short rates (flat expected path = 3%)
+  const expFlat   = [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0];
+  // LP Theory: adds rising term premium to same flat expected rates
+  const lpTheory  = [3.0, 3.3, 3.6, 4.0, 4.3, 4.6, 4.8, 5.0, 5.2];
+  // Market seg: hump shape due to supply/demand at different maturities
+  const mktSeg    = [3.2, 3.9, 4.5, 5.0, 5.2, 4.9, 4.4, 4.0, 3.7];
+  new Chart(document.getElementById('theoriesChart'), {
+    type: 'line',
+    data: {
+      labels: mats2,
+      datasets: [
+        {
+          label: 'Expectations Theory (flat expected rates)',
+          data: expFlat,
+          borderColor: '#888480', backgroundColor:'transparent', borderWidth:2, tension:0, borderDash:[5,4], pointRadius:3, pointBackgroundColor:'#888480'
+        },
+        {
+          label: 'Liquidity Premium Theory',
+          data: lpTheory,
+          borderColor: '#00c875', backgroundColor:'rgba(0,200,117,0.07)', fill:true, borderWidth:2.5, tension:0.35, pointRadius:3, pointBackgroundColor:'#00c875'
+        },
+        {
+          label: 'Market Segmentation / Preferred Habitat',
+          data: mktSeg,
+          borderColor: '#f0b429', backgroundColor:'transparent', borderWidth:2.5, tension:0.4, pointRadius:3, pointBackgroundColor:'#f0b429'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:true, labels:{ color:'#888480', font:{size:10}, boxWidth:18, padding:14 } },
+        tooltip: { mode:'index', intersect:false, callbacks:{ label: c=>` ${c.dataset.label}: ${c.parsed.y}%` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:tickStyle, title:{display:true,text:'Maturity',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback:v=>v+'%'}, min:1.5, max:6, title:{display:true,text:'Yield (%)',color:'#888480',font:{size:9}} }
+      }
+    }
+  });
+})();
+
+/* ── CHART 6: BoE-style gilt curve (spot + forward, hump-shaped) ── */
+(function() {
+  const mats3 = ['1y','2y','3y','5y','7y','10y','15y','20y','25y','30y','40y'];
+  const spot    = [0.2, 0.5, 0.9, 1.3, 1.6, 1.9, 2.0, 2.1, 2.1, 2.0, 1.8];
+  const fwd     = [0.2, 0.8, 1.7, 2.3, 2.7, 3.0, 2.8, 2.4, 2.0, 1.7, 1.4];
+  new Chart(document.getElementById('boeGiltChart'), {
+    type: 'line',
+    data: {
+      labels: mats3,
+      datasets: [
+        {
+          label: 'Spot (zero) curve r(T)',
+          data: spot,
+          borderColor: '#3d8ef0', backgroundColor:'rgba(61,142,240,0.08)', fill:true, borderWidth:2.5, tension:0.4, pointRadius:3, pointBackgroundColor:'#3d8ef0'
+        },
+        {
+          label: 'Instantaneous forward curve f(T)',
+          data: fwd,
+          borderColor: '#f56a00', backgroundColor:'transparent', borderWidth:2.5, tension:0.4, pointRadius:3, pointBackgroundColor:'#f56a00'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:true, labels:{ color:'#888480', font:{size:10}, boxWidth:18, padding:14 } },
+        tooltip: { mode:'index', intersect:false, callbacks:{ label: c=>` ${c.dataset.label}: ${c.parsed.y}%` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:tickStyle, title:{display:true,text:'Maturity',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle, callback:v=>v+'%'}, min:0, max:4, title:{display:true,text:'Rate (%)',color:'#888480',font:{size:9}} }
+      }
+    }
+  });
+})();
+
+/* ── CHART 7: Consol price vs yield ── */
+(function() {
+  const ys = [], ps = [];
+  for (let y = 1; y <= 20; y += 0.5) {
+    ys.push(y.toFixed(1));
+    ps.push(+(5 / (y/100)).toFixed(2));
+  }
+  new Chart(document.getElementById('consolChart'), {
+    type: 'line',
+    data: {
+      labels: ys,
+      datasets: [{
+        label: 'Consol price (£5 coupon)',
+        data: ps,
+        borderColor: '#00c8c8',
+        backgroundColor: 'rgba(0,200,200,0.07)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:false },
+        tooltip: { callbacks:{ title: c=>`Yield: ${c[0].label}%`, label: c=>` Price: £${c.parsed.y.toFixed(2)}` } }
+      },
+      scales: {
+        x: { grid:{color:gridColor}, ticks:{...tickStyle,maxTicksLimit:10}, title:{display:true,text:'Yield (%)',color:'#888480',font:{size:9}} },
+        y: { grid:{color:gridColor}, ticks:{...tickStyle,callback:v=>'£'+v}, title:{display:true,text:'Price (£)',color:'#888480',font:{size:9}} }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
