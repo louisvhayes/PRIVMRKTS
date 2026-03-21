@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Budgeting & Investment Rules — Free Cash Flow, NPV, IRR & Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.re{border-top:2px solid var(--red)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.re .ac-hd{color:var(--red)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}.ac.gr .ac-stat{color:var(--green)}.ac.re .ac-stat{color:var(--red)}.ac.bl .ac-stat{color:var(--blue)}.ac.ye .ac-stat{color:var(--yellow)}.ac.pu .ac-stat{color:var(--purple)}.ac.te .ac-stat{color:var(--teal)}
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right}
+.chart-wrap{position:relative;width:100%}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+/* SPREADSHEET TABLE */
+.ss-wrap{overflow-x:auto;margin:1rem 0}
+.ss-table{width:100%;border-collapse:collapse;font-size:11.5px}
+.ss-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .9rem;background:var(--panel-2);border-bottom:2px solid var(--orange-line);color:var(--orange);text-align:right;white-space:nowrap}
+.ss-table th:nth-child(1),.ss-table th:nth-child(2){text-align:left}
+.ss-table td{font-family:var(--mono);padding:.4rem .9rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2);white-space:nowrap}
+.ss-table td:nth-child(1){text-align:center;color:var(--orange);font-weight:600;width:32px}
+.ss-table td:nth-child(2){text-align:left;color:var(--white-3)}
+.ss-table .ss-neg{color:var(--red)}
+.ss-table .ss-pos{color:var(--green)}
+.ss-table .ss-total{font-weight:600;color:var(--white);border-top:1px solid var(--border-2);background:var(--panel)}
+.ss-table .ss-grand{font-family:var(--mono);font-weight:700;color:var(--orange);border-top:2px solid var(--orange-line);background:var(--panel)}
+.ss-table .ss-section{background:var(--panel-2);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);font-weight:600}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right;line-height:1.7}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#forecasting">Forecasting Earnings</a>
+    <a class="nl" href="#fcf">Free Cash Flow</a>
+    <a class="nl" href="#npv">NPV &amp; Rules</a>
+    <a class="nl" href="#irr">IRR</a>
+    <a class="nl" href="#payback">Payback &amp; PI</a>
+    <a class="nl" href="#eac">EAC</a>
+    <a class="nl" href="#analysis">Break-Even &amp; Sensitivity</a>
+    <a class="nl" href="#scenario">Scenario Analysis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 5</div>
+      <h1>Capital Budgeting<br>&amp; <em>Investment Rules</em></h1>
+      <p class="hero-lead">From pro-forma earnings forecasts and free cash flow construction to NPV, IRR, payback, profitability index, equivalent annual cost, and the complete toolkit of break-even, sensitivity, and scenario analysis — everything needed to make rigorous investment decisions under uncertainty.</p>
+      <div class="meta-row">
+        <span>Capital Budgeting · Investment Rules</span>
+        <span>FCF · NPV · IRR · Break-Even · Sensitivity · EAC</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core formulas at a glance</div>
+      <div class="sp-row"><div class="sp-lbl">Free Cash Flow</div><div class="sp-right"><div class="sp-val">EBIT(1−t)+D−CapEx−ΔNWC</div><div class="sp-sub">Cash available to all investors</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Depreciation tax shield</div><div class="sp-right"><div class="sp-val">τ × Depreciation</div><div class="sp-sub">Real cash saving from non-cash charge</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">NPV rule</div><div class="sp-right"><div class="sp-val">Accept if NPV &gt; 0</div><div class="sp-sub">Highest NPV when mutually exclusive</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">HomeNet NPV (WACC=12%)</div><div class="sp-right"><div class="sp-val">$5.027m</div><div class="sp-sub">IRR = 24.1%</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Profitability Index</div><div class="sp-right"><div class="sp-val">NPV / Resource</div><div class="sp-sub">Rank projects under constraints</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">EAC</div><div class="sp-right"><div class="sp-val">NPV / Annuity factor</div><div class="sp-sub">Compare machines of unequal lives</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: FORECASTING EARNINGS ── -->
+<div id="forecasting" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">Forecasting Incremental Earnings</h2></div>
+
+  <p class="body fu">Capital budgeting is the process a firm uses to evaluate long-term investments and decide which ones to accept. The starting point is always the same: <strong>how will this project change the firm's earnings?</strong> We focus exclusively on <em>incremental</em> effects — the difference between the firm's financial position with the project versus without it. This seemingly simple principle has several important and sometimes counterintuitive implications.</p>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">Capital budget &amp; capital budgeting</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Capital budget</strong> — the list of projects and investments a company plans to undertake in the coming period; the output of the capital budgeting process</li>
+        <li><strong style="color:var(--white)">Capital budgeting</strong> — the systematic process of analysing alternative investments, estimating their cash flows, and deciding which ones to accept or reject</li>
+        <li><strong style="color:var(--white)">Incremental earnings</strong> — the change in the firm's earnings caused specifically by the investment decision; not total earnings, only the delta</li>
+        <li>Both revenue-affecting and cost-affecting projects fall under capital budgeting — the framework is identical</li>
+      </ul>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">Pro-forma statements</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Pro-forma financials</strong> — projected financial statements prepared using specific assumptions about the future; the primary tool for evaluating project economics</li>
+        <li>Used externally (investment proposals to investors/lenders) and internally (management decision-making)</li>
+        <li>May not comply with GAAP — they highlight <em>economically relevant</em> items, not accounting conventions</li>
+        <li>The key question pro-formas answer: what do revenues, costs, and profits look like if our assumptions are correct?</li>
+      </ul>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">What incremental means in practice</div>
+      <ul class="blist">
+        <li>Only include costs and revenues that <strong style="color:var(--white)">change because of the project</strong></li>
+        <li>Exclude sunk costs — money already spent regardless of the decision (e.g., feasibility study fees)</li>
+        <li>Include opportunity costs — the value of resources used that could have generated income elsewhere</li>
+        <li>Include project externalities — cannibalization of existing products, synergies with other divisions</li>
+        <li>Exclude financing costs — analyse the project on its own merits; financing is a separate decision</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HOMENET CASE STUDY SETUP -->
+  <div class="sec-hd fu" style="margin-top:2rem"><h2 class="sec-title" style="font-size:20px">Case Study: Cisco HomeNet — Revenue &amp; Cost Estimates</h2></div>
+
+  <p class="body fu">Cisco Systems is evaluating HomeNet — a home networking appliance providing both hardware and software to run an entire home from any Internet connection. The project has a 4-year life. Note: the $300,000 feasibility study already completed is a <strong>sunk cost</strong> and is excluded from all calculations.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Revenue &amp; cost assumptions</div>
+        <div class="d-row"><span class="d-lbl">Unit sales</span><span class="d-val">100,000 units/year</span></div>
+        <div class="d-row"><span class="d-lbl">Selling price per unit</span><span class="d-val">$260</span></div>
+        <div class="d-row"><span class="d-lbl">Annual revenue</span><span class="d-val" style="color:var(--green)">$26,000,000</span></div>
+        <div class="d-row"><span class="d-lbl">Cost per unit (COGS)</span><span class="d-val">$110</span></div>
+        <div class="d-row"><span class="d-lbl">Annual COGS</span><span class="d-val" style="color:var(--red)">$11,000,000</span></div>
+        <div class="d-row"><span class="d-lbl">Annual gross profit</span><span class="d-val" style="color:var(--green)">$15,000,000</span></div>
+        <div class="d-row"><span class="d-lbl">Annual SG&amp;A (marketing)</span><span class="d-val" style="color:var(--red)">$2,800,000</span></div>
+        <div class="d-row"><span class="d-lbl">Up-front R&amp;D (year 0)</span><span class="d-val" style="color:var(--red)">$15,000,000</span></div>
+        <div class="d-row"><span class="d-lbl">New equipment (year 0)</span><span class="d-val" style="color:var(--red)">$7,500,000</span></div>
+        <div class="d-row"><span class="d-lbl">Equipment life</span><span class="d-val">5 years (straight-line D)</span></div>
+        <div class="d-row"><span class="d-lbl">Annual depreciation</span><span class="d-val" style="color:var(--red)">$1,500,000/yr</span></div>
+        <div class="d-row"><span class="d-lbl">Corporate tax rate</span><span class="d-val">40%</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Key concept — unlevered net income</div>
+        <div class="ac-body" style="margin-bottom:.65rem">In capital budgeting, <strong>interest expense is excluded</strong>. The rationale: the project should be evaluated on its own operating merits, not on how it will be financed. Financing is a separate decision. This gives us <em>unlevered net income</em> — what the project earns as if it had no debt:</div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">Unlevered NI = EBIT × (1 − τ_c)</div>
+          <div class="f-note">= (Revenue − Costs − Depreciation) × (1 − 0.40)</div>
+        </div>
+        <div class="ac-body">EBIT is "earnings before interest and taxes." By taxing at the firm rate and excluding interest, we get the after-tax operating profit the project generates for all capital providers, independent of capital structure. This is the input to the FCF calculation.</div>
+      </div>
+      <div class="ac ye" style="margin-top:1rem">
+        <div class="ac-hd">Depreciation — non-cash but tax-deductible</div>
+        <div class="ac-body">Straight-line depreciation: $7.5m ÷ 5 years = <strong>$1.5m/year</strong> for years 1–5. Depreciation reduces taxable income (EBIT) even though no cash leaves the firm each year. Cash leaves once at year 0 (CapEx). The subsequent annual depreciation charges are <em>accounting allocations</em>, not cash outflows — but they generate a <strong>real tax saving</strong> of τ × D = 40% × $1.5m = $600k/year.</div>
+        <div class="ac-stat">Year 5 still has depreciation ($1.5m) even after HomeNet revenues stop — creating a tax credit of $600k</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCREMENTAL EARNINGS SPREADSHEET -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">HomeNet incremental earnings forecast — base case ($000s)</div><div class="chart-src">Before cannibalization &amp; opportunity cost adjustments</div></div>
+    <div class="ss-wrap">
+      <table class="ss-table">
+        <thead><tr><th>#</th><th>Line Item</th><th>Year 0</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sales</td><td>—</td><td class="ss-pos">26,000</td><td class="ss-pos">26,000</td><td class="ss-pos">26,000</td><td class="ss-pos">26,000</td><td>—</td></tr>
+          <tr><td>2</td><td>Cost of Goods Sold</td><td>—</td><td class="ss-neg">(11,000)</td><td class="ss-neg">(11,000)</td><td class="ss-neg">(11,000)</td><td class="ss-neg">(11,000)</td><td>—</td></tr>
+          <tr><td>3</td><td>Gross Profit</td><td>—</td><td class="ss-total">15,000</td><td class="ss-total">15,000</td><td class="ss-total">15,000</td><td class="ss-total">15,000</td><td>—</td></tr>
+          <tr><td>4</td><td>Selling, General &amp; Administrative</td><td>—</td><td class="ss-neg">(2,800)</td><td class="ss-neg">(2,800)</td><td class="ss-neg">(2,800)</td><td class="ss-neg">(2,800)</td><td>—</td></tr>
+          <tr><td>5</td><td>Research &amp; Development</td><td class="ss-neg">(15,000)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>6</td><td>Depreciation (straight-line, 5yr)</td><td>—</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td></tr>
+          <tr><td>7</td><td>EBIT</td><td class="ss-neg">(15,000)</td><td class="ss-total">10,700</td><td class="ss-total">10,700</td><td class="ss-total">10,700</td><td class="ss-total">10,700</td><td class="ss-neg">(1,500)</td></tr>
+          <tr><td>8</td><td>Income Tax at 40%</td><td class="ss-pos">6,000</td><td class="ss-neg">(4,280)</td><td class="ss-neg">(4,280)</td><td class="ss-neg">(4,280)</td><td class="ss-neg">(4,280)</td><td class="ss-pos">600</td></tr>
+          <tr><td>9</td><td>Unlevered Net Income</td><td class="ss-neg ss-grand">(9,000)</td><td class="ss-grand">6,420</td><td class="ss-grand">6,420</td><td class="ss-grand">6,420</td><td class="ss-grand">6,420</td><td class="ss-neg ss-grand">(900)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Year 0 and Year 5 show negative EBIT → tax credits (negative tax) of $6m and $0.6m respectively. Valid only if Cisco has other taxable income to offset against.</div>
+  </div>
+
+  <!-- INDIRECT EFFECTS -->
+  <div class="sec-hd fu" style="margin-top:2rem"><h2 class="sec-title" style="font-size:20px">Indirect Effects: Opportunity Costs &amp; Cannibalization</h2></div>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac re">
+        <div class="ac-hd">1. Opportunity cost — lab space</div>
+        <div class="ac-body" style="margin-bottom:.65rem">The HomeNet lab occupies warehouse space Cisco could rent out for $200k/year. Even though no cash changes hands internally, this forgone rent is a real cost of using the space for HomeNet.</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--red)">
+          <div class="f-eq">After-tax impact = $200k × (1 − 40%) = $120k/year reduction</div>
+          <div class="f-note">The opportunity cost is treated as an additional SG&amp;A expense increasing from $2.8m to $3.0m</div>
+        </div>
+        <div class="ac-body">The after-tax rate is used because the foregone rent would have been taxable income — so the real cost is net of tax. This is a critical principle: always evaluate opportunity costs on an after-tax basis to ensure consistency with the project's own after-tax earnings.</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac pu">
+        <div class="ac-hd">2. Cannibalization — lost router sales</div>
+        <div class="ac-body" style="margin-bottom:.65rem">25% of HomeNet buyers would have bought Cisco's existing $100 wireless router. This reduces incremental revenue:</div>
+        <div class="d-row"><span class="d-lbl">Lost sales</span><span class="d-val" style="color:var(--red)">−$2.5m/yr</span></div>
+        <div class="d-row"><span class="d-lbl">Saved COGS (at $60/unit)</span><span class="d-val" style="color:var(--green)">+$1.5m/yr</span></div>
+        <div class="d-row"><span class="d-lbl">Net gross profit reduction</span><span class="d-val" style="color:var(--red)">−$1.0m/yr</span></div>
+        <div class="ac-body" style="margin-top:.5rem">Cannibalization is a classic project externality. It must be included because it is an incremental effect of the HomeNet decision — without HomeNet, those router sales continue. Including it reduces revenue to $23.5m and COGS to $9.5m.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADJUSTED EARNINGS TABLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">HomeNet adjusted earnings — including cannibalization &amp; opportunity cost ($000s)</div><div class="chart-src">Unlevered NI falls from $6,420 to $5,700 per year</div></div>
+    <div class="ss-wrap">
+      <table class="ss-table">
+        <thead><tr><th>#</th><th>Line Item</th><th>Year 0</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Sales (net of cannibalization)</td><td>—</td><td class="ss-pos">23,500</td><td class="ss-pos">23,500</td><td class="ss-pos">23,500</td><td class="ss-pos">23,500</td><td>—</td></tr>
+          <tr><td>2</td><td>Cost of Goods Sold (net of saved costs)</td><td>—</td><td class="ss-neg">(9,500)</td><td class="ss-neg">(9,500)</td><td class="ss-neg">(9,500)</td><td class="ss-neg">(9,500)</td><td>—</td></tr>
+          <tr><td>3</td><td>Gross Profit</td><td>—</td><td class="ss-total">14,000</td><td class="ss-total">14,000</td><td class="ss-total">14,000</td><td class="ss-total">14,000</td><td>—</td></tr>
+          <tr><td>4</td><td>SG&amp;A (incl. $200k opp. cost)</td><td>—</td><td class="ss-neg">(3,000)</td><td class="ss-neg">(3,000)</td><td class="ss-neg">(3,000)</td><td class="ss-neg">(3,000)</td><td>—</td></tr>
+          <tr><td>5</td><td>Research &amp; Development</td><td class="ss-neg">(15,000)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>6</td><td>Depreciation</td><td>—</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td><td class="ss-neg">(1,500)</td></tr>
+          <tr><td>7</td><td>EBIT</td><td class="ss-neg">(15,000)</td><td class="ss-total">9,500</td><td class="ss-total">9,500</td><td class="ss-total">9,500</td><td class="ss-total">9,500</td><td class="ss-neg">(1,500)</td></tr>
+          <tr><td>8</td><td>Income Tax at 40%</td><td class="ss-pos">6,000</td><td class="ss-neg">(3,800)</td><td class="ss-neg">(3,800)</td><td class="ss-neg">(3,800)</td><td class="ss-neg">(3,800)</td><td class="ss-pos">600</td></tr>
+          <tr><td>9</td><td>Unlevered Net Income</td><td class="ss-neg ss-grand">(9,000)</td><td class="ss-grand">5,700</td><td class="ss-grand">5,700</td><td class="ss-grand">5,700</td><td class="ss-grand">5,700</td><td class="ss-neg ss-grand">(900)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: FREE CASH FLOW ── -->
+<div id="fcf" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">Determining Free Cash Flow &amp; NPV</h2></div>
+
+  <p class="body fu">Earnings are not cash flow. This distinction is critical. The incremental earnings forecast tells us how profit changes, but it is <strong>free cash flow (FCF)</strong> — not profit — that we discount to find NPV. The difference between earnings and FCF comes from three adjustments: adding back non-cash depreciation, subtracting capital expenditures, and subtracting increases in net working capital.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Free Cash Flow Formula</div>
+        <div class="f-eq">FCF = EBIT(1−τ) + Depreciation − CapEx − ΔNWC</div>
+        <div class="f-note">EBIT(1−τ) = Unlevered Net Income (after-tax operating profit)<br>+ Depreciation: add back non-cash charge to convert earnings → cash<br>− CapEx: cash spent on physical assets (not in earnings)<br>− ΔNWC: cash tied up in working capital (not in earnings)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Equivalent direct form</div>
+        <div class="f-eq">FCF = (Revenue − Costs)(1−τ) − CapEx − ΔNWC + τ·Depreciation</div>
+        <div class="f-note">The term τ·Depreciation is the <strong>depreciation tax shield</strong><br>= 40% × $1,500 = $600k/yr for HomeNet<br>Depreciation expenses reduce taxes → real cash saving each year</div>
+      </div>
+      <div class="ac or">
+        <div class="ac-hd">Three adjustments: earnings → FCF</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">+ Depreciation:</strong> depreciation reduced earnings but no cash left the firm in that year (cash left at CapEx in year 0). Adding it back converts earnings to cash basis.</li>
+          <li><strong style="color:var(--white)">− CapEx:</strong> cash spent buying equipment (year 0: $7.5m). Not in earnings because it is capitalised and depreciated over time. But the cash goes out immediately.</li>
+          <li><strong style="color:var(--white)">− ΔNWC:</strong> when the project starts, Cisco must fund receivables before collecting cash from customers. This working capital requirement is a cash use not reflected in earnings.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ac ye">
+        <div class="ac-hd">Net Working Capital — HomeNet</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Receivables = 15% of sales = 15% × $23,500 = <strong>$3,525k</strong><br>Payables = 15% of COGS = 15% × $9,500 = <strong>$1,425k</strong></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--yellow)">
+          <div class="f-eq">NWC = Receivables − Payables = $3,525 − $1,425 = $2,100k</div>
+        </div>
+        <div class="ac-body">HomeNet needs $2,100k of NWC from year 1. This is a cash outflow of $2,100k at year 1 (ΔNWC = +$2,100k). At year 5, when the project ends, receivables and payables unwind — NWC returns to zero, releasing $2,100k of cash (ΔNWC = −$2,100k at year 5).</div>
+        <div class="ac-stat">NWC ties up $2.1m in years 1–4; recovered in full at year 5 when project winds down</div>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">Why CapEx ≠ Depreciation</div>
+        <ul class="blist">
+          <li>CapEx ($7.5m) is a cash outflow at year 0 — money leaves the firm immediately to buy the equipment</li>
+          <li>Depreciation ($1.5m/yr) is a non-cash accounting charge spread over 5 years — it allocates the original cost over the asset's life but involves no additional cash payment</li>
+          <li>The FCF formula corrects for this: subtract CapEx (actual cash) and add back depreciation (non-cash reduction in earnings)</li>
+          <li>The net effect over 5 years: CapEx of $7.5m minus total depreciation added back of $7.5m = zero. Fully consistent.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FCF TABLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">HomeNet full FCF schedule ($000s) — including NWC &amp; CapEx</div><div class="chart-src">FCF = Unlevered NI + D − CapEx − ΔNWC</div></div>
+    <div class="ss-wrap">
+      <table class="ss-table">
+        <thead><tr><th>#</th><th>Line Item</th><th>Year 0</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+        <tbody>
+          <tr><td colspan="8" class="ss-section">Incremental Earnings</td></tr>
+          <tr><td>9</td><td>Unlevered Net Income</td><td class="ss-neg">(9,000)</td><td>5,700</td><td>5,700</td><td>5,700</td><td>5,700</td><td class="ss-neg">(900)</td></tr>
+          <tr><td colspan="8" class="ss-section">FCF Adjustments</td></tr>
+          <tr><td>10</td><td>Plus: Depreciation</td><td>—</td><td class="ss-pos">1,500</td><td class="ss-pos">1,500</td><td class="ss-pos">1,500</td><td class="ss-pos">1,500</td><td class="ss-pos">1,500</td></tr>
+          <tr><td>11</td><td>Less: Capital Expenditures</td><td class="ss-neg">(7,500)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>12</td><td>Less: Increases in NWC</td><td>—</td><td class="ss-neg">(2,100)</td><td>—</td><td>—</td><td>—</td><td class="ss-pos">2,100</td></tr>
+          <tr><td>13</td><td>Free Cash Flow</td><td class="ss-neg ss-grand">(16,500)</td><td class="ss-grand">5,100</td><td class="ss-grand">7,200</td><td class="ss-grand">7,200</td><td class="ss-grand">7,200</td><td class="ss-grand">2,700</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Year 1 FCF ($5,100) is lower than years 2–4 ($7,200) because of the $2,100k NWC investment. Year 5 FCF ($2,700) is lower than years 2–4 because revenues cease but depreciation continues — plus the NWC release (+$2,100) partially offsets the loss.</div>
+  </div>
+
+  <!-- CHART: FCF waterfall -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">HomeNet free cash flow by year — cumulative &amp; annual ($000s)</div>
+      <div class="chart-src">WACC = 12% · NPV = $5,027k</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="fcfChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Annual FCF</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Cumulative undiscounted FCF</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: NPV ── -->
+<div id="npv" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Net Present Value &amp; Investment Rules</h2></div>
+
+  <p class="body fu">With the FCF schedule in hand, we can now evaluate whether the project creates value. The <strong>Net Present Value (NPV)</strong> is the sum of all future free cash flows discounted to today at the project's cost of capital (WACC). It represents the incremental value the project creates for shareholders — the exact cash equivalent of undertaking the project.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Net Present Value</div>
+        <div class="f-eq">NPV = Σ FCF_t / (1+r)ᵗ  for t=0 to n</div>
+        <div class="f-note">r = WACC (weighted average cost of capital) — the required return for all investors<br>Discounts each year's FCF back to today using the project's blended cost of capital</div>
+      </div>
+      <p class="body">The WACC is the rate that a company pays on average to all its security holders (debt and equity) to finance its assets. It blends the after-tax cost of debt and the cost of equity, weighted by their proportions in the capital structure. Using WACC as the discount rate correctly values the project <em>independently of how it is financed</em>.</p>
+      <div class="ac or">
+        <div class="ac-hd">HomeNet NPV at WACC = 12%</div>
+        <div class="d-row"><span class="d-lbl">Year 0: −16,500 × 1.000</span><span class="d-val" style="color:var(--red)">(16,500)</span></div>
+        <div class="d-row"><span class="d-lbl">Year 1: 5,100 × 0.893</span><span class="d-val">4,554</span></div>
+        <div class="d-row"><span class="d-lbl">Year 2: 7,200 × 0.797</span><span class="d-val">5,740</span></div>
+        <div class="d-row"><span class="d-lbl">Year 3: 7,200 × 0.712</span><span class="d-val">5,125</span></div>
+        <div class="d-row"><span class="d-lbl">Year 4: 7,200 × 0.636</span><span class="d-val">4,576</span></div>
+        <div class="d-row"><span class="d-lbl">Year 5: 2,700 × 0.567</span><span class="d-val">1,532</span></div>
+        <div class="d-row" style="border-top:2px solid var(--orange)"><span class="d-lbl" style="color:var(--orange);font-weight:600">NPV</span><span class="d-val" style="color:var(--green);font-size:16px">+$5,027k</span></div>
+        <div style="font-size:12px;color:var(--white-2);margin-top:.5rem">Taking HomeNet is equivalent to Cisco having an extra $5.027m in the bank today. PV of inflows = $21.527m vs upfront cost of $16.5m.</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">The NPV Investment Rule</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Single project:</strong> Accept if NPV &gt; 0 (better than doing nothing); reject if NPV &lt; 0</li>
+          <li><strong style="color:var(--white)">Mutually exclusive projects:</strong> Take the project with the <em>highest NPV</em> — this is equivalent to receiving that NPV in cash today</li>
+          <li>The NPV rule is the <strong style="color:var(--white)">gold standard</strong> — it always gives the correct answer when applied correctly</li>
+          <li>Alternative rules (IRR, payback) sometimes agree with NPV but can conflict — when they conflict, <strong style="color:var(--white)">always follow NPV</strong></li>
+          <li>NPV directly measures value creation in today's pounds/dollars — it has clear economic meaning</li>
+        </ul>
+        <div class="ac-stat">NPV = value created by project = PV(inflows) − PV(outflows) = $21.527m − $16.5m = $5.027m ✓</div>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">Terminal / continuation value</div>
+        <div class="ac-body">For projects with an indefinite life (e.g., business expansions), we cannot forecast FCF to infinity. Instead, we forecast over a finite horizon and add a <strong>terminal value</strong> at the end — an estimate of all remaining FCFs, typically using the Gordon Model:</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+          <div class="f-eq">TV_N = FCF_{N+1} / (WACC − g)</div>
+          <div class="f-note">Then discount: PV(TV) = TV_N / (1+WACC)ᴺ</div>
+        </div>
+        <div class="ac-body">The terminal value often represents 60–80% of a project's total NPV in practice, making the assumed long-run growth rate g a critically sensitive input.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: NPV profile -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">HomeNet NPV profile — NPV as a function of discount rate</div>
+      <div class="chart-src">NPV crosses zero at IRR = 24.1%</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="npvProfileChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">At WACC=12%, NPV=$5,027k ✓ · NPV declines as discount rate rises · Crosses zero at IRR=24.1% · Negative above IRR → reject</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: IRR ── -->
+<div id="irr" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">The Internal Rate of Return</h2></div>
+
+  <p class="body fu">The <strong>Internal Rate of Return (IRR)</strong> is the discount rate that sets a project's NPV exactly to zero. It is the project's own "break-even" cost of capital — the rate at which the present value of inflows exactly equals the present value of outflows. The IRR rule says: accept if IRR &gt; cost of capital; reject if IRR &lt; cost of capital.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">IRR Definition</div>
+        <div class="f-eq">0 = Σ FCF_t / (1+IRR)ᵗ</div>
+        <div class="f-note">No closed-form solution — must be found by iteration (trial-and-error) or numerical methods (Excel's IRR/RATE function)<br>For HomeNet: IRR = 24.1% (well above WACC of 12%)</div>
+      </div>
+      <div class="ac or">
+        <div class="ac-hd">IRR rule — HomeNet</div>
+        <div class="d-row"><span class="d-lbl">IRR</span><span class="d-val" style="color:var(--green)">24.1%</span></div>
+        <div class="d-row"><span class="d-lbl">WACC</span><span class="d-val">12.0%</span></div>
+        <div class="d-row"><span class="d-lbl">IRR − WACC (spread)</span><span class="d-val" style="color:var(--green)">12.1% — accept</span></div>
+        <div style="margin-top:.5rem;font-size:12.5px;color:var(--white-2)">Since IRR (24.1%) &gt; WACC (12%), accept the project. This is consistent with NPV &gt; 0 — both rules agree here because all negative cash flows precede positive ones (conventional cash flow pattern).</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac re">
+        <div class="ac-hd">When IRR conflicts with NPV — three failure modes</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Delayed investments:</strong> if the initial cash flow is positive (e.g., selling a resource now), the NPV rule flips: accept when IRR &lt; WACC. The IRR rule gives the wrong answer if applied naively.</li>
+          <li><strong style="color:var(--white)">Multiple IRRs:</strong> if cash flows change sign more than once (e.g., positive, then negative, then positive), there can be multiple IRRs or no real IRR at all. The NPV profile may cross the x-axis multiple times.</li>
+          <li><strong style="color:var(--white)">Mutually exclusive projects:</strong> the project with the higher IRR may not have the higher NPV if projects differ in <em>scale</em>, <em>timing</em>, or <em>risk</em>. Always compare NPVs — never choose between mutually exclusive projects on IRR alone.</li>
+        </ul>
+        <div class="ac-stat">Rule: when IRR and NPV conflict → always follow NPV</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: Multiple IRR illustration -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">IRR failure mode — mutually exclusive projects with different scale</div>
+      <div class="chart-src">Project A (large, lower IRR) vs Project B (small, higher IRR)</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="irrCompareChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">
+      <span style="color:#f56a00">■</span> Project A: higher NPV at low discount rates despite lower IRR &nbsp;|&nbsp;
+      <span style="color:#3d8ef0">■</span> Project B: higher IRR but lower NPV at typical discount rates &nbsp;|&nbsp;
+      At WACC=10%, choose A (higher NPV) — not B (higher IRR)
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: PAYBACK & PI ── -->
+<div id="payback" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">Payback Rule &amp; Profitability Index</h2></div>
+
+  <div class="tabs fu" id="ruleTabs">
+    <div class="tab on" onclick="switchTab('r1',this,'ruleTabs','rulePanels')">Payback Rule</div>
+    <div class="tab" onclick="switchTab('r2',this,'ruleTabs','rulePanels')">Profitability Index</div>
+  </div>
+  <div id="rulePanels">
+
+    <div class="tab-panel on" id="r1">
+      <div class="g2">
+        <div>
+          <p class="body">The <strong>payback rule</strong> says: accept a project if its undiscounted cash flows recover the initial investment within a specified time threshold. It is widely used in practice due to its simplicity and intuitive appeal — how quickly do we get our money back?</p>
+          <div class="formula">
+            <div class="f-label">Payback Period</div>
+            <div class="f-eq">Time until cumulative undiscounted FCF ≥ initial outlay</div>
+          </div>
+          <div class="ac re">
+            <div class="ac-hd">Three critical pitfalls</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Ignores time value of money</strong> — treats $1 in year 1 the same as $1 in year 3; no discounting</li>
+              <li><strong style="color:var(--white)">Ignores post-payback cash flows</strong> — a project that pays back in 2 years but generates nothing thereafter beats one that pays back in 3 years but generates massive cash flows in years 4–20</li>
+              <li><strong style="color:var(--white)">Ad hoc threshold</strong> — the choice of "2 years" or "3 years" is arbitrary and not grounded in theory</li>
+            </ul>
+            <div class="ac-stat">Despite these flaws, many firms use payback as a quick screen — not a primary decision rule</div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box" style="align-self:start">
+            <div class="chart-hd"><div class="chart-title">HomeNet — payback period (cumulative undiscounted FCF)</div><div class="chart-src">Initial investment = $16,500k</div></div>
+            <div class="chart-wrap" style="height:240px"><canvas id="paybackChart"></canvas></div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">HomeNet payback ≈ 3.0 years — cumulative FCF crosses $16.5m between year 2 and year 3. The dashed line marks the initial outlay.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="r2">
+      <div class="g2">
+        <div>
+          <p class="body">When a firm faces a <strong>binding resource constraint</strong> (e.g., limited engineers, factory capacity, or capital), it cannot undertake all positive-NPV projects. The goal becomes choosing the combination of projects that <em>maximises total NPV</em> within the constraint. The <strong>Profitability Index (PI)</strong> ranks projects by NPV created per unit of scarce resource consumed.</p>
+          <div class="formula">
+            <div class="f-label">Profitability Index</div>
+            <div class="f-eq">PI = NPV / Resource Consumed</div>
+            <div class="f-note">= "Value created per pound/unit of scarce resource"<br>Sort projects by PI descending; accept from top until resource exhausted</div>
+          </div>
+          <div class="ac or">
+            <div class="ac-hd">NetIt example — 190 engineers available</div>
+            <table style="width:100%;font-size:11.5px;border-collapse:collapse;margin-top:.5rem">
+              <thead><tr style="font-family:var(--mono);font-size:9px;color:var(--orange);border-bottom:1px solid var(--border-2)"><th style="text-align:left;padding:.4rem .6rem">Project</th><th style="text-align:right;padding:.4rem .6rem">NPV ($m)</th><th style="text-align:right;padding:.4rem .6rem">EHC</th><th style="text-align:right;padding:.4rem .6rem">PI</th><th style="text-align:right;padding:.4rem .6rem">Cum EHC</th></tr></thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--border)"><td style="padding:.35rem .6rem;color:var(--green)">Project A</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">22.7</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">47</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--green)">0.483</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">47</td></tr>
+                <tr style="border-bottom:1px solid var(--border)"><td style="padding:.35rem .6rem;color:var(--green)">Project F</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">12.9</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">32</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--green)">0.403</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">79</td></tr>
+                <tr style="border-bottom:1px solid var(--border)"><td style="padding:.35rem .6rem;color:var(--green)">Project E</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">20.6</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">58</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--green)">0.355</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">137</td></tr>
+                <tr style="border-bottom:1px solid var(--border);background:var(--orange-dim)"><td style="padding:.35rem .6rem;color:var(--orange)">Router ✓</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--orange)">17.7</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--orange)">50</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--orange)">0.354</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem;color:var(--orange)">187 ← stop</td></tr>
+                <tr style="border-bottom:1px solid var(--border);opacity:.5"><td style="padding:.35rem .6rem;color:var(--red)">Project C ✗</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">14.0</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">40</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">0.350</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">—</td></tr>
+                <tr style="border-bottom:1px solid var(--border);opacity:.5"><td style="padding:.35rem .6rem;color:var(--red)">Project D ✗</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">11.5</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">61</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">0.189</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">—</td></tr>
+                <tr style="opacity:.5"><td style="padding:.35rem .6rem;color:var(--red)">Project B ✗</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">8.1</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">44</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">0.184</td><td style="text-align:right;font-family:var(--mono);padding:.35rem .6rem">—</td></tr>
+              </tbody>
+            </table>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Total NPV selected: 22.7+12.9+20.6+17.7 = <strong style="color:var(--green)">$73.9m</strong> · Forgoing C+D+B = $33.6m of NPV unavoidable under constraint</div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box" style="align-self:start">
+            <div class="chart-hd"><div class="chart-title">NetIt — NPV per engineer (PI ranking)</div><div class="chart-src">190 engineer constraint · Sort by PI descending</div></div>
+            <div class="chart-wrap" style="height:260px"><canvas id="piChart"></canvas></div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">PI limitations</div>
+            <ul class="blist">
+              <li>If there are leftover resources after ranking, a small low-PI project that fits may be worth adding (e.g., a 3-engineer project at PI=0.04 takes leftover capacity)</li>
+              <li>PI fails with <strong style="color:var(--white)">multiple resource constraints</strong> (e.g., both engineering headcount AND capital are limited) — requires linear programming</li>
+              <li>PI is only valid when the resource constraint is truly binding — if additional resources can be acquired, standard NPV ranking applies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: EAC ── -->
+<div id="eac" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">Equivalent Annual Cost — Unequal Lives</h2></div>
+
+  <p class="body fu">The NPV rule requires modification when comparing <strong>mutually exclusive projects with different lifespans</strong>. A simple NPV comparison is misleading because a shorter-lived project will need to be replaced sooner — its lower NPV cost must be weighed against how long it lasts. The <strong>Equivalent Annual Cost (EAC)</strong> converts each project's total cost into a uniform annual figure, enabling fair comparison.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Equivalent Annual Cost</div>
+        <div class="f-eq">EAC = NPV / A_r^n</div>
+        <div class="f-note">A_r^n = annuity factor = [1 − (1+r)^(−n)] / r<br>EAC converts the NPV of a cost stream into a constant annual cost<br>Pick the machine with the <strong>lower</strong> (less negative) EAC — cheapest per year</div>
+      </div>
+      <div class="ac or">
+        <div class="ac-hd">Machine comparison — which to choose?</div>
+        <div class="d-row"><span class="d-lbl">Machine A upfront cost</span><span class="d-val" style="color:var(--red)">$4,000</span></div>
+        <div class="d-row"><span class="d-lbl">Machine A annual operating cost</span><span class="d-val" style="color:var(--red)">$100/yr</span></div>
+        <div class="d-row"><span class="d-lbl">Machine A lifespan</span><span class="d-val">10 years</span></div>
+        <div class="d-row"><span class="d-lbl">Machine B upfront cost</span><span class="d-val" style="color:var(--red)">$1,000</span></div>
+        <div class="d-row"><span class="d-lbl">Machine B annual operating cost</span><span class="d-val" style="color:var(--red)">$500/yr</span></div>
+        <div class="d-row"><span class="d-lbl">Machine B lifespan</span><span class="d-val">5 years</span></div>
+        <div class="d-row"><span class="d-lbl">Discount rate</span><span class="d-val">10%</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Step-by-step EAC calculation</div>
+        <div class="tl-yr" style="margin-top:.25rem">Machine A — 10-year life</div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">NPV_A = −4,000 − 100 × A(10%,10) = −4,614.5</div>
+          <div class="f-note">A(10%,10) = [1−1.10⁻¹⁰]/0.10 = 6.1446</div>
+        </div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">EAC_A = −4,614.5 / 6.1446 = −$751/yr</div>
+        </div>
+        <div class="tl-yr" style="margin-top:.5rem">Machine B — 5-year life</div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--green)">
+          <div class="f-eq">NPV_B = −1,000 − 500 × A(10%,5) = −2,895.4</div>
+          <div class="f-note">A(10%,5) = [1−1.10⁻⁵]/0.10 = 3.7908</div>
+        </div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--green)">
+          <div class="f-eq">EAC_B = −2,895.4 / 3.7908 = −$763.8/yr</div>
+        </div>
+        <div style="margin-top:.75rem;font-size:13px;color:var(--white-2)"><strong>Decision: Choose Machine A</strong> (EAC = −$751/yr vs −$763.8/yr). Machine A costs $12.80 less per year over its life. The naive NPV comparison suggested B ($2,895) but this ignored that A lasts twice as long.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: EAC comparison -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">EAC comparison — Machine A (10yr) vs Machine B (5yr)</div>
+      <div class="chart-src">Annual cost equivalent at 10% discount rate</div>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="eacChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Machine A: total NPV cost = $4,614.5 spread over 10 years = $751/yr · Machine B: $2,895.4 spread over 5 years = $763.8/yr · A is cheaper per year despite higher upfront cost</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 7: BREAK-EVEN & SENSITIVITY ── -->
+<div id="analysis" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">07</div><h2 class="sec-title">Break-Even &amp; Sensitivity Analysis</h2></div>
+
+  <p class="body fu">The most difficult part of capital budgeting is estimating cash flows and the cost of capital. These estimates are inherently uncertain. Three tools help assess the importance of that uncertainty: <strong>break-even analysis</strong> identifies the threshold values below/above which the project fails; <strong>sensitivity analysis</strong> shows how NPV changes when one assumption varies; and <strong>scenario analysis</strong> changes multiple assumptions simultaneously.</p>
+
+  <div class="tabs fu" id="analysisTabs">
+    <div class="tab on" onclick="switchTab('a1',this,'analysisTabs','analysisPanels')">Break-Even Analysis</div>
+    <div class="tab" onclick="switchTab('a2',this,'analysisTabs','analysisPanels')">Sensitivity Analysis</div>
+  </div>
+  <div id="analysisPanels">
+
+    <div class="tab-panel on" id="a1">
+      <div class="g2">
+        <div>
+          <p class="body">Break-even analysis finds the value of each input at which the project's NPV is exactly zero — the minimum performance required to justify the investment. If actual performance falls below break-even, the project destroys value. These thresholds give managers a clear picture of how much room for error they have.</p>
+          <div class="ac or">
+            <div class="ac-hd">HomeNet break-even levels (NPV=0)</div>
+            <div class="d-row"><span class="d-lbl">Units sold (break-even)</span><span class="d-val" style="color:var(--yellow)">79,759 units/yr</span></div>
+            <div class="d-row"><span class="d-lbl">Baseline units</span><span class="d-val">100,000 units/yr</span></div>
+            <div class="d-row"><span class="d-lbl">Safety margin</span><span class="d-val" style="color:var(--green)">20,241 units (20.2%)</span></div>
+            <div style="height:.4rem"></div>
+            <div class="d-row"><span class="d-lbl">Wholesale price (break-even)</span><span class="d-val" style="color:var(--yellow)">$232/unit</span></div>
+            <div class="d-row"><span class="d-lbl">Baseline price</span><span class="d-val">$260/unit</span></div>
+            <div class="d-row"><span class="d-lbl">Downside cushion</span><span class="d-val" style="color:var(--green)">$28 (10.8%)</span></div>
+            <div style="height:.4rem"></div>
+            <div class="d-row"><span class="d-lbl">Cost of goods (break-even)</span><span class="d-val" style="color:var(--yellow)">$138/unit</span></div>
+            <div class="d-row"><span class="d-lbl">Baseline COGS</span><span class="d-val">$110/unit</span></div>
+            <div class="d-row"><span class="d-lbl">Cost inflation cushion</span><span class="d-val" style="color:var(--green)">+$28 (25.5%)</span></div>
+            <div style="height:.4rem"></div>
+            <div class="d-row"><span class="d-lbl">Cost of capital (break-even = IRR)</span><span class="d-val" style="color:var(--yellow)">24.1%</span></div>
+            <div class="d-row"><span class="d-lbl">Baseline WACC</span><span class="d-val">12.0%</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box" style="align-self:start">
+            <div class="chart-hd"><div class="chart-title">HomeNet NPV vs units sold — break-even at 79,759 units</div><div class="chart-src">Break-even: NPV=0</div></div>
+            <div class="chart-wrap" style="height:260px"><canvas id="breakEvenChart"></canvas></div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">The NPV line is linear in units sold. Every additional thousand units sold adds approximately $X to NPV. The break-even is where this line crosses zero.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="a2">
+      <div class="g2">
+        <div>
+          <p class="body">Sensitivity analysis varies one input at a time while holding all others at their baseline values. It shows which assumptions drive the NPV most strongly — revealing where management attention and due diligence should be focused. Parameters with steep NPV-sensitivity slopes are the "key value drivers."</p>
+          <div class="ac bl">
+            <div class="ac-hd">Marketing cost sensitivity example</div>
+            <div class="ac-body" style="margin-bottom:.65rem">Baseline SG&amp;A: $3m/yr. Pessimistic: $4m/yr. How does NPV change?</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+              <div class="f-eq">ΔNI = −$1m × (1−40%) = −$0.6m/yr (after-tax)</div>
+              <div class="f-note">ΔNPV = PV of −$0.6m for 4 years at 12% = −$1.82m<br>New NPV = $5.027m − $1.82m = $3.2m</div>
+            </div>
+            <div class="ac-body">The logic: a $1m increase in costs → EBIT falls $1m → tax falls $0.4m → FCF falls $0.6m after tax → PV of $0.6m/yr for 4 yrs at 12% = $1.82m reduction in NPV.</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">What sensitivity analysis reveals</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Steep slope</strong> → small changes in that input cause large NPV swings → this is a key risk driver requiring careful estimation and monitoring</li>
+              <li><strong style="color:var(--white)">Flat slope</strong> → NPV is relatively insensitive to that input → errors here don't matter much</li>
+              <li>Guides where to invest in better information (market research, engineering studies, etc.)</li>
+              <li>Also guides project management focus — steep-slope parameters are the ones to monitor most closely once the project is underway</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box" style="align-self:start">
+            <div class="chart-hd"><div class="chart-title">HomeNet sensitivity — NPV vs key inputs (tornado chart)</div><div class="chart-src">Each bar shows NPV range from pessimistic to optimistic</div></div>
+            <div class="chart-wrap" style="height:280px"><canvas id="sensitivityChart"></canvas></div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">
+              Wider bars = more sensitive to that input. <span style="color:#00c875">■</span> Optimistic · <span style="color:#ff4050">■</span> Pessimistic vs baseline NPV of $5,027k
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 8: SCENARIO ANALYSIS ── -->
+<div id="scenario" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">08</div><h2 class="sec-title">Scenario Analysis</h2></div>
+
+  <p class="body fu">Sensitivity analysis varies one parameter at a time. But in reality, <strong>multiple parameters often move together</strong>. A recession simultaneously reduces units sold, forces price cuts, and may increase costs — these effects are correlated. <strong>Scenario analysis</strong> captures this by defining complete alternative scenarios (e.g., optimistic, base case, pessimistic) where multiple parameters change simultaneously.</p>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The scenario analysis for HomeNet examines three alternative pricing strategies, each with a different combination of price and expected volume. Because price and volume move together (lower price → more units, higher price → fewer units), this is precisely the kind of multi-parameter change that scenario analysis is designed to handle.</p>
+      <div class="ac or">
+        <div class="ac-hd">HomeNet pricing strategy scenarios</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:.5rem">
+          <thead><tr style="font-family:var(--mono);font-size:9px;color:var(--orange);border-bottom:1px solid var(--border-2)"><th style="text-align:left;padding:.4rem .6rem">Strategy</th><th style="text-align:right;padding:.4rem .6rem">Price</th><th style="text-align:right;padding:.4rem .6rem">Units (k)</th><th style="text-align:right;padding:.4rem .6rem">NPV ($k)</th><th style="text-align:right;padding:.4rem .6rem">Verdict</th></tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:.4rem .6rem">Price Reduction</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem">$245</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem">110</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--red)">4,582</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--red)">↓ Worse</td></tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--orange-dim)"><td style="padding:.4rem .6rem;color:var(--orange)">Current (Baseline)</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--orange)">$260</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--orange)">100</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--orange)">5,027</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--green)">★ Best</td></tr>
+            <tr><td style="padding:.4rem .6rem">Price Increase</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem">$275</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem">90</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--red)">4,937</td><td style="text-align:right;font-family:var(--mono);padding:.4rem .6rem;color:var(--red)">↓ Worse</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:12px;color:var(--white-2);margin-top:.65rem">Counterintuitively, <strong>both</strong> moving up and moving down from the baseline $260 reduces NPV. The current strategy is at a local optimum. The price increase loses too many units; the price reduction gains units but sacrifices too much margin.</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd">
+          <div class="chart-title">Scenario analysis — iso-NPV curve &amp; pricing strategies</div>
+          <div class="chart-src">Combinations above the curve → NPV &gt; $5,027k</div>
+        </div>
+        <div class="chart-wrap" style="height:280px"><canvas id="scenarioChart"></canvas></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">
+          The iso-NPV curve shows all (price, volume) combinations that produce NPV = $5,027k. Any strategy <span style="color:#00c875">above</span> the line is superior; <span style="color:#ff4050">below</span> the line is inferior. The three strategies are plotted as points — current strategy lies on the curve.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: Scenario NPV comparison bars -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">NPV comparison across pricing scenarios</div>
+      <div class="chart-src">HomeNet · WACC = 12% · All three strategies positive NPV but current is highest</div>
+    </div>
+    <div class="chart-wrap" style="height:220px"><canvas id="scenarioBarChart"></canvas></div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="sec-hd fu" style="margin-top:2rem"><h2 class="sec-title" style="font-size:20px">Complete Formula Reference</h2></div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell"><div class="og-icon">💰</div><div class="og-lbl">HomeNet NPV (WACC=12%)</div><div class="og-val">$5,027k</div><div class="og-sub">Accept. IRR=24.1% · Break-even units=79,759</div></div>
+    <div class="og-cell"><div class="og-icon">📊</div><div class="og-lbl">Primary decision rule</div><div class="og-val">NPV</div><div class="og-sub">Always follow NPV when IRR/payback conflict with it</div></div>
+    <div class="og-cell"><div class="og-icon">⚙️</div><div class="og-lbl">Machine A EAC vs B</div><div class="og-val">−$751 vs −$764</div><div class="og-sub">Choose A — lower annual equivalent cost despite longer life</div></div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Unlevered NI = EBIT × (1−τ)</strong> — after-tax operating profit excluding financing costs</li>
+        <li><strong style="color:var(--white)">FCF = Unlevered NI + D − CapEx − ΔNWC</strong> — cash available to all investors each year</li>
+        <li><strong style="color:var(--white)">FCF = (Revenue−Costs)(1−τ) − CapEx − ΔNWC + τD</strong> — direct form; τD is the depreciation tax shield</li>
+        <li><strong style="color:var(--white)">NWC = Current Assets − Current Liabilities</strong> — cash tied up in operations; ΔNWC is the year-on-year change</li>
+        <li><strong style="color:var(--white)">NPV = Σ FCF_t/(1+r)ᵗ</strong> — sum of discounted FCFs; r = WACC</li>
+        <li><strong style="color:var(--white)">NPV rule: Accept if NPV &gt; 0 · Highest NPV if mutually exclusive</strong></li>
+        <li><strong style="color:var(--white)">IRR: solve 0 = Σ FCF_t/(1+IRR)ᵗ</strong> — accept if IRR &gt; WACC; fails for multiple sign changes &amp; mutually exclusive projects</li>
+        <li><strong style="color:var(--white)">PI = NPV / Resource consumed</strong> — rank by PI when facing resource constraint; accept from top until resource exhausted</li>
+        <li><strong style="color:var(--white)">EAC = NPV / A_r^n</strong> — where A_r^n = [1−(1+r)^(−n)]/r; choose lowest EAC for cost-minimisation decisions</li>
+        <li><strong style="color:var(--white)">TV = FCF_{N+1}/(WACC−g)</strong> — terminal value at date N for perpetually growing cash flows</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Never include sunk costs</strong> — money already spent (feasibility studies, past R&amp;D) is irrelevant to the investment decision; only future incremental costs matter</li>
+        <li><strong style="color:var(--white)">Always include opportunity costs</strong> — if a resource is being diverted from another use, its forgone value is a real cost even if no cash changes hands</li>
+        <li><strong style="color:var(--white)">Earnings ≠ FCF</strong> — always add back depreciation, subtract CapEx and ΔNWC; failing to do so can make a value-destroying project look profitable</li>
+        <li><strong style="color:var(--white)">Higher IRR ≠ better project</strong> — when choosing between mutually exclusive projects, always compare NPV; the higher-IRR project can have lower NPV if scales or timings differ</li>
+        <li><strong style="color:var(--white)">NWC investment is recovered</strong> — the ΔNWC cash outflow at project start is fully reversed at project end; forgetting the recovery understates NPV</li>
+        <li><strong style="color:var(--white)">Depreciation is real in terms of tax</strong> — while non-cash, depreciation creates a real cash saving via the tax shield (τ×D per year)</li>
+        <li><strong style="color:var(--white)">Payback ignores TVM</strong> — a project paying back in 2 years with $0 thereafter can lose to a 4-year payback project with huge late cash flows when NPV is computed properly</li>
+        <li><strong style="color:var(--white)">EAC assumes identical replacement</strong> — the EAC comparison is only valid if machines can be replaced by identical machines at end of life; if technology changes, more careful analysis is needed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 1 — Build the incremental earnings forecast (pro-forma)</div><div class="tl-card"><div class="tl-title">Revenues − COGS − SG&amp;A − R&amp;D − Depreciation = EBIT → Unlevered NI</div><div class="tl-text">Start with only incremental effects. Exclude sunk costs. Include opportunity costs and cannibalization. Exclude interest expense. Tax at the corporate rate. Depreciation reduces tax even though it is non-cash. A tax credit (negative tax) arises whenever EBIT is negative — valid if the firm has other taxable income to offset.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 2 — Convert earnings to free cash flow</div><div class="tl-card"><div class="tl-title">FCF = Unlevered NI + D − CapEx − ΔNWC</div><div class="tl-text">Three adjustments: (1) add back depreciation (non-cash); (2) subtract CapEx (cash not in earnings); (3) subtract increases in NWC (cash tied up in receivables etc.). The NWC investment is recovered at project end — don't forget to include the reversal.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 3 — Compute NPV at the WACC</div><div class="tl-card"><div class="tl-title">NPV = Σ FCF_t/(1+WACC)ᵗ — the gold standard</div><div class="tl-text">Discount each year's FCF at the WACC. Sum. A positive NPV means the project generates more value than it costs. NPV directly measures value created in today's dollars. For long-lived projects, add a terminal value at the forecast horizon using the Gordon Model.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 4 — Cross-check with IRR; apply PI/EAC where needed</div><div class="tl-card"><div class="tl-title">IRR, PI, EAC — useful supplements, not replacements for NPV</div><div class="tl-text">IRR is a useful break-even check — accept if IRR &gt; WACC for conventional cash flows. But when projects are mutually exclusive or have unusual cash flow patterns, always rely on NPV. Use PI only under genuine resource constraints. Use EAC only when comparing mutually exclusive alternatives with different useful lives.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 5 — Analyse uncertainty with break-even, sensitivity, and scenario analysis</div><div class="tl-card"><div class="tl-title">Understand the range of outcomes, not just the base case</div><div class="tl-text">Break-even tells you how much the key inputs can deteriorate before the project fails. Sensitivity analysis tells you which inputs matter most for NPV. Scenario analysis tells you what happens when multiple inputs move together. These tools don't replace the base-case NPV — they tell you how much to trust it.</div></div></div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Capital Budgeting</div>
+    <div class="verdict-text">Capital budgeting reduces to a single question: do the incremental free cash flows this project generates, discounted at the firm's cost of capital, exceed the investment required? When they do, NPV is positive and the project creates value. Every technique — FCF construction, NPV, IRR, EAC, break-even, sensitivity, and scenario analysis — is simply a different way of answering that same question with more or less precision, under more or less uncertainty.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Capital Budgeting &amp; Investment Rules · Clara Martínez-Toledano · Corporate Finance Module 5<br>
+    Topics: Incremental Earnings · FCF · NPV · IRR · Payback · PI · EAC · Break-Even · Sensitivity · Scenario Analysis<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── BOILERPLATE ── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
+});
+const sections=['forecasting','fcf','npv','irr','payback','eac','analysis','scenario'];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;let cur=sections[0];
+  sections.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  document.querySelectorAll('.nl').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
+document.querySelectorAll('.fu,.tl-item').forEach(el=>io.observe(el));
+function switchTab(panelId,btn,tabsId,panelsId){
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+Chart.defaults.color='#888480';
+Chart.defaults.font.family="'IBM Plex Mono',monospace";
+Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.04)',tk={color:'#888480',font:{size:10}};
+
+/* ── CHART 1: HomeNet FCF by year ── */
+(()=>{
+  const yrs=['Year 0','Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const fcf=[-16500,5100,7200,7200,7200,2700];
+  const cumFcf=[];let cum=0;
+  fcf.forEach(v=>{cum+=v;cumFcf.push(cum);});
+  new Chart(document.getElementById('fcfChart'),{
+    type:'bar',
+    data:{labels:yrs,datasets:[
+      {type:'bar',label:'Annual FCF ($k)',data:fcf,backgroundColor:fcf.map(v=>v>=0?'rgba(245,106,0,0.75)':'rgba(255,64,80,0.75)'),borderColor:fcf.map(v=>v>=0?'#f56a00':'#ff4050'),borderWidth:0,borderRadius:2,yAxisID:'y'},
+      {type:'line',label:'Cumulative FCF ($k)',data:cumFcf,borderColor:'#3d8ef0',backgroundColor:'transparent',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#3d8ef0',tension:0.2,yAxisID:'y'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}k`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(0)+'m'},title:{display:true,text:'$000s',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 2: NPV Profile ── */
+(()=>{
+  const fcfs=[-16500,5100,7200,7200,7200,2700];
+  const rates=[];const npvs=[];
+  for(let r=0;r<=40;r+=1){
+    rates.push(r);
+    let npv=0;
+    fcfs.forEach((v,t)=>npv+=v/Math.pow(1+r/100,t));
+    npvs.push(+npv.toFixed(0));
+  }
+  new Chart(document.getElementById('npvProfileChart'),{
+    type:'line',
+    data:{labels:rates,datasets:[
+      {label:'NPV',data:npvs,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
+      {label:'Zero',data:rates.map(()=>0),borderColor:'rgba(255,255,255,0.12)',borderWidth:1.5,borderDash:[4,4],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`WACC = ${c[0].label}%`,label:c=>` NPV = $${c.parsed.y.toLocaleString()}k`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Discount Rate (%)',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(0)+'m'},title:{display:true,text:'NPV ($000s)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 3: IRR failure — mutually exclusive projects ── */
+(()=>{
+  // Project A: -10000, 2000,2000,2000,2000,2000,2000,2000 (7 yrs, high NPV at low r)
+  // Project B: -1000, 800, 800 (2 yrs, high IRR but low NPV)
+  const rates=[];const npvA=[];const npvB=[];
+  for(let r=0;r<=50;r+=1){
+    rates.push(r);
+    let a=0;[-10000,2000,2000,2000,2000,2000,2000,2000].forEach((v,t)=>a+=v/Math.pow(1+r/100,t));
+    let b=0;[-1000,800,800].forEach((v,t)=>b+=v/Math.pow(1+r/100,t));
+    npvA.push(+a.toFixed(0));npvB.push(+b.toFixed(0));
+  }
+  new Chart(document.getElementById('irrCompareChart'),{
+    type:'line',
+    data:{labels:rates,datasets:[
+      {label:'Project A (IRR≈20.6%)',data:npvA,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.06)',fill:false,tension:0.2,borderWidth:2.5,pointRadius:0},
+      {label:'Project B (IRR≈44.9%)',data:npvB,borderColor:'#3d8ef0',backgroundColor:'transparent',tension:0.2,borderWidth:2.5,pointRadius:0},
+      {label:'Zero',data:rates.map(()=>0),borderColor:'rgba(255,255,255,0.1)',borderWidth:1,borderDash:[4,4],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:14}},
+        tooltip:{mode:'index',callbacks:{label:c=>c.dataset.label.includes('Zero')?null:` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Discount Rate (%)',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:tk,title:{display:true,text:'NPV ($)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 4: Payback ── */
+(()=>{
+  const fcf=[-16500,5100,7200,7200,7200,2700];
+  const cum=[];let c=0;
+  fcf.forEach(v=>{c+=v;cum.push(c);});
+  new Chart(document.getElementById('paybackChart'),{
+    type:'line',
+    data:{labels:['Yr 0','Yr 1','Yr 2','Yr 3','Yr 4','Yr 5'],datasets:[
+      {label:'Cumulative FCF',data:cum,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:true,tension:0.2,borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#f56a00'},
+      {label:'Initial Investment ($16,500k)',data:[16500,16500,16500,16500,16500,16500].map(v=>-16500+v+v),borderColor:'rgba(240,180,41,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0},
+      {label:'Zero',data:[0,0,0,0,0,0].map(()=>0),borderColor:'rgba(255,255,255,0.1)',borderWidth:1,borderDash:[3,3],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}k`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(0)+'m'},
+        title:{display:true,text:'Cumulative FCF ($000s)',color:'#888480',font:{size:9}},
+        min:-18000}}}
+  });
+})();
+
+/* ── CHART 5: Profitability Index ── */
+(()=>{
+  const projects=['Project A','Project F','Project E','Router','Project C','Project D','Project B'];
+  const pi=[0.483,0.403,0.355,0.354,0.350,0.189,0.184];
+  const colors=['rgba(0,200,117,0.8)','rgba(0,200,117,0.8)','rgba(0,200,117,0.8)','rgba(245,106,0,0.8)','rgba(255,64,80,0.5)','rgba(255,64,80,0.5)','rgba(255,64,80,0.5)'];
+  new Chart(document.getElementById('piChart'),{
+    type:'bar',
+    data:{labels:projects,datasets:[{label:'PI (NPV per engineer)',data:pi,backgroundColor:colors,borderColor:colors.map(c=>c.replace('0.8','1').replace('0.5','0.7')),borderWidth:0,borderRadius:2}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` PI = ${c.parsed.x.toFixed(3)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v.toFixed(2)},title:{display:true,text:'NPV / Engineer ($ millions)',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:tk}}}
+  });
+})();
+
+/* ── CHART 6: EAC comparison ── */
+(()=>{
+  new Chart(document.getElementById('eacChart'),{
+    type:'bar',
+    data:{
+      labels:['Machine A\n(10 years)','Machine B\n(5 years)'],
+      datasets:[
+        {label:'Total NPV Cost ($)',data:[4614.5,2895.4],backgroundColor:['rgba(61,142,240,0.7)','rgba(0,200,117,0.7)'],borderColor:['#3d8ef0','#00c875'],borderWidth:0,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'EAC ($/yr)',data:[751,763.8],borderColor:'#f56a00',backgroundColor:'transparent',borderWidth:2.5,pointRadius:8,pointBackgroundColor:'#f56a00',yAxisID:'y2'}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:14}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(1)}`}}},
+      scales:{
+        x:{grid:{color:gc},ticks:tk},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+v},title:{display:true,text:'Total NPV Cost ($)',color:'#3d8ef0',font:{size:9}},position:'left'},
+        y2:{grid:{drawOnChartArea:false},ticks:{...tk,callback:v=>'$'+v+'/yr',color:'#f56a00'},title:{display:true,text:'EAC ($/yr)',color:'#f56a00',font:{size:9}},position:'right',min:700,max:800}
+      }}
+  });
+})();
+
+/* ── CHART 7: Break-even — NPV vs units sold ── */
+(()=>{
+  const units=[];const npvs=[];
+  const wacc=0.12,tau=0.40,D=1500,capex=7500,nwc=2100,rd=15000,sga=3000,price=260,unitCost=110;
+  for(let u=40000;u<=140000;u+=5000){
+    // Adjusted for cannibalization: net price effect
+    const netRevPerUnit=price-0.25*100; // 260 - 25 (cannib adj already in base)
+    const netCostPerUnit=unitCost-0.25*60;
+    const rev=u*netRevPerUnit/1000;
+    const cogs=u*netCostPerUnit/1000;
+    const ebit_y0=(-rd-0)*1;
+    const unlevNI_y0=ebit_y0*(1-tau);
+    const ebit_yr=(rev-cogs-sga-D);
+    const unlevNI_yr=ebit_yr*(1-tau);
+    const ebit_y5=-D;
+    const unlevNI_y5=ebit_y5*(1-tau);
+    const fcf0=unlevNI_y0-capex;
+    const fcf1=unlevNI_yr+D-nwc;
+    const fcf234=unlevNI_yr+D;
+    const fcf5=unlevNI_y5+D+nwc;
+    let npv=fcf0;
+    npv+=fcf1/Math.pow(1+wacc,1);
+    for(let t=2;t<=4;t++) npv+=fcf234/Math.pow(1+wacc,t);
+    npv+=fcf5/Math.pow(1+wacc,5);
+    units.push((u/1000).toFixed(0)+'k');
+    npvs.push(+npv.toFixed(0));
+  }
+  new Chart(document.getElementById('breakEvenChart'),{
+    type:'line',
+    data:{labels:units,datasets:[
+      {label:'NPV',data:npvs,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
+      {label:'NPV=0',data:units.map(()=>0),borderColor:'rgba(240,180,41,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`Units: ${c[0].label}`,label:c=>` NPV: $${c.parsed.y.toLocaleString()}k`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Units sold per year',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(1)+'m'},title:{display:true,text:'NPV ($000s)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 8: Sensitivity tornado ── */
+(()=>{
+  // base NPV = 5027
+  // Each parameter: [pessimistic NPV, optimistic NPV]
+  const base=5027;
+  const params=['Units sold','Wholesale price','COGS per unit','SG&A costs','WACC'];
+  const pess=[800,3200,2100,3200,2700];
+  const opt=[9200,6900,7900,6900,7500];
+  new Chart(document.getElementById('sensitivityChart'),{
+    type:'bar',
+    data:{labels:params,
+      datasets:[
+        {label:'Pessimistic',data:pess,backgroundColor:'rgba(255,64,80,0.75)',borderColor:'#ff4050',borderWidth:0,borderRadius:2},
+        {label:'Optimistic',data:opt,backgroundColor:'rgba(0,200,117,0.75)',borderColor:'#00c875',borderWidth:0,borderRadius:2}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:12}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.x.toLocaleString()}k NPV`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(1)+'m'},
+        title:{display:true,text:'NPV ($000s)',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:tk}}}
+  });
+})();
+
+/* ── CHART 9: Scenario iso-NPV curve ── */
+(()=>{
+  // Compute iso-NPV line: combinations of (price, volume) giving NPV = 5027
+  // Simplified linear approximation: for each price, find break-even volume
+  const wacc=0.12,tau=0.40,D=1500,capex=7500,nwc=2100,rd=15000,sga=3000,unitCost=110;
+  const targetNPV=5027;
+  // For a range of prices, compute the unit volume needed to hit targetNPV
+  const curvePrices=[],curveUnits=[];
+  for(let p=220;p<=300;p+=2){
+    // binary search for units
+    let lo=0,hi=500000;
+    for(let i=0;i<50;i++){
+      const mid=(lo+hi)/2;
+      const u=mid;
+      const rev=u*(p-0.25*100)/1000;
+      const cogs=u*(unitCost-0.25*60)/1000;
+      const unlevNI_y0=(-rd)*(1-tau);
+      const ebit_yr=rev-cogs-sga-D;
+      const unlevNI_yr=ebit_yr*(1-tau);
+      const unlevNI_y5=(-D)*(1-tau);
+      const fcf0=unlevNI_y0-capex;
+      const fcf1=unlevNI_yr+D-nwc;
+      const fcf234=unlevNI_yr+D;
+      const fcf5=unlevNI_y5+D+nwc;
+      let npv=fcf0+fcf1/Math.pow(1+wacc,1);
+      for(let t=2;t<=4;t++) npv+=fcf234/Math.pow(1+wacc,t);
+      npv+=fcf5/Math.pow(1+wacc,5);
+      if(npv<targetNPV) lo=mid; else hi=mid;
+    }
+    if(lo>0&&lo<500000){curvePrices.push(p);curveUnits.push(+(lo/1000).toFixed(1));}
+  }
+  // Strategy points
+  const stratPrices=[245,260,275];
+  const stratUnits=[110,100,90];
+  const stratLabels=['Price Cut ($245)','Baseline ($260)','Price Increase ($275)'];
+  const stratNPVs=[4582,5027,4937];
+  new Chart(document.getElementById('scenarioChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',label:'Iso-NPV curve (NPV=$5,027k)',data:curvePrices.map((p,i)=>({x:p,y:curveUnits[i]})),borderColor:'rgba(61,142,240,0.7)',backgroundColor:'rgba(61,142,240,0.05)',fill:true,tension:0.3,borderWidth:2,pointRadius:0},
+      {type:'scatter',label:'Pricing strategies',data:stratPrices.map((p,i)=>({x:p,y:stratUnits[i]})),backgroundColor:stratNPVs.map(n=>n>=5027?'#00c875':'#ff4050'),borderColor:stratNPVs.map(n=>n>=5027?'#00c875':'#ff4050'),pointRadius:9,pointHoverRadius:11}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===0)return` Iso-NPV: P=$${c.parsed.x}, Vol=${c.parsed.y}k units`;const i=c.dataIndex;return` ${stratLabels[i]}: NPV=$${stratNPVs[i].toLocaleString()}k`;}}}},
+      scales:{x:{grid:{color:gc},ticks:tk,title:{display:true,text:'Price per unit ($)',color:'#888480',font:{size:9}},min:215,max:305},
+        y:{grid:{color:gc},ticks:tk,title:{display:true,text:'Annual units (thousands)',color:'#888480',font:{size:9}},min:75,max:125}}}
+  });
+})();
+
+/* ── CHART 10: Scenario bar chart ── */
+(()=>{
+  new Chart(document.getElementById('scenarioBarChart'),{
+    type:'bar',
+    data:{labels:['Price Reduction\n($245, 110k units)','Current Strategy\n($260, 100k units)','Price Increase\n($275, 90k units)'],
+      datasets:[{label:'NPV ($k)',data:[4582,5027,4937],backgroundColor:['rgba(255,64,80,0.7)','rgba(245,106,0,0.8)','rgba(255,64,80,0.7)'],borderColor:['#ff4050','#f56a00','#ff4050'],borderWidth:0,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` NPV = $${c.parsed.y.toLocaleString()}k`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+(v/1000).toFixed(1)+'m'},min:4000,max:5500,
+        title:{display:true,text:'NPV ($000s)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+</script>
+</body>
+</html>
