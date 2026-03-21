@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stocks & Options — Valuation, Growth Models & Derivatives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.re{border-top:2px solid var(--red)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.re .ac-hd{color:var(--red)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}.ac.gr .ac-stat{color:var(--green)}.ac.re .ac-stat{color:var(--red)}.ac.bl .ac-stat{color:var(--blue)}.ac.ye .ac-stat{color:var(--yellow)}.ac.pu .ac-stat{color:var(--purple)}.ac.te .ac-stat{color:var(--teal)}
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right}
+.chart-wrap{position:relative;width:100%}
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
+.flow-node{flex:1;min-width:120px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;cursor:default;transition:border-color .2s,background .2s}
+.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
+.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
+.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
+.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+/* payoff table */
+.po-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:.75rem 0}
+.po-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;padding:.6rem 1rem;background:var(--panel-2);border-bottom:2px solid var(--orange-line);text-align:right;color:var(--orange)}
+.po-table th:first-child{text-align:left}
+.po-table td{font-family:var(--mono);padding:.45rem 1rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2)}
+.po-table td:first-child{text-align:left;color:var(--white-3)}
+.po-table .pos{color:var(--green)}.po-table .neg{color:var(--red)}.po-table .zero{color:var(--white-3)}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right;line-height:1.7}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  .flow{flex-direction:column}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#stocks">Stock Basics</a>
+    <a class="nl" href="#zerogrowth">Zero Growth</a>
+    <a class="nl" href="#constantgrowth">Constant Growth</a>
+    <a class="nl" href="#diffgrowth">Differential Growth</a>
+    <a class="nl" href="#npvgo">NPVGO Model</a>
+    <a class="nl" href="#pe">P/E Ratio</a>
+    <a class="nl" href="#options">Options</a>
+    <a class="nl" href="#parity">Put-Call Parity</a>
+    <a class="nl" href="#exercises">Exercises</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 4</div>
+      <h1>Stocks <em>&amp; Options</em>:<br>Valuation &amp; Derivatives</h1>
+      <p class="hero-lead">From dividend discount models and the Gordon Growth formula to NPVGO decomposition, call and put payoffs, protective puts, and put-call parity — a complete deep-dive into how equities and options are valued and why they move the way they do.</p>
+      <div class="meta-row">
+        <span>Equity Valuation · Derivatives</span>
+        <span>DDM · Gordon Model · NPVGO · Options · Put-Call Parity</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core formulas at a glance</div>
+      <div class="sp-row"><div class="sp-lbl">Zero growth stock</div><div class="sp-right"><div class="sp-val">P₀ = D₁/R</div><div class="sp-sub">Perpetuity of dividends</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Constant growth (Gordon)</div><div class="sp-right"><div class="sp-val">P₀ = D₁/(R−g)</div><div class="sp-sub">Growing perpetuity; R &gt; g</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Sustainable growth rate</div><div class="sp-right"><div class="sp-val">g = retention × ROE</div><div class="sp-sub">(1−payout) × ROE</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">NPVGO decomposition</div><div class="sp-right"><div class="sp-val">P₀ = E₁/R + NPVGO</div><div class="sp-sub">Cash cow + growth options</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Call payoff at expiry</div><div class="sp-right"><div class="sp-val">max(Sᴛ−X, 0)</div><div class="sp-sub">Exercise only if in-the-money</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Put-call parity</div><div class="sp-right"><div class="sp-val">C + X/(1+R)ᵀ = P + S₀</div><div class="sp-sub">No-arbitrage identity</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: STOCK BASICS ── -->
+<div id="stocks" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">What is a Stock? Ownership, Rights &amp; Valuation Logic</h2></div>
+
+  <p class="body fu">A <strong>stock</strong> (or equity) is a security representing fractional ownership of a company. When a firm issues shares to raise capital, each share confers a proportional claim on the firm's assets and earnings. Unlike bonds — which promise contractually fixed cash flows — stocks offer <strong>residual claims</strong>: shareholders receive whatever is left after all other claimants (employees, suppliers, creditors) have been paid. This makes equity riskier than debt, but also potentially more rewarding.</p>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">What you get as a shareholder</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Dividends</strong> — share of profits distributed to shareholders; not contractually guaranteed (directors decide)</li>
+        <li><strong style="color:var(--white)">Capital gains/losses</strong> — profit or loss from changes in the share price between purchase and sale</li>
+        <li><strong style="color:var(--white)">Residual claim</strong> — paid after all creditors, suppliers, employees in liquidation; highest risk, highest potential return</li>
+        <li><strong style="color:var(--white)">Voting rights</strong> — vote on major decisions: electing board members, approving mergers, authorising new share issuances</li>
+      </ul>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">The fundamental valuation principle</div>
+      <div class="ac-body" style="margin-bottom:.65rem">The value of any asset = PV of expected future cash flows. For a stock, those cash flows are dividends. But what about capital gains?</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Dividends</strong> are the cash received directly each period</li>
+        <li><strong style="color:var(--white)">Capital gains</strong> occur because the next buyer is willing to pay more — but they pay more <em>because they expect larger future dividends</em></li>
+        <li>Therefore: capital gains are simply the <strong style="color:var(--white)">market re-pricing of future dividends</strong> — not an independent source of value</li>
+        <li>The stock's value today = PV of ALL future dividends, to infinity</li>
+      </ul>
+      <div class="ac-stat">P₀ = Σ Dₜ/(1+R)ᵗ for t=1 to ∞</div>
+    </div>
+    <div class="ac ye">
+      <div class="ac-hd">Why the holding period doesn't matter</div>
+      <div class="ac-body" style="margin-bottom:.5rem">Whether you hold forever or sell at t=1, the price is the same:</div>
+      <div class="formula" style="margin:.4rem 0;border-left-color:var(--yellow)">
+        <div class="f-eq">P₀ = (D₁ + P₁)/(1+R)</div>
+        <div class="f-note">P₁ itself = PV of all dividends from t=2 onward</div>
+      </div>
+      <div class="ac-body">Substituting P₁ back in gives the same infinite sum. The capital gain at t=1 (P₁ − P₀) is just the market updating its valuation of future dividends. The dividend discount model is therefore a complete valuation framework — not just a "long-hold" model.</div>
+    </div>
+  </div>
+
+  <div class="pq fu">
+    <div class="pq-text">Capital gains are not magic. They happen because the buyer at any future date is also discounting dividends — just from a later starting point. The entire return from owning a stock ultimately reduces to one thing: the present value of all dividends the firm will ever pay.</div>
+    <div class="pq-src">— Dividend Discount Model Foundations</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: ZERO GROWTH ── -->
+<div id="zerogrowth" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">Case 1 — Zero Growth (Perpetuity)</h2></div>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The simplest stock valuation model assumes dividends remain <strong>constant forever</strong>: D₁ = D₂ = D₃ = … This is the same structure as a bond consol — a perpetuity. Firms in mature, stable industries with highly predictable earnings may approximate this behaviour (utility companies, for example).</p>
+      <div class="formula">
+        <div class="f-label">Zero Growth Stock Price</div>
+        <div class="f-eq">P₀ = D₁ / R</div>
+        <div class="f-note">D₁ = constant dividend per period (forever) · R = required return (discount rate)<br>Same as the perpetuity formula: PV = C/r from TVM</div>
+      </div>
+      <p class="body">The formula reveals a critical insight: the stock price is entirely determined by the ratio of the dividend to the required return. A stock paying £5/year forever at a 10% required return is worth exactly £50. If required returns rise to 12%, the price falls to £41.67 — even though dividends haven't changed. <strong>The discount rate is the transmission mechanism between the macro environment and individual stock prices.</strong></p>
+      <div class="ac or">
+        <div class="ac-hd">Zero growth sensitivity to required return</div>
+        <div class="d-row"><span class="d-lbl">D₁ = £5, R = 5%</span><span class="d-val" style="color:var(--green)">P₀ = £100</span></div>
+        <div class="d-row"><span class="d-lbl">D₁ = £5, R = 8%</span><span class="d-val" style="color:var(--green)">P₀ = £62.50</span></div>
+        <div class="d-row"><span class="d-lbl">D₁ = £5, R = 10%</span><span class="d-val" style="color:var(--yellow)">P₀ = £50.00</span></div>
+        <div class="d-row"><span class="d-lbl">D₁ = £5, R = 15%</span><span class="d-val" style="color:var(--red)">P₀ = £33.33</span></div>
+        <div class="d-row"><span class="d-lbl">D₁ = £5, R = 20%</span><span class="d-val" style="color:var(--red)">P₀ = £25.00</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">Zero growth price vs required return (D₁ = £5)</div><div class="chart-src">P₀ = 5/R</div></div>
+        <div class="chart-wrap" style="height:240px"><canvas id="zeroGrowthChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: CONSTANT GROWTH ── -->
+<div id="constantgrowth" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Case 2 — Constant Growth (Gordon Growth Model)</h2></div>
+
+  <p class="body fu">The <strong>Gordon Growth Model</strong> (also called the Dividend Growth Model, DGM) is the workhorse of equity valuation. It extends the zero-growth perpetuity to allow dividends to grow at a constant rate g forever. This turns the infinite dividend stream into a growing perpetuity — the same structure encountered in TVM.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Gordon Growth Model — Stock Price</div>
+        <div class="f-eq">P₀ = D₁ / (R − g)</div>
+        <div class="f-note">D₁ = next period's dividend · R = required return · g = constant dividend growth rate<br>⚠ Requires R &gt; g — if g ≥ R, the denominator ≤ 0 and the formula breaks (price is infinite/undefined)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Rearranged: Required Return</div>
+        <div class="f-eq">R = D₁/P₀ + g</div>
+        <div class="f-note">Required return = dividend yield + capital gains yield (= growth rate)<br>The total return on a stock has exactly two components</div>
+      </div>
+      <p class="body">The rearrangement is powerful: it shows that the <strong>total return R</strong> on a stock equals the dividend yield (D₁/P₀) plus the capital gains rate (g). Under constant growth, dividends and prices both grow at rate g — so the capital gain each year is exactly g% of the current price. This gives a clean decomposition: income return + price appreciation = total return.</p>
+    </div>
+    <div>
+      <div class="ac gr">
+        <div class="ac-hd">Gordon Model — Example 1 (Big D Inc.)</div>
+        <div class="d-row"><span class="d-lbl">D₁</span><span class="d-val">£0.50</span></div>
+        <div class="d-row"><span class="d-lbl">g (dividend growth)</span><span class="d-val">2% per year</span></div>
+        <div class="d-row"><span class="d-lbl">R (required return)</span><span class="d-val">15%</span></div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--green)">
+          <div class="f-eq">P₀ = 0.50 / (0.15 − 0.02) = £3.846</div>
+        </div>
+        <div class="ac-body">Whether the investor holds forever or sells at t=1, the result is the same. Buyer at t=1 pays P₁ = D₂/(R−g) = 0.51/0.13 = £3.923. Then: P₀ = (D₁+P₁)/(1+R) = (0.50+3.923)/1.15 = £3.846 ✓</div>
+        <div class="ac-stat">Capital gain: P₁−P₀ = £0.077 = 2% of £3.846 — exactly equal to g</div>
+      </div>
+      <div class="ac pu" style="margin-top:1rem">
+        <div class="ac-hd">Gordon Model — Example 2 (Solving for g)</div>
+        <div class="ac-body" style="margin-bottom:.5rem">Apple: D₁ = $0.82, R ∈ [8%, 10%]. What is the implied growth rate?</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--purple)">
+          <div class="f-eq">g = R − D₁/P₀ = R − dividend yield</div>
+        </div>
+        <div class="ac-body">If P₀ is Apple's market price, the dividend yield y_D = 0.82/P₀. Then g ∈ [0.08 − y_D, 0.10 − y_D]. If P₀ is high (low yield), most of the return comes from expected growth; if P₀ is low (high yield), growth expectations are modest. This is how analysts back out market-implied growth assumptions.</div>
+        <div class="ac-stat">Higher R → higher implied g for any given price P₀</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: Gordon Model price vs g -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Gordon Model — stock price vs growth rate g (D₁=£1, R=10%)</div>
+      <div class="chart-src">P₀ = D₁/(R−g) · Price → ∞ as g → R</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="gordonChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">As g approaches R=10%, the denominator (R−g) shrinks toward zero and the stock price explodes toward infinity. This is why the constraint g &lt; R is essential — no firm can grow faster than the economy forever.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: DIFFERENTIAL GROWTH ── -->
+<div id="diffgrowth" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">Case 3 — Differential Growth (Two-Stage Model)</h2></div>
+
+  <p class="body fu">The differential growth model is the most realistic of the three cases. Most companies don't grow at a constant rate forever — they often have a <strong>high-growth phase</strong> early in their life (driven by new products, market expansion, competitive advantage) followed by a <strong>steady-state phase</strong> once they mature and competition intensifies. The two-stage model captures this by using growth rate g₁ for N years and g₂ thereafter.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Step 1: PV of dividends in years 1 to N (growing annuity)</div>
+        <div class="f-eq">PV₀(1→N) = D₁/(R−g₁) × [1−((1+g₁)/(1+R))ᴺ]</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Step 2: Terminal value at time N (growing perpetuity)</div>
+        <div class="f-eq">Pₙ = D_{N+1} / (R − g₂)</div>
+        <div class="f-note">D_{N+1} = D₁ × (1+g₁)^N × (1+g₂) — first dividend under new growth rate</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Step 3: Discount terminal value to today</div>
+        <div class="f-eq">P₀ = PV₀(1→N) + Pₙ/(1+R)ᴺ</div>
+        <div class="f-note">Add the PV of early dividends to the PV of all post-N dividends</div>
+      </div>
+      <p class="body">The intuition for Step 2 is that at date N, the stock transitions to constant growth at g₂. The Gordon Model then applies — but gives a value <em>at date N</em>, not today. Step 3 discounts that terminal value back N years to get today's contribution. The two terms are additive — the stock's total value today is the sum of its near-term dividends plus the present value of the perpetuity that begins at the end of the high-growth phase.</p>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Differential growth — worked example</div>
+        <div class="d-row"><span class="d-lbl">D₁</span><span class="d-val">$2.00</span></div>
+        <div class="d-row"><span class="d-lbl">g₁ (years 1–3)</span><span class="d-val">8% p.a.</span></div>
+        <div class="d-row"><span class="d-lbl">g₂ (year 4 onward)</span><span class="d-val">4% p.a.</span></div>
+        <div class="d-row"><span class="d-lbl">R (discount rate)</span><span class="d-val">12%</span></div>
+        <div style="height:.5rem"></div>
+        <div class="tl-yr">Step-by-step cash flows</div>
+        <div class="d-row"><span class="d-lbl">D₁</span><span class="d-val">$2.000</span></div>
+        <div class="d-row"><span class="d-lbl">D₂ = 2 × 1.08</span><span class="d-val">$2.160</span></div>
+        <div class="d-row"><span class="d-lbl">D₃ = 2 × 1.08²</span><span class="d-val">$2.333</span></div>
+        <div class="d-row"><span class="d-lbl">D₄ = D₃ × 1.04</span><span class="d-val">$2.426</span></div>
+        <div class="d-row"><span class="d-lbl">P₃ = D₄/(R−g₂)</span><span class="d-val" style="color:var(--orange)">$30.375</span></div>
+        <div class="formula" style="margin:.5rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">P₀ = 2/1.12 + 2.16/1.12² + (2.333+30.375)/1.12³</div>
+          <div class="f-note">= 1.786 + 1.722 + 23.292 ≈ $26.80</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: differential growth dividend timeline -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Differential growth — dividend path &amp; discounted cash flows</div>
+      <div class="chart-src">D₁=$2, g₁=8% for 3 yrs, g₂=4% perpetuity, R=12%</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="diffGrowthChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">
+      <span style="color:#f56a00">■</span> Dividend cash flow · <span style="color:#3d8ef0">■</span> PV of that cash flow · The terminal value at t=3 ($30.375) dominates — it represents 87% of the total stock value of $26.80
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: PARAMETERS ── -->
+<div id="npvgo" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">Growth Parameters &amp; the NPVGO Model</h2></div>
+
+  <p class="body fu">Two key parameters drive every stock valuation: the <strong>growth rate g</strong> and the <strong>discount rate R</strong>. Understanding where they come from — not just plugging them into formulas — is essential. The NPVGO model then provides a second, complementary way to decompose stock value that reveals whether growth is actually creating value.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Where g comes from — sustainable growth rate</div>
+        <div class="f-eq">g = Retention ratio × ROE</div>
+        <div class="f-note">= (1 − Payout) × Net Income / Book Value of Equity<br>Retention ratio = 1 − Payout ratio = 1 − (DPS/EPS)<br>DPS = dividends per share · EPS = earnings per share</div>
+      </div>
+      <p class="body">The logic is elegant: growth in dividends comes from growth in earnings, which comes from <strong>reinvesting retained earnings</strong>. Each period, the firm keeps (1−Payout) of its earnings and reinvests them at ROE. Those reinvested pounds earn ROE going forward — generating higher future earnings and therefore higher future dividends.</p>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Where R comes from — return decomposition</div>
+        <div class="f-eq">R = D₁/P₀ + g</div>
+        <div class="f-note">R = dividend yield + expected capital gains rate<br>Rearranging Gordon Model to solve for R rather than P₀</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Intuition behind g = retention × ROE</div>
+        <ul class="blist">
+          <li>Suppose EPS = £10. If payout = 40%, the firm pays £4 as dividends and retains £6</li>
+          <li>Those £6 are reinvested at ROE = 15%, generating £6 × 15% = £0.90 extra earnings next year</li>
+          <li>Growth in EPS = 0.90/10 = 9%. So g = (1−0.40) × 15% = 9% ✓</li>
+          <li>This formula only holds if ROE is stable and the firm is in steady state</li>
+          <li><strong style="color:var(--white)">Key takeaway:</strong> growth doesn't come from just reinvesting — it comes from reinvesting <em>profitably</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NPVGO MODEL -->
+  <div class="sec-hd fu" style="margin-top:2rem"><h2 class="sec-title" style="font-size:20px">The NPVGO Model — Value = Cash Cow + Growth</h2></div>
+
+  <p class="body fu">The NPVGO (Net Present Value of Growth Opportunities) model offers a <strong>second, equivalent way to value a stock</strong>. Instead of discounting all future dividends, it splits the stock's value into two parts: what the firm is worth if it pays out everything and never grows ("cash cow"), plus the incremental value created by future reinvestment opportunities.</p>
+
+  <div class="formula fu">
+    <div class="f-label">NPVGO Decomposition</div>
+    <div class="f-eq">P₀ = E₁/R + NPVGO</div>
+    <div class="f-note">E₁/R = cash cow value (firm pays out all earnings as dividends, never reinvests)<br>NPVGO = PV of all future positive-NPV investment opportunities</div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">The cash cow component: E₁/R</div>
+      <div class="ac-body">Suppose the firm never reinvests — it pays out 100% of earnings each year as dividends. Then D₁ = E₁ (dividends equal earnings), growth is zero, and the stock is a perpetuity worth E₁/R. This is the "base case" value if management never takes on any new projects. It is the value of the firm's <strong>existing assets in place</strong>.</div>
+      <div class="ac-stat">Cash cow: zero retention, zero growth, P₀ = EPS₁/R</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">The NPVGO component</div>
+      <div class="ac-body">NPVGO captures the value created by <strong>retaining earnings and reinvesting in positive-NPV projects</strong>. Each £1 retained and reinvested creates NPV = −1 + ROE/R. If ROE &gt; R, this is positive (value creating). NPVGO is the growing perpetuity of these per-share NPVs, starting at NPV₁ and growing at rate g.</div>
+      <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+        <div class="f-eq">NPVGO = NPV₁ / (R − g)</div>
+      </div>
+    </div>
+    <div class="ac re">
+      <div class="ac-hd">The critical condition: ROE vs R</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">ROE &gt; R:</strong> each reinvested £1 earns more than the cost of capital → NPVGO &gt; 0 → growth adds value → retain earnings</li>
+        <li><strong style="color:var(--white)">ROE = R:</strong> reinvestment earns exactly the cost of capital → NPVGO = 0 → growth is neutral → payout irrelevant</li>
+        <li><strong style="color:var(--white)">ROE &lt; R:</strong> reinvestment destroys value → NPVGO &lt; 0 → pay everything out → higher payout raises P₀</li>
+      </ul>
+      <div class="ac-stat">Growth only adds value when ROE &gt; R — "profitable growth" is the key</div>
+    </div>
+  </div>
+
+  <!-- NPVGO EXAMPLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">NPVGO example — EPS₁=£5, payout=30%, ROE=20%, R=16%</div><div class="chart-src">DGM and NPVGO give identical P₀=£75</div></div>
+    <div class="g2" style="margin:0">
+      <div>
+        <div class="tl-yr" style="margin-bottom:.4rem">DGM Route</div>
+        <div class="d-row"><span class="d-lbl">D₁ = EPS × payout</span><span class="d-val">£5 × 0.30 = £1.50</span></div>
+        <div class="d-row"><span class="d-lbl">g = (1−0.30) × 20%</span><span class="d-val">14%</span></div>
+        <div class="d-row"><span class="d-lbl">P₀ = 1.50/(0.16−0.14)</span><span class="d-val" style="color:var(--orange)">£75.00 ✓</span></div>
+      </div>
+      <div>
+        <div class="tl-yr" style="margin-bottom:.4rem">NPVGO Route</div>
+        <div class="d-row"><span class="d-lbl">Cash cow: E₁/R = 5/0.16</span><span class="d-val">£31.25</span></div>
+        <div class="d-row"><span class="d-lbl">Retained EPS₁ = 5×0.7</span><span class="d-val">£3.50</span></div>
+        <div class="d-row"><span class="d-lbl">NPV₁ = −3.5 + 3.5×0.20/0.16</span><span class="d-val" style="color:var(--green)">£0.875</span></div>
+        <div class="d-row"><span class="d-lbl">NPVGO = 0.875/(0.16−0.14)</span><span class="d-val" style="color:var(--green)">£43.75</span></div>
+        <div class="d-row"><span class="d-lbl">P₀ = 31.25 + 43.75</span><span class="d-val" style="color:var(--orange)">£75.00 ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: NPVGO decomposition -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">NPVGO decomposition — stock price vs payout ratio (EPS=£5, ROE=20%, R=16%)</div>
+      <div class="chart-src">Shows how payout affects cash cow vs NPVGO when ROE &gt; R</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="npvgoChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Cash cow value (E₁/R)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>NPVGO (growth value)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:var(--white-3);border:1px solid var(--border-2)"></span>Total P₀</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.4rem">When ROE &gt; R: reducing payout destroys value (less growth opportunity captured). Cash cow stays fixed at E₁/R = £31.25. NPVGO rises as retention increases because each retained pound earns above the cost of capital.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: P/E RATIO ── -->
+<div id="pe" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">The Price-Earnings Ratio</h2></div>
+
+  <p class="body fu">The <strong>Price-Earnings (P/E) ratio</strong> is the most widely cited valuation metric in equity markets. It measures how much investors are willing to pay per pound of current earnings. While simple to compute, it encodes expectations about growth, risk, and dividend policy — making it a rich source of information when interpreted correctly.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">P/E Ratio Definition &amp; Gordon Model Derivation</div>
+        <div class="f-eq">P/E = P₀/EPS₁ = Payout / (R − g)</div>
+        <div class="f-note">From Gordon: P₀ = D₁/(R−g) = EPS₁ × Payout/(R−g)<br>→ P/E = Payout/(R−g)</div>
+      </div>
+      <p class="body">This derivation reveals what drives the P/E ratio. It <strong>increases with payout ratio</strong> (investors pay more for a stock that returns more cash today) and <strong>increases with growth</strong> (higher g reduces the denominator, inflating price relative to earnings). It <strong>decreases with the discount rate</strong> R — riskier firms or higher interest rate environments attract lower P/E multiples.</p>
+      <div class="ac or">
+        <div class="ac-hd">P/E ratio drivers</div>
+        <div class="d-row"><span class="d-lbl">Payout ratio ↑</span><span class="d-val" style="color:var(--green)">P/E ↑</span></div>
+        <div class="d-row"><span class="d-lbl">Growth rate g ↑</span><span class="d-val" style="color:var(--green)">P/E ↑</span></div>
+        <div class="d-row"><span class="d-lbl">Discount rate R ↑</span><span class="d-val" style="color:var(--red)">P/E ↓</span></div>
+        <div class="d-row"><span class="d-lbl">Risk ↑ (higher R)</span><span class="d-val" style="color:var(--red)">P/E ↓</span></div>
+        <div style="margin-top:.75rem;font-size:12.5px;color:var(--white-2)">Tech stocks: high P/E because g is high. Utilities: low P/E because g is low. High-yield value stocks: higher payout but lower growth, moderate P/E.</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">P/E ratio vs growth rate (payout=50%, R=10%)</div><div class="chart-src">P/E = 0.50/(0.10−g)</div></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="peChart"></canvas></div>
+      </div>
+      <div class="ac ye" style="margin-top:1rem">
+        <div class="ac-hd">P/E comparison pitfall — must compare like-for-like</div>
+        <ul class="blist">
+          <li>A high P/E could mean high growth expectations — or simply that the stock is overvalued</li>
+          <li>A low P/E could mean cheap value — or structural decline in earnings</li>
+          <li><strong style="color:var(--white)">Only compare P/E across firms with similar:</strong> payout ratio, growth rate, and risk (discount rate)</li>
+          <li>Cross-industry P/E comparisons are almost always misleading — a 30× P/E for a tech firm and a 12× for a utility are both "fair" if growth and risk differ appropriately</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 7: OPTIONS ── -->
+<div id="options" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">07</div><h2 class="sec-title">Options — Calls, Puts &amp; Payoffs</h2></div>
+
+  <p class="body fu">An <strong>option</strong> is a financial contract giving the holder the <em>right but not the obligation</em> to buy or sell an underlying asset at a pre-specified price. This asymmetry — you choose whether to exercise, but the seller must comply if you do — is the source of options' unique risk-return profile. Options are both powerful hedging instruments and flexible speculative tools.</p>
+
+  <div class="flow fu">
+    <div class="flow-node"><div class="fn-num">S</div><div class="fn-title">Underlying</div><div class="fn-body">Current market price of the asset (stock, index, commodity)</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><div class="fn-num">X</div><div class="fn-title">Strike Price</div><div class="fn-body">Pre-agreed exercise price. The option buyer can transact at X regardless of market price</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><div class="fn-num">T</div><div class="fn-title">Expiration</div><div class="fn-body">Date the option expires. European: exercise only at T. American: any time up to T</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><div class="fn-num">C/P</div><div class="fn-title">Call or Put</div><div class="fn-body">Call = right to BUY. Put = right to SELL. Opposite exposures to price moves</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><div class="fn-num">π</div><div class="fn-title">Premium</div><div class="fn-body">Price paid today to acquire the option. Maximum loss for the buyer</div></div>
+  </div>
+
+  <div class="tabs fu" id="optionTabs">
+    <div class="tab on" onclick="switchTab('op1',this,'optionTabs','optionPanels')">Call Options</div>
+    <div class="tab" onclick="switchTab('op2',this,'optionTabs','optionPanels')">Put Options</div>
+    <div class="tab" onclick="switchTab('op3',this,'optionTabs','optionPanels')">Payoff vs Profit</div>
+    <div class="tab" onclick="switchTab('op4',this,'optionTabs','optionPanels')">Options as Insurance</div>
+  </div>
+  <div id="optionPanels">
+
+    <!-- CALL -->
+    <div class="tab-panel on" id="op1">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>call option</strong> gives the holder the right to <em>buy</em> the underlying asset at the strike price X. You exercise a call only when it is profitable to do so — i.e., when the market price Sᴛ exceeds the strike X. If Sᴛ ≤ X, you simply let the option expire worthless; it is never rational to pay X for something trading below X in the open market.</p>
+          <div class="formula">
+            <div class="f-label">Call Payoff at Expiration</div>
+            <div class="f-eq">Payoff_call = max(Sᴛ − X, 0)</div>
+            <div class="f-note">Sᴛ &gt; X (in the money): exercise — payoff = Sᴛ − X<br>Sᴛ = X (at the money): indifferent — payoff = 0<br>Sᴛ &lt; X (out of the money): do not exercise — payoff = 0</div>
+          </div>
+          <div class="ac bl">
+            <div class="ac-hd">Call — moneyness terminology</div>
+            <div class="d-row"><span class="d-lbl">Sᴛ &gt; X</span><span class="d-val" style="color:var(--green)">In-the-money (ITM) — exercise</span></div>
+            <div class="d-row"><span class="d-lbl">Sᴛ = X</span><span class="d-val" style="color:var(--yellow)">At-the-money (ATM) — indifferent</span></div>
+            <div class="d-row"><span class="d-lbl">Sᴛ &lt; X</span><span class="d-val" style="color:var(--red)">Out-of-the-money (OTM) — expire</span></div>
+            <div style="margin-top:.5rem;font-size:12.5px;color:var(--white-2)">The buyer's loss is always capped at the premium paid upfront. The potential gain is unlimited — the higher Sᴛ rises, the more valuable the call.</div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box">
+            <div class="chart-hd"><div class="chart-title">Call option payoff &amp; profit (X=50, premium=6)</div><div class="chart-src">Payoff = max(Sᴛ−X,0) · Profit = Payoff − 6</div></div>
+            <div class="chart-wrap" style="height:240px"><canvas id="callChart"></canvas></div>
+            <div class="leg">
+              <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Payoff</span>
+              <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Profit</span>
+              <span class="leg-item"><span class="leg-sq" style="background:rgba(255,255,255,0.15);border:1px dashed #555"></span>Break-even: Sᴛ=56</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUT -->
+    <div class="tab-panel" id="op2">
+      <div class="g2">
+        <div>
+          <p class="body">A <strong>put option</strong> gives the holder the right to <em>sell</em> the underlying asset at the strike price X. You exercise a put only when Sᴛ &lt; X — when you can sell at the contractually fixed price X, which is higher than the current market price. If Sᴛ ≥ X, you can sell for a higher price in the open market, so the put expires worthless.</p>
+          <div class="formula">
+            <div class="f-label">Put Payoff at Expiration</div>
+            <div class="f-eq">Payoff_put = max(X − Sᴛ, 0)</div>
+            <div class="f-note">Sᴛ &lt; X (in the money): exercise — sell at X when market is Sᴛ, payoff = X − Sᴛ<br>Sᴛ ≥ X (at or out of the money): do not exercise — payoff = 0</div>
+          </div>
+          <div class="ac re">
+            <div class="ac-hd">Put — key properties</div>
+            <ul class="blist">
+              <li>Put profits when the stock <strong style="color:var(--white)">falls</strong> — it is a bearish instrument (opposite of a call)</li>
+              <li>Maximum payoff = X (if the stock goes to zero, you sell worthless shares at X)</li>
+              <li>Maximum loss for the buyer = premium paid (if stock stays above X, option expires worthless)</li>
+              <li>Break-even: Sᴛ = X − premium (stock must fall below this for the put to be profitable)</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box">
+            <div class="chart-hd"><div class="chart-title">Put option payoff &amp; profit (X=50, premium=4)</div><div class="chart-src">Payoff = max(X−Sᴛ,0) · Profit = Payoff − 4</div></div>
+            <div class="chart-wrap" style="height:240px"><canvas id="putChart"></canvas></div>
+            <div class="leg">
+              <span class="leg-item"><span class="leg-sq" style="background:#ff4050"></span>Payoff</span>
+              <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Profit</span>
+              <span class="leg-item"><span class="leg-sq" style="background:rgba(255,255,255,0.15);border:1px dashed #555"></span>Break-even: Sᴛ=46</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYOFF VS PROFIT -->
+    <div class="tab-panel" id="op3">
+      <div class="g2">
+        <div>
+          <p class="body">It is essential to distinguish between <strong>payoff</strong> and <strong>profit</strong>. Payoff is the value received at expiration from exercising. Profit is the true economic gain — payoff minus the premium paid upfront (including the time value of money on the premium).</p>
+          <div class="formula">
+            <div class="f-label">Profit = Payoff − Premium</div>
+            <div class="f-eq">Profit_call = max(Sᴛ−X, 0) − C₀</div>
+            <div class="f-note">Profit_put = max(X−Sᴛ, 0) − P₀</div>
+          </div>
+          <div class="ac or">
+            <div class="ac-hd">Break-even points</div>
+            <div class="d-row"><span class="d-lbl">Call break-even</span><span class="d-val">Sᴛ = X + premium</span></div>
+            <div class="d-row"><span class="d-lbl">Put break-even</span><span class="d-val">Sᴛ = X − premium</span></div>
+            <div class="d-row"><span class="d-lbl">Max loss (buyer)</span><span class="d-val">= premium paid</span></div>
+            <div class="d-row"><span class="d-lbl">Max gain (call buyer)</span><span class="d-val" style="color:var(--green)">Unlimited (Sᴛ unbounded)</span></div>
+            <div class="d-row"><span class="d-lbl">Max gain (put buyer)</span><span class="d-val" style="color:var(--green)">X − premium (if Sᴛ=0)</span></div>
+          </div>
+          <p class="body" style="margin-top:1rem">Note the critical asymmetry: the option <strong>seller</strong> has the exact mirror-image profile. The seller collects the premium upfront but faces unlimited losses (for a naked call seller) or large losses (for a put seller). The premium is just transfer of risk — what the buyer gains in asymmetry, the seller accepts as the counterparty.</p>
+        </div>
+        <div>
+          <div class="chart-box">
+            <div class="chart-hd"><div class="chart-title">Call vs Put profit comparison (X=50, C₀=6, P₀=4)</div><div class="chart-src">Profit = Payoff − Premium</div></div>
+            <div class="chart-wrap" style="height:260px"><canvas id="profitCompareChart"></canvas></div>
+            <div class="leg">
+              <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Call profit</span>
+              <span class="leg-item"><span class="leg-sq" style="background:#ff4050"></span>Put profit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIONS AS INSURANCE -->
+    <div class="tab-panel" id="op4">
+      <div class="g2">
+        <div>
+          <p class="body">The most intuitive way to understand options is as <strong>insurance policies</strong>. Just as you pay a premium to insure your car against accidents, you pay an option premium to protect a financial position against adverse price moves. The option gives you asymmetric exposure: you participate in favourable outcomes but are protected from unfavourable ones.</p>
+          <div class="ac gr">
+            <div class="ac-hd">Protective put — the classic hedging strategy</div>
+            <div class="ac-body" style="margin-bottom:.65rem">Strategy: Hold 1 share of stock + Buy 1 put (strike X)</div>
+            <div class="d-row"><span class="d-lbl">If Sᴛ falls below X</span><span class="d-val" style="color:var(--green)">Put pays X−Sᴛ → total value = X</span></div>
+            <div class="d-row"><span class="d-lbl">If Sᴛ rises above X</span><span class="d-val" style="color:var(--green)">Put worthless → total value = Sᴛ</span></div>
+            <div class="ac-body" style="margin-top:.5rem">The protective put creates a <strong>floor</strong> at X — the portfolio value can never fall below X at expiration, while all upside above X is retained. This is exactly how insurance works: you sacrifice the premium for downside protection while keeping the upside.</div>
+            <div class="ac-stat">Floor = X. Cost of floor = put premium paid upfront</div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box">
+            <div class="chart-hd"><div class="chart-title">Protective put — value at expiration (S₀=50, X=50, put premium=4)</div><div class="chart-src">Stock alone vs Stock + Put</div></div>
+            <div class="chart-wrap" style="height:260px"><canvas id="protectivePutChart"></canvas></div>
+            <div class="leg">
+              <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Stock alone (Sᴛ)</span>
+              <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Stock + Put (insured)</span>
+              <span class="leg-item"><span class="leg-sq" style="background:rgba(240,180,41,.5);border:1px dashed #f0b429"></span>Floor at X=50</span>
+            </div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Why options are valuable — the asymmetry principle</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">More volatility (σ↑)</strong> → higher chance of extreme moves in either direction → higher payoff potential → option value rises for both calls AND puts</li>
+              <li><strong style="color:var(--white)">More time (T↑)</strong> → more opportunity for large price moves → option value usually rises</li>
+              <li>An option is always worth at least its intrinsic value (payoff if exercised today) — time value is strictly non-negative</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /optionPanels -->
+</div>
+</div>
+
+<!-- ── SECTION 8: PUT-CALL PARITY ── -->
+<div id="parity" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">08</div><h2 class="sec-title">Put-Call Parity</h2></div>
+
+  <p class="body fu">Put-call parity is one of the most important no-arbitrage relationships in finance. It precisely links the prices of calls, puts, the underlying stock, and a risk-free bond. If the relationship is violated, a <strong>riskless arbitrage profit</strong> exists — two portfolios with identical payoffs in every future state have different prices today, allowing you to buy the cheap one and sell the expensive one for a guaranteed profit.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Put-Call Parity (European options, no dividends)</div>
+        <div class="f-eq">C₀ + X/(1+R)ᵀ = P₀ + S₀</div>
+        <div class="f-note">C₀ = call price · P₀ = put price · S₀ = stock price today<br>X/(1+R)ᵀ = PV of strike price (risk-free bond paying X at T)<br>Same strike X, same expiration T, European style, no dividends</div>
+      </div>
+      <p class="body">The parity arises because <strong>two portfolios produce identical payoffs in all states at expiration</strong>. Portfolio A (Call + Bond) and Portfolio B (Stock + Put) both deliver max(Sᴛ, X) at time T. Since they are always worth the same at expiration, they must cost the same today — otherwise a riskless profit exists by buying the cheaper portfolio and shorting the expensive one.</p>
+      <div class="ac bl">
+        <div class="ac-hd">Proof: both portfolios pay max(Sᴛ, X)</div>
+        <table class="po-table">
+          <thead><tr><th>Scenario</th><th>Portfolio A: Call+Bond</th><th>Portfolio B: Stock+Put</th></tr></thead>
+          <tbody>
+            <tr><td>Sᴛ &gt; X (call ITM)</td><td class="pos">Exercise call → Sᴛ</td><td class="pos">Put worthless → Sᴛ</td></tr>
+            <tr><td>Sᴛ ≤ X (put ITM)</td><td class="zero">Call worthless → X (bond)</td><td class="zero">Exercise put → X</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:.5rem;font-size:12px;color:var(--white-3);font-family:var(--mono)">Both portfolios deliver max(Sᴛ, X) in all states → same price today</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Put-call parity arbitrage check — Exercise 2</div>
+        <div class="d-row"><span class="d-lbl">S₀</span><span class="d-val">$50</span></div>
+        <div class="d-row"><span class="d-lbl">X</span><span class="d-val">$50</span></div>
+        <div class="d-row"><span class="d-lbl">R</span><span class="d-val">5%</span></div>
+        <div class="d-row"><span class="d-lbl">T</span><span class="d-val">1 year</span></div>
+        <div class="d-row"><span class="d-lbl">C₀ (call price)</span><span class="d-val">$6</span></div>
+        <div class="d-row"><span class="d-lbl">P₀ (put price)</span><span class="d-val">$4</span></div>
+        <div style="height:.5rem"></div>
+        <div class="d-row"><span class="d-lbl">Portfolio A: C₀ + X/(1+R)</span><span class="d-val">6 + 47.619 = 53.619</span></div>
+        <div class="d-row"><span class="d-lbl">Portfolio B: P₀ + S₀</span><span class="d-val">4 + 50 = 54.000</span></div>
+        <div class="d-row" style="border-top:2px solid var(--red)"><span class="d-lbl" style="color:var(--red)">Difference</span><span class="d-val" style="color:var(--red)">$0.381 → arbitrage!</span></div>
+        <div style="margin-top:.75rem;font-size:12.5px;color:var(--white-2)">Portfolio B is overpriced relative to A. Arbitrage: short stock + short put + buy call + buy bond = $0.381 riskless profit today.</div>
+      </div>
+      <div class="ac re" style="margin-top:1rem">
+        <div class="ac-hd">Arbitrage trade — step by step</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Sell (short) 1 share</strong> → receive +$50</li>
+          <li><strong style="color:var(--white)">Sell (write) 1 put</strong> → receive +$4</li>
+          <li><strong style="color:var(--white)">Buy 1 call</strong> → pay −$6</li>
+          <li><strong style="color:var(--white)">Buy bond paying $50 at T=1</strong> → pay −$47.619</li>
+          <li>Net cash today: 50 + 4 − 6 − 47.619 = <strong style="color:var(--green)">+$0.381 riskless profit</strong></li>
+          <li>At expiry: all obligations cancel perfectly in every scenario</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: put-call parity payoff diagram -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Put-call parity — both portfolios at expiration (X=50)</div>
+      <div class="chart-src">Portfolio A = Call+Bond · Portfolio B = Stock+Put · Both = max(Sᴛ, X)</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="parityChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Portfolio A: Call + Bond (Call value + X)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Portfolio B: Stock + Put</span>
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(240,180,41,0.5);border:1px dashed #f0b429"></span>Strike X=50</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Both portfolios trace the same kinked line: flat at X=50 when Sᴛ≤50, then rising 1:1 with Sᴛ when Sᴛ&gt;50. Identical payoffs → identical prices by no-arbitrage.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 9: EXERCISES ── -->
+<div id="exercises" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">09</div><h2 class="sec-title">Worked Exercises</h2></div>
+
+  <div class="tabs fu" id="exTabs">
+    <div class="tab on" onclick="switchTab('ex1',this,'exTabs','exPanels')">Exercise 1: NPVGO Stock Valuation</div>
+    <div class="tab" onclick="switchTab('ex2',this,'exTabs','exPanels')">Exercise 2: Options &amp; Put-Call Parity</div>
+  </div>
+  <div id="exPanels">
+
+    <div class="tab-panel on" id="ex1">
+      <div class="g2">
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Setup — Firm B</div>
+            <div class="d-row"><span class="d-lbl">Annual free cash flow (constant)</span><span class="d-val">$30 million</span></div>
+            <div class="d-row"><span class="d-lbl">Shares outstanding</span><span class="d-val">10 million</span></div>
+            <div class="d-row"><span class="d-lbl">Required return R</span><span class="d-val">10%</span></div>
+            <div class="d-row"><span class="d-lbl">New project: retention rate</span><span class="d-val">25% of FCF from year 1</span></div>
+            <div class="d-row"><span class="d-lbl">New project: ROE</span><span class="d-val">12% constant</span></div>
+            <div class="d-row"><span class="d-lbl">First project cash flows begin</span><span class="d-val">End of year 2</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Part (i) — Price before announcement</div>
+            <div class="ac-body" style="margin-bottom:.5rem">No investment opportunities → pure cash cow. EPS = FCF per share = 30m/10m = $3</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">P₀ = EPS₁/R = 3/0.10 = $30</div>
+            </div>
+            <div class="ac-hd" style="margin-top:.75rem">Part (ii) — Growth rate from new project</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">g = retention × ROE = 25% × 12% = 3%</div>
+            </div>
+            <div class="ac-hd" style="margin-top:.75rem">Part (iii) — NPVGO</div>
+            <div class="d-row"><span class="d-lbl">Retained EPS₁ = 3 × 25%</span><span class="d-val">$0.75</span></div>
+            <div class="d-row"><span class="d-lbl">NPV₁ = −0.75 + 0.75×0.12/0.10</span><span class="d-val" style="color:var(--green)">$0.15</span></div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+              <div class="f-eq">NPVGO = NPV₁/(R−g) = 0.15/(0.10−0.03) = $2.1429</div>
+            </div>
+            <div class="ac-hd" style="margin-top:.75rem">Part (iv) — New price after announcement</div>
+            <div class="formula" style="margin:.4rem 0;border-left-color:var(--orange)">
+              <div class="f-eq">P' = cash cow + NPVGO = 30 + 2.1429 = $32.1429</div>
+            </div>
+            <div class="ac-body">Cross-check via DGM: D₁ = 3×0.75 = $2.25; P = 2.25/(0.10−0.03) = $32.14 ✓</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 1</div>
+        <div class="verdict-text">ROE (12%) &gt; R (10%), so the new project creates value — each retained dollar earns more than its opportunity cost. The announcement raises the share price by $2.14. If ROE had equalled R, NPVGO would be zero and the price would stay at $30. If ROE were below R, the project would destroy value and the rational response would be to pay out more, not less.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ex2">
+      <div class="g2">
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">Setup — European options</div>
+            <div class="d-row"><span class="d-lbl">S₀ (stock price)</span><span class="d-val">$50</span></div>
+            <div class="d-row"><span class="d-lbl">X (strike price)</span><span class="d-val">$50</span></div>
+            <div class="d-row"><span class="d-lbl">T (expiration)</span><span class="d-val">1 year</span></div>
+            <div class="d-row"><span class="d-lbl">R (risk-free rate)</span><span class="d-val">5%</span></div>
+            <div class="d-row"><span class="d-lbl">C₀ (call premium)</span><span class="d-val">$6</span></div>
+            <div class="d-row"><span class="d-lbl">P₀ (put premium)</span><span class="d-val">$4</span></div>
+          </div>
+          <div class="ac or" style="margin-top:1rem">
+            <div class="ac-hd">Part (1) — Payoff &amp; profit at Sᴛ ∈ {40, 50, 60}</div>
+            <table class="po-table">
+              <thead><tr><th>Sᴛ</th><th>Call payoff</th><th>Call profit</th><th>Put payoff</th><th>Put profit</th></tr></thead>
+              <tbody>
+                <tr><td>$40</td><td class="zero">0</td><td class="neg">−6</td><td class="pos">10</td><td class="pos">+6</td></tr>
+                <tr><td>$50</td><td class="zero">0</td><td class="neg">−6</td><td class="zero">0</td><td class="neg">−4</td></tr>
+                <tr><td>$60</td><td class="pos">10</td><td class="pos">+4</td><td class="zero">0</td><td class="neg">−4</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="ac gr">
+            <div class="ac-hd">Part (2) — Protective put (Stock + Put)</div>
+            <div class="ac-body" style="margin-bottom:.5rem">Value at T = Sᴛ + max(X−Sᴛ, 0)</div>
+            <table class="po-table">
+              <thead><tr><th>Sᴛ</th><th>Stock value</th><th>Put payoff</th><th>Total value</th></tr></thead>
+              <tbody>
+                <tr><td>$40</td><td>40</td><td class="pos">+10</td><td class="pos">50 (floor)</td></tr>
+                <tr><td>$50</td><td>50</td><td class="zero">0</td><td>50 (floor)</td></tr>
+                <tr><td>$60</td><td>60</td><td class="zero">0</td><td class="pos">60 (upside)</td></tr>
+              </tbody>
+            </table>
+            <div class="ac-body" style="margin-top:.5rem">Value never falls below X=$50 ✓ (floor). Full upside retained above $50 ✓. Cost of this insurance: $4 premium = maximum loss on the put position.</div>
+          </div>
+          <div class="ac re" style="margin-top:1rem">
+            <div class="ac-hd">Part (3) — Put-call parity violation &amp; arbitrage</div>
+            <div class="d-row"><span class="d-lbl">LHS: C₀ + X/(1+R)</span><span class="d-val">6 + 47.619 = 53.619</span></div>
+            <div class="d-row"><span class="d-lbl">RHS: P₀ + S₀</span><span class="d-val">4 + 50 = 54.000</span></div>
+            <div class="d-row" style="border-top:1px solid var(--red)"><span class="d-lbl" style="color:var(--red)">Mispricing</span><span class="d-val" style="color:var(--red)">RHS overpriced by $0.381</span></div>
+            <div class="ac-body" style="margin-top:.5rem">Short stock + short put + buy call + buy bond = <strong>$0.381 riskless profit today</strong>. All obligations cancel at expiry in every scenario.</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict fu">
+        <div class="verdict-lbl">Key lesson — Exercise 2</div>
+        <div class="verdict-text">Put-call parity is a law, not a guideline. When it is violated, the mispricing is immediately exploitable: the arbitrageur buys the underpriced portfolio and sells the overpriced one, locking in the spread as a riskless profit. In practice, transaction costs, short-selling constraints, and bid-ask spreads create a small "no-arbitrage band" around the parity condition — but large deviations are rapidly eliminated by professional traders.</div>
+      </div>
+    </div>
+  </div><!-- /exPanels -->
+
+  <!-- SUMMARY -->
+  <div class="sec-hd fu" style="margin-top:2.5rem"><h2 class="sec-title" style="font-size:20px">Complete Formula Reference</h2></div>
+  <div class="outlook-grid fu">
+    <div class="og-cell"><div class="og-icon">📈</div><div class="og-lbl">Stock valuation models</div><div class="og-val">3</div><div class="og-sub">Zero growth · Constant growth (Gordon) · Differential growth (two-stage)</div></div>
+    <div class="og-cell"><div class="og-icon">🔬</div><div class="og-lbl">NPVGO condition</div><div class="og-val">ROE &gt; R</div><div class="og-sub">Only when ROE exceeds the cost of capital does growth add value</div></div>
+    <div class="og-cell"><div class="og-icon">⚖️</div><div class="og-lbl">Put-call parity</div><div class="og-val">C + PV(X) = P + S</div><div class="og-sub">No-arbitrage identity linking calls, puts, stock, and bonds</div></div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">P₀ = Σ Dₜ/(1+R)ᵗ</strong> — general dividend discount model; stock = PV of all future dividends</li>
+        <li><strong style="color:var(--white)">P₀ = D₁/R</strong> — zero growth (perpetuity)</li>
+        <li><strong style="color:var(--white)">P₀ = D₁/(R−g)</strong> — constant growth (Gordon); requires R &gt; g</li>
+        <li><strong style="color:var(--white)">R = D₁/P₀ + g</strong> — total return = dividend yield + capital gains yield</li>
+        <li><strong style="color:var(--white)">g = (1−payout) × ROE</strong> — sustainable growth rate from retained earnings</li>
+        <li><strong style="color:var(--white)">P₀ = E₁/R + NPVGO</strong> — cash cow value + growth opportunity value</li>
+        <li><strong style="color:var(--white)">NPVGO = NPV₁/(R−g)</strong> — growing perpetuity of per-share investment NPVs</li>
+        <li><strong style="color:var(--white)">P/E = Payout/(R−g)</strong> — P/E ratio derived from Gordon Model</li>
+        <li><strong style="color:var(--white)">Payoff_call = max(Sᴛ−X, 0)</strong> — call value at expiration</li>
+        <li><strong style="color:var(--white)">Payoff_put = max(X−Sᴛ, 0)</strong> — put value at expiration</li>
+        <li><strong style="color:var(--white)">Profit = Payoff − Premium</strong> — true gain after cost of option</li>
+        <li><strong style="color:var(--white)">C₀ + X/(1+R)ᵀ = P₀ + S₀</strong> — put-call parity (European, no dividends)</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Gordon Model requires R &gt; g strictly</strong> — if g ≥ R, price is infinite/undefined; no firm can grow faster than the economy forever</li>
+        <li><strong style="color:var(--white)">Growth only creates value when ROE &gt; R</strong> — reinvesting when ROE &lt; R destroys value; higher payout would be better</li>
+        <li><strong style="color:var(--white)">DGM and NPVGO must give the same answer</strong> — they are two ways of writing the same thing; if they differ, you have a calculation error</li>
+        <li><strong style="color:var(--white)">P/E comparison requires like-for-like firms</strong> — comparing P/E across industries with different growth and risk is meaningless</li>
+        <li><strong style="color:var(--white)">Option payoff ≠ profit</strong> — profit subtracts the premium; break-even for a call is X + premium, not X</li>
+        <li><strong style="color:var(--white)">Put-call parity applies to European options only</strong> (no early exercise) and assumes no dividends; both conditions must hold</li>
+        <li><strong style="color:var(--white)">Higher volatility raises BOTH call and put values</strong> — never say "volatility is good for calls but bad for puts"; both benefit from extreme outcomes</li>
+        <li><strong style="color:var(--white)">Capital gains are not independent of dividends</strong> — they are entirely driven by market re-pricing of future dividends; a stock with no dividends ever is worth zero</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 1 — Understand the dividend discount model as the master framework</div><div class="tl-card"><div class="tl-title">P₀ = Σ Dₜ/(1+R)ᵗ — stocks are just dividend perpetuities</div><div class="tl-text">Every stock valuation model is a special case of the infinite sum. Zero growth, Gordon Model, and two-stage models are all assumptions about the pattern of future dividends — simplifications that make the infinite sum tractable. Never lose sight of the master formula.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 2 — Apply the Gordon Model and understand its limits</div><div class="tl-card"><div class="tl-title">P₀ = D₁/(R−g) — elegant but requires care</div><div class="tl-text">The Gordon Model is powerful for mature, stable firms. But R must exceed g, and g must be sustainable forever. For high-growth firms, use the two-stage model. Know how to rearrange: P₀ to find R; P₀ to find g. Both R = D₁/P₀ + g and g = R − D₁/P₀ are essential rearrangements.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 3 — Decompose value using the NPVGO model</div><div class="tl-card"><div class="tl-title">P₀ = E₁/R + NPVGO — cash cow + growth</div><div class="tl-text">This is the most analytically powerful framing. It forces you to ask: is this firm's growth actually creating value? If ROE &gt; R, growth is valuable. If ROE = R, growth is irrelevant. If ROE &lt; R, pay out more. The NPVGO model also links cleanly to the P/E ratio and explains why P/E varies across firms.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 4 — Master option payoffs and the asymmetry principle</div><div class="tl-card"><div class="tl-title">max(Sᴛ−X, 0) and max(X−Sᴛ, 0) — always draw the diagram</div><div class="tl-text">The kinked payoff diagram is the key to understanding options. Always draw it. Calls benefit from upside, puts from downside. The kink at X is the exercise decision boundary. Profit diagrams shift down by the premium — this determines break-even and maximum loss.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 5 — Apply put-call parity and identify arbitrage</div><div class="tl-card"><div class="tl-title">C + X/(1+R)ᵀ = P + S₀ — a law, not a guideline</div><div class="tl-text">Always verify parity by computing both sides. If they differ, identify which side is overpriced and construct the arbitrage: short the expensive portfolio, long the cheap one. The cash inflow today is the riskless profit. All future payoffs will cancel. Parity also lets you derive any one price from the other three — a useful shortcut.</div></div></div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Stocks &amp; Options</div>
+    <div class="verdict-text">Stocks are valued as the present value of all future dividends — whether through the dividend discount model, the Gordon formula, the two-stage model, or the NPVGO decomposition. Options are contracts that transfer the right (not obligation) to transact at a fixed price, and their value comes entirely from the asymmetry of that right. Put-call parity links both worlds through a single no-arbitrage equation, reminding us that every financial price is ultimately determined by the principle that two portfolios with identical future payoffs must cost the same today.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Stocks &amp; Options · Clara Martínez-Toledano · Corporate Finance Module 4<br>
+    Topics: DDM · Gordon Model · NPVGO · Differential Growth · P/E · Calls · Puts · Put-Call Parity<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── BOILERPLATE ── */
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop, h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('prog').style.width = (s/h*100)+'%';
+});
+const sections=['stocks','zerogrowth','constantgrowth','diffgrowth','npvgo','pe','options','parity','exercises'];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80; let cur=sections[0];
+  sections.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  document.querySelectorAll('.nl').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
+document.querySelectorAll('.fu,.tl-item').forEach(el=>io.observe(el));
+function switchTab(panelId,btn,tabsId,panelsId){
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+Chart.defaults.color='#888480';
+Chart.defaults.font.family="'IBM Plex Mono',monospace";
+Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.04)',tk={color:'#888480',font:{size:10}};
+
+/* ── CHART 1: Zero Growth — Price vs R ── */
+(()=>{
+  const rs=[],ps=[];
+  for(let r=2;r<=20;r+=0.5){rs.push(r.toFixed(1));ps.push(+(5/(r/100)).toFixed(2));}
+  new Chart(document.getElementById('zeroGrowthChart'),{
+    type:'line',data:{labels:rs,datasets:[{label:'P₀ = D₁/R',data:ps,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.08)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`R = ${c[0].label}%`,label:c=>` P₀ = £${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Required Return R (%)',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:{...tk,callback:v=>'£'+v},title:{display:true,text:'Stock Price (£)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 2: Gordon Model — Price vs g (D₁=1, R=10%) ── */
+(()=>{
+  const gs=[],ps=[];
+  for(let g=0;g<=9;g+=0.25){gs.push(g.toFixed(2));ps.push(+(1/(0.10-g/100)).toFixed(2));}
+  new Chart(document.getElementById('gordonChart'),{
+    type:'line',data:{labels:gs,datasets:[{label:'P₀ = D₁/(R−g)',data:ps,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.08)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`g = ${c[0].label}%`,label:c=>` P₀ = £${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Growth Rate g (%)',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:{...tk,callback:v=>'£'+v},min:0,max:200,title:{display:true,text:'Stock Price (£)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 3: Differential growth — dividends and PVs ── */
+(()=>{
+  const R=0.12,g1=0.08,g2=0.04,D1=2;
+  const D=[D1,D1*(1+g1),D1*(1+g1)**2];
+  const P3=D1*(1+g1)**2*(1+g2)/(R-g2);
+  const labels=['D₁','D₂','D₃','P₃ (terminal)'];
+  const raw=[D[0],D[1],D[2],P3];
+  const pvs=[D[0]/1.12,D[1]/1.12**2,D[2]/1.12**3,P3/1.12**3];
+  new Chart(document.getElementById('diffGrowthChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Cash flow ($)',data:raw,backgroundColor:'rgba(245,106,0,0.75)',borderColor:'#f56a00',borderWidth:0,borderRadius:2},
+      {label:'PV today ($)',data:pvs,backgroundColor:'rgba(61,142,240,0.75)',borderColor:'#3d8ef0',borderWidth:0,borderRadius:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:14}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(3)}`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+v},title:{display:true,text:'Value ($)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 4: NPVGO — price decomposition vs payout ── */
+(()=>{
+  const R=0.16,ROE=0.20,EPS=5;
+  const payouts=[],cashCows=[],npvgos=[],totals=[];
+  for(let po=0.05;po<=0.95;po+=0.05){
+    const g=(1-po)*ROE;
+    if(g>=R)continue;
+    const D1=EPS*po;
+    const cashCow=EPS/R;
+    const retained=EPS*(1-po);
+    const npv1=-retained+retained*ROE/R;
+    const npvgo=npv1/(R-g);
+    payouts.push((po*100).toFixed(0)+'%');
+    cashCows.push(+cashCow.toFixed(2));
+    npvgos.push(+npvgo.toFixed(2));
+    totals.push(+(cashCow+npvgo).toFixed(2));
+  }
+  new Chart(document.getElementById('npvgoChart'),{
+    type:'bar',
+    data:{labels:payouts,datasets:[
+      {label:'Cash cow (E₁/R)',data:cashCows,backgroundColor:'rgba(61,142,240,0.75)',stack:'a',borderRadius:0},
+      {label:'NPVGO',data:npvgos,backgroundColor:'rgba(0,200,117,0.75)',stack:'a',borderRadius:0},
+      {type:'line',label:'Total P₀',data:totals,borderColor:'rgba(255,255,255,0.5)',backgroundColor:'transparent',borderWidth:2,borderDash:[4,4],pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.5)'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: £${typeof c.parsed.y==='number'?c.parsed.y.toFixed(2):''}`}}},
+      scales:{x:{stacked:true,grid:{color:gc},ticks:tk,title:{display:true,text:'Payout Ratio',color:'#888480',font:{size:9}}},y:{stacked:false,grid:{color:gc},ticks:{...tk,callback:v=>'£'+v},title:{display:true,text:'Value per Share (£)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 5: P/E vs growth rate ── */
+(()=>{
+  const gs=[],pes=[];
+  const R=0.10,payout=0.5;
+  for(let g=0;g<=9;g+=0.25){gs.push(g.toFixed(2));pes.push(+(payout/(R-g/100)).toFixed(2));}
+  new Chart(document.getElementById('peChart'),{
+    type:'line',data:{labels:gs,datasets:[{label:'P/E = Payout/(R−g)',data:pes,borderColor:'#f0b429',backgroundColor:'rgba(240,180,41,0.08)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`g = ${c[0].label}%`,label:c=>` P/E = ${c.parsed.y.toFixed(1)}×`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Growth Rate g (%)',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,min:0,max:100,title:{display:true,text:'P/E Ratio (×)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── Helper: generate price range ── */
+function priceRange(lo,hi,step){const a=[];for(let s=lo;s<=hi;s+=step)a.push(+s.toFixed(1));return a;}
+
+/* ── CHART 6: Call payoff and profit ── */
+(()=>{
+  const X=50,C0=6,prices=priceRange(20,80,1);
+  const payoff=prices.map(s=>Math.max(s-X,0));
+  const profit=prices.map(s=>Math.max(s-X,0)-C0);
+  new Chart(document.getElementById('callChart'),{
+    type:'line',
+    data:{labels:prices,datasets:[
+      {label:'Payoff',data:payoff,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.08)',fill:false,tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Profit',data:profit,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.08)',fill:true,tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Zero line',data:prices.map(()=>0),borderColor:'rgba(255,255,255,0.1)',borderWidth:1,pointRadius:0,borderDash:[3,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:c=>`Sᴛ = $${c[0].label}`,label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Stock price at expiry Sᴛ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'$ Value',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 7: Put payoff and profit ── */
+(()=>{
+  const X=50,P0=4,prices=priceRange(20,80,1);
+  const payoff=prices.map(s=>Math.max(X-s,0));
+  const profit=prices.map(s=>Math.max(X-s,0)-P0);
+  new Chart(document.getElementById('putChart'),{
+    type:'line',
+    data:{labels:prices,datasets:[
+      {label:'Payoff',data:payoff,borderColor:'#ff4050',backgroundColor:'rgba(255,64,80,0.08)',fill:false,tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Profit',data:profit,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.08)',fill:true,tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Zero line',data:prices.map(()=>0),borderColor:'rgba(255,255,255,0.1)',borderWidth:1,pointRadius:0,borderDash:[3,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:c=>`Sᴛ = $${c[0].label}`,label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Stock price at expiry Sᴛ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'$ Value',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 8: Call vs Put profit comparison ── */
+(()=>{
+  const X=50,C0=6,P0=4,prices=priceRange(20,80,1);
+  const callP=prices.map(s=>Math.max(s-X,0)-C0);
+  const putP=prices.map(s=>Math.max(X-s,0)-P0);
+  new Chart(document.getElementById('profitCompareChart'),{
+    type:'line',
+    data:{labels:prices,datasets:[
+      {label:'Call profit',data:callP,borderColor:'#f56a00',backgroundColor:'transparent',tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Put profit',data:putP,borderColor:'#ff4050',backgroundColor:'transparent',tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Zero',data:prices.map(()=>0),borderColor:'rgba(255,255,255,0.1)',borderWidth:1,pointRadius:0,borderDash:[3,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:c=>`Sᴛ = $${c[0].label}`,label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Stock price at expiry Sᴛ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'Profit ($)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 9: Protective put ── */
+(()=>{
+  const X=50,P0=4,prices=priceRange(20,80,1);
+  const stock=prices.map(s=>s);
+  const insured=prices.map(s=>s+Math.max(X-s,0));
+  const floor=prices.map(()=>X);
+  new Chart(document.getElementById('protectivePutChart'),{
+    type:'line',
+    data:{labels:prices,datasets:[
+      {label:'Stock alone',data:stock,borderColor:'#3d8ef0',backgroundColor:'rgba(61,142,240,0.05)',fill:false,tension:0,borderWidth:2,pointRadius:0},
+      {label:'Stock + Put',data:insured,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.08)',fill:true,tension:0,borderWidth:2.5,pointRadius:0},
+      {label:'Floor at X=50',data:floor,borderColor:'rgba(240,180,41,0.5)',borderWidth:1.5,pointRadius:0,borderDash:[5,4]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:c=>`Sᴛ = $${c[0].label}`,label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Stock price at expiry Sᴛ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'Portfolio value ($)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 10: Put-Call Parity — both portfolios ── */
+(()=>{
+  const X=50,prices=priceRange(20,80,1);
+  const portA=prices.map(s=>Math.max(s-X,0)+X); // call + bond = max(S,X)
+  const portB=prices.map(s=>s+Math.max(X-s,0)); // stock + put = max(S,X)
+  const fl=prices.map(()=>X);
+  new Chart(document.getElementById('parityChart'),{
+    type:'line',
+    data:{labels:prices,datasets:[
+      {label:'Portfolio A: Call+Bond',data:portA,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.06)',fill:false,tension:0,borderWidth:3,pointRadius:0},
+      {label:'Portfolio B: Stock+Put',data:portB,borderColor:'#3d8ef0',backgroundColor:'transparent',tension:0,borderWidth:2,borderDash:[6,3],pointRadius:0},
+      {label:'Strike X=50',data:fl,borderColor:'rgba(240,180,41,0.4)',borderWidth:1.5,pointRadius:0,borderDash:[4,4]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:c=>`Sᴛ = $${c[0].label}`,label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Stock price at expiry Sᴛ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'Portfolio value ($)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+</script>
+</body>
+</html>
