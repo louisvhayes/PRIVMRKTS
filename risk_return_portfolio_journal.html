@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk, Return & Portfolio Theory — Returns, Diversification & Efficient Frontiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.re{border-top:2px solid var(--red)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.re .ac-hd{color:var(--red)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}.ac.gr .ac-stat{color:var(--green)}.ac.re .ac-stat{color:var(--red)}.ac.bl .ac-stat{color:var(--blue)}.ac.ye .ac-stat{color:var(--yellow)}.ac.pu .ac-stat{color:var(--purple)}.ac.te .ac-stat{color:var(--teal)}
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right}
+.chart-wrap{position:relative;width:100%}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+/* DATA TABLE */
+.dt{width:100%;border-collapse:collapse;font-size:12px;margin:.75rem 0}
+.dt th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .85rem;background:var(--panel-2);border-bottom:2px solid var(--orange-line);color:var(--orange);text-align:right}
+.dt th:first-child{text-align:left}
+.dt td{font-family:var(--mono);padding:.4rem .85rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2)}
+.dt td:first-child{text-align:left;color:var(--white-3)}
+.dt .dt-pos{color:var(--green)}.dt .dt-neg{color:var(--red)}.dt .dt-hi{color:var(--white);font-weight:600;background:var(--orange-dim)}
+.dt .dt-total{font-weight:600;color:var(--white);border-top:1px solid var(--border-2);background:var(--panel)}
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right;line-height:1.7}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#returns">Returns</a>
+    <a class="nl" href="#averages">Arithmetic vs Geometric</a>
+    <a class="nl" href="#historical">Historical Data</a>
+    <a class="nl" href="#portfolio">Portfolio Theory</a>
+    <a class="nl" href="#covariance">Covariance &amp; Correlation</a>
+    <a class="nl" href="#efficient">Efficient Frontier</a>
+    <a class="nl" href="#shortsales">Short Sales</a>
+    <a class="nl" href="#summary">Summary</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 6</div>
+      <h1>Risk, Return &amp;<br><em>Portfolio Theory</em></h1>
+      <p class="hero-lead">From dollar returns and holding period returns to arithmetic vs geometric averages, historical risk premia, portfolio variance, covariance, correlation, the efficient frontier, and the impact of short selling — the complete quantitative foundation for understanding how risk and return interact in financial markets.</p>
+      <div class="meta-row">
+        <span>Risk &amp; Return · Portfolio Theory</span>
+        <span>HPR · Volatility · Diversification · Efficient Frontier</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core formulas at a glance</div>
+      <div class="sp-row"><div class="sp-lbl">Percentage return</div><div class="sp-right"><div class="sp-val">r = (P₁+D₁−P₀)/P₀</div><div class="sp-sub">Dividend yield + capital gains</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Holding period return</div><div class="sp-right"><div class="sp-val">HPR = Π(1+rᵢ) − 1</div><div class="sp-sub">Compounded multi-year return</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Portfolio variance (2 stocks)</div><div class="sp-right"><div class="sp-val">x₁²σ₁²+x₂²σ₂²+2x₁x₂Cov</div><div class="sp-sub">Covariance drives diversification</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Correlation range</div><div class="sp-right"><div class="sp-val">−1 ≤ ρ ≤ +1</div><div class="sp-sub">Lower ρ → more diversification</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Equity risk premium (US)</div><div class="sp-right"><div class="sp-val">8.5%</div><div class="sp-sub">12.3% stocks − 3.8% T-bills</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Geo avg always ≤ Arith avg</div><div class="sp-right"><div class="sp-val">r̄_G ≤ r̄_A</div><div class="sp-sub">Volatility drag reduces compound returns</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: RETURNS ── -->
+<div id="returns" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">Returns: Dollar, Percentage &amp; Holding Period</h2></div>
+
+  <p class="body fu">The starting point for all investment analysis is measuring return precisely. A return has two components — <strong>income</strong> (dividends, coupons) and <strong>capital appreciation</strong> (price change). The total return captures both. Understanding exactly how returns are calculated, and particularly how they compound over time via the holding period return, is the foundation for everything that follows in portfolio theory.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Dollar Return</div>
+        <div class="f-eq">Dollar Return = P_{t+1} + D_{t+1} − P_t</div>
+        <div class="f-note">P_t = price at start of period · P_{t+1} = price at end · D_{t+1} = dividend paid<br>Raw profit/loss in currency units — not scaled to investment size</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Percentage Return</div>
+        <div class="f-eq">r_{t+1} = (P_{t+1} + D_{t+1} − P_t) / P_t</div>
+        <div class="f-note">= Dividend yield + Capital gains yield<br>Scaled to investment size — allows comparison across different investments</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Holding Period Return (n years)</div>
+        <div class="f-eq">HPR = (1+r₁)(1+r₂)···(1+rₙ) − 1</div>
+        <div class="f-note">Total return from holding investment for n years, assuming reinvestment of dividends<br>Captures the compounding effect — returns multiply, they don't add</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Walmart example — full calculation</div>
+        <div class="d-row"><span class="d-lbl">Shares purchased</span><span class="d-val">100 @ $25</span></div>
+        <div class="d-row"><span class="d-lbl">Initial investment P₀</span><span class="d-val">$2,500</span></div>
+        <div class="d-row"><span class="d-lbl">Dividends received D₁</span><span class="d-val">$20</span></div>
+        <div class="d-row"><span class="d-lbl">Ending price P₁</span><span class="d-val">$30 × 100 = $3,000</span></div>
+        <div class="d-row"><span class="d-lbl">Dollar return</span><span class="d-val" style="color:var(--green)">$3,000+$20−$2,500 = $520</span></div>
+        <div class="d-row"><span class="d-lbl">% return</span><span class="d-val" style="color:var(--green)">$520/$2,500 = 20.8%</span></div>
+        <div style="margin-top:.65rem;font-size:12.5px;color:var(--white-2)">Decomposition: dividend yield = $20/$2,500 = 0.8%; capital gain = ($3,000−$2,500)/$2,500 = 20%. Together: 0.8% + 20% = 20.8% ✓</div>
+      </div>
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">HPR example — 4 years</div>
+        <div class="ac-body" style="margin-bottom:.5rem">Annual returns: r₁=10%, r₂=−5%, r₃=20%, r₄=15%</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">HPR = (1.10)(0.95)(1.20)(1.15) − 1</div>
+          <div class="f-note">= 1.4421 − 1 = <strong>44.21%</strong> total return over 4 years</div>
+        </div>
+        <div class="ac-body">Note: arithmetic sum = 10−5+20+15 = 40%. But compounding gives 44.21% because positive returns compound on previously accumulated gains. The order of returns doesn't affect the HPR — only their values matter.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: HPR compounding vs arithmetic sum -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Wealth growth — HPR compounding vs simple summation ($100 initial investment)</div>
+      <div class="chart-src">Returns: +10%, −5%, +20%, +15%</div>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="hprChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Compounded wealth (HPR)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0;opacity:0.6"></span>Simple sum (not compounded)</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: ARITHMETIC VS GEOMETRIC ── -->
+<div id="averages" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">Arithmetic vs Geometric Average Returns</h2></div>
+
+  <p class="body fu">Two different averages answer two different questions. The <strong>arithmetic average</strong> is the best estimate of what you expect to earn <em>next period</em>. The <strong>geometric average</strong> tells you your actual annual compound return <em>over a past period</em> — it measures wealth growth. They only agree when returns are constant. In the presence of volatility, the geometric average is always lower — a phenomenon called <em>volatility drag</em>.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Arithmetic Average Return</div>
+        <div class="f-eq">r̄_A = (1/n) × Σ rᵢ</div>
+        <div class="f-note">Simple mean of all period returns<br>Best estimate of expected return in a single future period<br>Does NOT tell you how much wealth grew over the full period</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Geometric Average Return</div>
+        <div class="f-eq">r̄_G = [Π(1+rᵢ)]^(1/n) − 1</div>
+        <div class="f-note">Constant annual growth rate that produces the same final wealth<br>Equivalent to annualised HPR<br>Always ≤ arithmetic average (equality only when returns are constant)</div>
+      </div>
+      <div class="ac re">
+        <div class="ac-hd">Volatility drag — why r̄_G &lt; r̄_A</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Classic example: r₁=+50%, r₂=−50%, W₀=$100</div>
+        <div class="d-row"><span class="d-lbl">Arithmetic average</span><span class="d-val">(50%−50%)/2 = 0%</span></div>
+        <div class="d-row"><span class="d-lbl">W₁ = 100 × 1.50</span><span class="d-val">$150</span></div>
+        <div class="d-row"><span class="d-lbl">W₂ = 150 × 0.50</span><span class="d-val" style="color:var(--red)">$75</span></div>
+        <div class="d-row"><span class="d-lbl">Geometric average</span><span class="d-val" style="color:var(--red)">√0.75 − 1 = −13.4%</span></div>
+        <div class="ac-body" style="margin-top:.5rem">Despite an arithmetic average of 0%, you lost 25% of your wealth. The +50% gain applies to a $100 base; the −50% loss applies to a $150 base. Compounding is multiplicative — losses bite harder than gains help when applied to different base amounts.</div>
+        <div class="ac-stat">Approx relationship: r̄_G ≈ r̄_A − σ²/2 (volatility drag)</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">Volatility drag — geometric vs arithmetic average (σ impact)</div><div class="chart-src">r̄_A = 10% fixed · varying σ</div></div>
+        <div class="chart-wrap" style="height:230px"><canvas id="volDragChart"></canvas></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">As volatility σ increases, geometric average falls further below arithmetic average. The gap is approximately σ²/2 — higher risk means lower compound wealth growth for the same average return.</div>
+      </div>
+      <div class="ac ye" style="margin-top:1rem">
+        <div class="ac-hd">Which average to use — decision rule</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Arithmetic average</strong> — use when estimating the expected return for a single future period (e.g., what return do I expect next year?)</li>
+          <li><strong style="color:var(--white)">Geometric average</strong> — use when measuring past wealth growth, or estimating the compound annual return over a multi-year horizon</li>
+          <li>For long-term financial planning (e.g., retirement savings), the geometric average is more relevant because it tells you the actual annual growth rate of your wealth</li>
+          <li>For option pricing and single-period models (e.g., CAPM), use the arithmetic average</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: HISTORICAL DATA ── -->
+<div id="historical" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Historical Returns, Risk &amp; the Risk Premium</h2></div>
+
+  <p class="body fu">A century of US market data reveals a consistent and powerful pattern: <strong>higher returns come with higher risk</strong>. This is the empirical foundation of the risk-return trade-off — not just a theoretical prediction, but a fact observed across every major asset class over many decades. The data also quantifies the <em>equity risk premium</em> — the extra return investors have historically earned for bearing stock market risk.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="chart-box">
+        <div class="chart-hd"><div class="chart-title">Historical returns &amp; volatility (US 1926–2005)</div><div class="chart-src">Ibbotson Associates / CRSP</div></div>
+        <div class="chart-wrap" style="height:280px"><canvas id="historicalChart"></canvas></div>
+        <div class="leg">
+          <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Average Annual Return</span>
+          <span class="leg-item"><span class="leg-sq" style="background:rgba(255,64,80,0.6)"></span>Standard Deviation</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">US historical summary (1926–2005)</div>
+        <div class="dt" style="font-size:11px">
+          <table class="dt" style="margin:0">
+            <thead><tr><th style="text-align:left">Asset Class</th><th>Avg Return</th><th>Std Dev</th><th>Risk Premium</th></tr></thead>
+            <tbody>
+              <tr class="dt-hi"><td>Large-Co. Stocks</td><td class="dt-pos">12.3%</td><td>20.2%</td><td class="dt-pos">8.5%</td></tr>
+              <tr><td>Small-Co. Stocks</td><td class="dt-pos">17.4%</td><td>32.9%</td><td class="dt-pos">13.6%</td></tr>
+              <tr><td>LT Corp. Bonds</td><td>6.2%</td><td>8.5%</td><td>2.4%</td></tr>
+              <tr><td>LT Gov. Bonds</td><td>5.8%</td><td>9.2%</td><td>2.0%</td></tr>
+              <tr><td>T-Bills (risk-free)</td><td>3.8%</td><td>3.1%</td><td>—</td></tr>
+              <tr><td>Inflation</td><td>3.1%</td><td>4.3%</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:11px;color:var(--white-3);font-family:var(--mono);margin-top:.4rem">Risk premium = avg return − T-bill rate (3.8%)</div>
+      </div>
+
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">Why does anyone hold bonds? (Risk-return trade-off)</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Risk tolerance</strong> — stocks have 20% std dev; some investors cannot stomach large short-run losses even for higher long-run returns</li>
+          <li><strong style="color:var(--white)">Investment horizon</strong> — over short horizons, stocks can perform poorly; bonds provide stable value for near-term liabilities (pensions, retirees)</li>
+          <li><strong style="color:var(--white)">Risk aversion</strong> — the equity premium exists precisely because equities are risky; not every investor wants maximum return</li>
+          <li><strong style="color:var(--white)">Diversification</strong> — bonds reduce overall portfolio volatility; combining stocks and bonds improves the risk-return trade-off</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NORMAL DISTRIBUTION CHART -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Return distributions — large stocks vs T-bills (approximate normal distribution)</div>
+      <div class="chart-src">R~N(μ, σ²) · Stocks: μ=12.3%, σ=20.2% · T-bills: μ=3.8%, σ=3.1%</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="normalDistChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">
+      <span style="color:#f56a00">■</span> Large-company stocks: wide distribution, high return, but large downside risk &nbsp;|&nbsp;
+      <span style="color:#3d8ef0">■</span> T-bills: tight distribution, low return, very stable &nbsp;|&nbsp;
+      The overlap shows why stocks aren't always better than T-bills in any given year
+    </div>
+  </div>
+
+  <!-- CUMULATIVE GROWTH CHART -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Cumulative wealth growth — $1 invested in 1926 (stylised, log scale)</div>
+      <div class="chart-src">Based on historical average returns · Illustrative compounding</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="cumulativeChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Large-co. stocks (12.3%/yr)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#8b5cf6"></span>Small-co. stocks (17.4%/yr)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>LT corp. bonds (6.2%/yr)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>T-bills (3.8%/yr)</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: PORTFOLIO THEORY ── -->
+<div id="portfolio" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">Portfolio Theory — Expected Returns &amp; Weights</h2></div>
+
+  <p class="body fu">Portfolio theory begins with a simple but powerful insight: the expected return of a portfolio is just the <strong>weighted average of the expected returns</strong> of its components. Weights must sum to one. But the variance — the measure of risk — is <em>not</em> a simple weighted average. It depends critically on how the assets move together, which is measured by covariance. This distinction is the entire basis of diversification theory.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Portfolio Weight</div>
+        <div class="f-eq">xᵢ = (Value of investment i) / (Total portfolio value)</div>
+        <div class="f-note">Weights must sum to 1: Σxᵢ = 1<br>Negative weights are possible (short positions)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Portfolio Return</div>
+        <div class="f-eq">R_p = x₁R₁ + x₂R₂ + ··· + xₙRₙ = Σxᵢ Rᵢ</div>
+        <div class="f-note">Realized return is weighted average of component returns<br>Weights at purchase, not realised weights — see Disney/Coke example</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Expected Portfolio Return</div>
+        <div class="f-eq">E[R_p] = Σ xᵢ E[Rᵢ]</div>
+        <div class="f-note">Expected return = weighted average of expected returns<br>The weighting of expected returns is always linear — unlike variance</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Example 1 — Disney &amp; Coca-Cola portfolio</div>
+        <div class="ac-body" style="margin-bottom:.65rem">200 Disney @ $30 ($6,000) + 100 Coke @ $40 ($4,000) = $10,000</div>
+        <div class="d-row"><span class="d-lbl">Initial Disney weight x_D</span><span class="d-val">6,000/10,000 = 60%</span></div>
+        <div class="d-row"><span class="d-lbl">Initial Coke weight x_C</span><span class="d-val">4,000/10,000 = 40%</span></div>
+        <div class="d-row"><span class="d-lbl">Disney return R_D</span><span class="d-val">36/30 − 1 = +20%</span></div>
+        <div class="d-row"><span class="d-lbl">Coke return R_C</span><span class="d-val">38/40 − 1 = −5%</span></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">R_p = 0.6×20% + 0.4×(−5%) = 10% ✓</div>
+        </div>
+        <div class="ac-body" style="margin-top:.3rem">New portfolio value: 200×$36 + 100×$38 = $11,000 (gain of $1,000 = 10% ✓). After the price change, weights shift: Disney = $7,200/$11,000 = <strong>65.45%</strong>. Without rebalancing, weights drift toward the outperforming stock.</div>
+      </div>
+      <div class="ac gr" style="margin-top:1rem">
+        <div class="ac-hd">Example 2 — Ford &amp; Tyco expected return</div>
+        <div class="ac-body" style="margin-bottom:.5rem">$10k in Ford (E[R]=10%), $30k in Tyco (E[R]=16%)</div>
+        <div class="d-row"><span class="d-lbl">x_Ford = 10k/40k</span><span class="d-val">0.25</span></div>
+        <div class="d-row"><span class="d-lbl">x_Tyco = 30k/40k</span><span class="d-val">0.75</span></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--green)">
+          <div class="f-eq">E[R_p] = 0.25×10% + 0.75×16% = 14.5%</div>
+        </div>
+        <div class="ac-body">The portfolio expected return (14.5%) lies between the two individual returns (10% and 16%), weighted by the capital allocation. More capital in higher-return Tyco pulls the portfolio return above the midpoint.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 5: COVARIANCE & CORRELATION ── -->
+<div id="covariance" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">Covariance, Correlation &amp; Portfolio Variance</h2></div>
+
+  <p class="body fu">The risk of a portfolio depends not only on the individual risks of its components but critically on <strong>how those components move together</strong>. Covariance measures the direction and magnitude of co-movement; correlation normalises this into a dimensionless measure between −1 and +1. The portfolio variance formula makes clear that combining assets with low or negative correlation reduces risk — this is the mathematical foundation of diversification.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Covariance</div>
+        <div class="f-eq">Cov(Rᵢ,Rⱼ) = E[(Rᵢ−E[Rᵢ])(Rⱼ−E[Rⱼ])]</div>
+        <div class="f-note">Historical estimate: (1/(T−1)) × Σ(Rᵢ,t−R̄ᵢ)(Rⱼ,t−R̄ⱼ)<br>Positive = tend to move together · Negative = tend to move oppositely</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Correlation</div>
+        <div class="f-eq">Corr(Rᵢ,Rⱼ) = Cov(Rᵢ,Rⱼ) / [SD(Rᵢ) × SD(Rⱼ)]</div>
+        <div class="f-note">Always between −1 and +1<br>−1 = perfect negative correlation (moves exactly opposite)<br>+1 = perfect positive correlation (moves exactly together)<br>0 = uncorrelated (no linear relationship)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--green)">
+        <div class="f-label" style="color:var(--green)">Two-Stock Portfolio Variance</div>
+        <div class="f-eq">Var(R_p) = x₁²σ₁² + x₂²σ₂² + 2x₁x₂Cov(R₁,R₂)</div>
+        <div class="f-note">Or equivalently: x₁²σ₁² + x₂²σ₂² + 2x₁x₂ρ₁₂σ₁σ₂<br>SD(R_p) = √Var(R_p) — always take the square root for volatility</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">North Air, West Air, Tex Oil — diversification in action</div>
+        <div class="ac-body" style="margin-bottom:.5rem">All three stocks: avg return = 10%, volatility = 13.4%</div>
+        <table class="dt" style="margin:.5rem 0">
+          <thead><tr><th style="text-align:left">Portfolio</th><th>Avg Return</th><th>Volatility</th></tr></thead>
+          <tbody>
+            <tr><td>North Air alone</td><td>10.0%</td><td>13.4%</td></tr>
+            <tr><td>West Air alone</td><td>10.0%</td><td>13.4%</td></tr>
+            <tr><td>Tex Oil alone</td><td>10.0%</td><td>13.4%</td></tr>
+            <tr><td>½ North + ½ West (ρ=+0.62)</td><td>10.0%</td><td>12.1%</td></tr>
+            <tr class="dt-hi"><td>½ West + ½ Tex Oil (ρ=−0.71)</td><td>10.0%</td><td class="dt-pos">5.1%</td></tr>
+          </tbody>
+        </table>
+        <div class="ac-body">Same average return, but the West+Tex Oil portfolio has <strong>only 5.1% volatility</strong> — less than 40% of each individual stock's risk. Airlines and oil tend to move in opposite directions (when oil prices rise, airline costs increase but oil companies profit), creating natural hedging.</div>
+        <div class="ac-stat">Key insight: diversification benefit depends on correlation, not individual risk levels</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COVARIANCE EXAMPLE TABLE -->
+  <div class="chart-box fu">
+    <div class="chart-hd"><div class="chart-title">Covariance &amp; correlation computation — North Air/West Air vs West Air/Tex Oil</div><div class="chart-src">Mean return = 10% for all · T=6 years · Divide by T−1=5</div></div>
+    <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr><th style="text-align:left">Year</th><th>R_N−R̄_N</th><th>R_W−R̄_W</th><th>R_T−R̄_T</th><th>(N−mean)(W−mean)</th><th>(W−mean)(T−mean)</th></tr></thead>
+        <tbody>
+          <tr><td>2003</td><td>+11%</td><td>−1%</td><td>−12%</td><td>−0.0011</td><td>+0.0012</td></tr>
+          <tr><td>2004</td><td>+20%</td><td>+11%</td><td>−15%</td><td>+0.0220</td><td class="dt-neg">−0.0165</td></tr>
+          <tr><td>2005</td><td>−3%</td><td>−3%</td><td>−1%</td><td>+0.0009</td><td>+0.0003</td></tr>
+          <tr><td>2006</td><td>−15%</td><td>−12%</td><td>+11%</td><td>+0.0180</td><td class="dt-neg">−0.0132</td></tr>
+          <tr><td>2007</td><td>−12%</td><td>−15%</td><td>+20%</td><td>+0.0180</td><td class="dt-neg">−0.0300</td></tr>
+          <tr><td>2008</td><td>−1%</td><td>+20%</td><td>−3%</td><td>−0.0020</td><td class="dt-neg">−0.0060</td></tr>
+          <tr class="dt-total"><td>Sum</td><td>—</td><td>—</td><td>—</td><td>0.0558</td><td>−0.0642</td></tr>
+          <tr class="dt-total"><td>Covariance (÷5)</td><td>—</td><td>—</td><td>—</td><td>0.01116</td><td>−0.01284</td></tr>
+          <tr class="dt-hi"><td>Correlation</td><td>—</td><td>—</td><td>—</td><td class="dt-pos">+0.624</td><td class="dt-neg">−0.713</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHART: Diversification — portfolio volatility vs correlation -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Portfolio volatility vs correlation — equal-weight two-stock portfolio (σ₁=σ₂=20%)</div>
+      <div class="chart-src">As correlation falls, portfolio volatility falls</div>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="corrChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">At ρ=+1 (same stock twice), no diversification — portfolio volatility = 20%. At ρ=0, portfolio volatility = 14.1% (20%/√2). At ρ=−1, perfect hedging — portfolio volatility = 0%.</div>
+  </div>
+
+  <!-- MICROSOFT/DELL EXAMPLE -->
+  <div class="g2 fu">
+    <div class="ac bl">
+      <div class="ac-hd">Example — Microsoft &amp; Dell portfolio variance</div>
+      <div class="d-row"><span class="d-lbl">σ_Microsoft</span><span class="d-val">37%</span></div>
+      <div class="d-row"><span class="d-lbl">σ_Dell</span><span class="d-val">50%</span></div>
+      <div class="d-row"><span class="d-lbl">Corr(MSFT, Dell)</span><span class="d-val">0.62</span></div>
+      <div class="d-row"><span class="d-lbl">Cov(MSFT,Dell) = 0.62×0.37×0.50</span><span class="d-val">0.1147</span></div>
+      <div class="formula" style="margin:.5rem 0;border-left-color:var(--blue)">
+        <div class="f-eq">Var(50/50) = 0.5²×0.37² + 0.5²×0.50² + 2×0.5×0.5×0.1147</div>
+        <div class="f-note">= 0.0342 + 0.0625 + 0.0574 = 0.1541 → SD = 39.3%</div>
+      </div>
+      <div class="ac-body">The combined portfolio (39.3%) is actually <em>more volatile</em> than Microsoft alone (37%) because Dell (50%) is riskier and the correlation (0.62) is high enough that diversification provides limited benefit.</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">Example — Dell &amp; Alaska Air portfolio variance</div>
+      <div class="d-row"><span class="d-lbl">σ_Dell</span><span class="d-val">50%</span></div>
+      <div class="d-row"><span class="d-lbl">σ_Alaska Air</span><span class="d-val">38%</span></div>
+      <div class="d-row"><span class="d-lbl">Corr(Dell, Alaska)</span><span class="d-val">0.19</span></div>
+      <div class="formula" style="margin:.5rem 0;border-left-color:var(--green)">
+        <div class="f-eq">Var(50/50) = 0.5²×0.50² + 0.5²×0.38² + 2×0.5×0.5×0.19×0.50×0.38</div>
+        <div class="f-note">= 0.0625 + 0.0361 + 0.0181 = 0.1167 → SD = 34.2%</div>
+      </div>
+      <div class="ac-body">The Dell/Alaska portfolio (34.2%) is <strong>less volatile than either stock alone</strong> (Dell=50%, Alaska=38%). Lower correlation (0.19 vs 0.62) creates much more diversification — even though Alaska Air is individually riskier than Microsoft, its low correlation with Dell makes it a better diversifier.</div>
+      <div class="ac-stat">Key lesson: a riskier asset with lower correlation can reduce portfolio risk more than a safer asset with high correlation</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: EFFICIENT FRONTIER ── -->
+<div id="efficient" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">The Efficient Frontier &amp; Portfolio Optimisation</h2></div>
+
+  <p class="body fu">With two or more assets, there are infinitely many possible portfolios. The <strong>efficient frontier</strong> identifies the optimal subset: the portfolios that provide the highest possible expected return for each level of risk (or equivalently, the lowest risk for each level of expected return). Rational investors should only hold portfolios on the efficient frontier — any other portfolio is suboptimal.</p>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">Consider a portfolio combining Intel (26% expected return, 50% volatility) and Coca-Cola (6% expected return, 25% volatility). By varying the weight in Intel from 0% to 100%, we trace out a curve in risk-return space. Some portfolios on this curve are <strong>efficient</strong> — no other portfolio has both higher return and lower risk. Others are <strong>inefficient</strong> — dominated by a better alternative.</p>
+      <div class="ac or">
+        <div class="ac-hd">Intel/Coca-Cola portfolio combinations</div>
+        <table class="dt" style="margin:.4rem 0">
+          <thead><tr><th style="text-align:left">x_Intel</th><th>x_Coke</th><th>E[R_p]</th><th>SD(R_p)</th><th>Efficient?</th></tr></thead>
+          <tbody>
+            <tr><td>100%</td><td>0%</td><td class="dt-pos">26.0%</td><td>50.0%</td><td>✓</td></tr>
+            <tr><td>80%</td><td>20%</td><td class="dt-pos">22.0%</td><td>40.3%</td><td>✓</td></tr>
+            <tr><td>60%</td><td>40%</td><td class="dt-pos">18.0%</td><td>31.6%</td><td>✓</td></tr>
+            <tr class="dt-hi"><td>40%</td><td>60%</td><td>14.0%</td><td>25.0%</td><td>✓ Min var</td></tr>
+            <tr><td>20%</td><td>80%</td><td>10.0%</td><td>22.3%</td><td>✓ Efficient</td></tr>
+            <tr class="dt-neg" style="opacity:.7"><td>0%</td><td>100%</td><td>6.0%</td><td>25.0%</td><td style="color:var(--red)">✗ Dominated</td></tr>
+          </tbody>
+        </table>
+        <div class="ac-body" style="margin-top:.4rem">100% Coke (6% return, 25% vol) is dominated by the 20% Intel / 80% Coke portfolio (10% return, 22.3% vol) — higher return AND lower risk. 100% Coke is therefore <strong>inefficient</strong>.</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">Efficient frontier — Intel &amp; Coca-Cola (ρ=0, illustrative)</div><div class="chart-src">Portfolios from 0% to 150% Intel (with short sales)</div></div>
+        <div class="chart-wrap" style="height:280px"><canvas id="efficientChart"></canvas></div>
+        <div class="leg">
+          <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Efficient (long only)</span>
+          <span class="leg-item"><span class="leg-sq" style="background:rgba(255,64,80,0.6)"></span>Inefficient</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#f0b429;border-radius:50%"></span>Key portfolios</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EFFECT OF CORRELATION CHART -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Effect of correlation on the efficient frontier (Intel vs Coca-Cola)</div>
+      <div class="chart-src">σ_I=50%, σ_C=25%, E[R_I]=26%, E[R_C]=6% · varying ρ</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="corrEffectChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#ff4050"></span>ρ = +1.0 (no diversification)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f0b429"></span>ρ = +0.5</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>ρ = 0.0 (independent)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>ρ = −0.5</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>ρ = −1.0 (perfect hedge)</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">As correlation falls, the frontier curves further left — more risk reduction available for the same expected return. At ρ=−1, the frontier hits the y-axis, meaning zero volatility is achievable at some intermediate portfolio.</div>
+  </div>
+
+  <div class="pq fu">
+    <div class="pq-text">Investing 100% in Coca-Cola is irrational. The 40% Intel / 60% Coca-Cola portfolio offers the same volatility (25%) but earns 14% expected return instead of 6%. There is no rational reason to accept 8 percentage points less return per year for the same amount of risk.</div>
+    <div class="pq-src">— Efficient Portfolio Theory · Sally Ferson Example</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 7: SHORT SALES ── -->
+<div id="shortsales" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">07</div><h2 class="sec-title">Long &amp; Short Positions — Extending the Frontier</h2></div>
+
+  <p class="body fu">A <strong>long position</strong> is simply owning a security — you profit if the price rises. A <strong>short position</strong> involves borrowing a security, selling it now, and buying it back later — you profit if the price falls. Short selling allows portfolio weights to be <em>negative</em>, extending the investment universe beyond the constrained frontier. This expands the set of achievable risk-return combinations, allowing both higher expected returns and new hedging strategies.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Long vs short — mechanics</div>
+        <div class="d-row"><span class="d-lbl">Long payoff</span><span class="d-val">P_T − P_0 (profit if price rises)</span></div>
+        <div class="d-row"><span class="d-lbl">Short payoff</span><span class="d-val">P_0 − P_T (profit if price falls)</span></div>
+        <div class="d-row"><span class="d-lbl">Short weight xᵢ</span><span class="d-val">Negative</span></div>
+        <div class="d-row"><span class="d-lbl">Weights still sum to</span><span class="d-val">1.0 (100%)</span></div>
+        <div style="margin-top:.65rem;font-size:12.5px;color:var(--white-2)">When you short $10k of Coke and invest $30k in Intel (using the $10k short proceeds + $20k cash), you hold:<br>x_Intel = $30k/$20k = 150%<br>x_Coke = −$10k/$20k = −50%<br>Check: 150% + (−50%) = 100% ✓</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Short sale example — Intel long / Coke short</div>
+        <div class="d-row"><span class="d-lbl">Cash available</span><span class="d-val">$20,000</span></div>
+        <div class="d-row"><span class="d-lbl">Short $10k Coke → invest in Intel</span><span class="d-val">$30,000 in Intel</span></div>
+        <div class="d-row"><span class="d-lbl">x_Intel</span><span class="d-val">30,000/20,000 = 150%</span></div>
+        <div class="d-row"><span class="d-lbl">x_Coke</span><span class="d-val">−10,000/20,000 = −50%</span></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">E[R_p] = 1.50×26% + (−0.50)×6% = 36%</div>
+        </div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--red)">
+          <div class="f-eq">SD(R_p) = √(1.5²×0.50² + 0.5²×0.25²) = 76.0%</div>
+          <div class="f-note">Assumes ρ = 0 (Cov = 0)</div>
+        </div>
+        <div class="ac-body" style="margin-top:.4rem">Short selling amplifies both <strong>return</strong> (36% vs 26% for Intel alone) and <strong>risk</strong> (76% vs 50%). It moves the portfolio beyond the individual stocks — above and to the right of the constrained frontier.</div>
+        <div class="ac-stat">Short selling is a leverage strategy — magnifies both gains and losses</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: frontier with and without short sales -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Intel/Coca-Cola frontier — long only vs with short sales (ρ = 0)</div>
+      <div class="chart-src">Short sales extend the frontier beyond the individual assets</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="shortSaleChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Long-only efficient frontier (0%–100% Intel)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>With short sales (extends beyond individual assets)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f0b429;border-radius:50%"></span>Individual stocks (Intel / Coke)</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Short selling Coke and going long Intel (x_Intel &gt; 100%) extends the frontier upward and to the right — higher returns but higher risk. Short selling Intel and going long Coke (x_Intel &lt; 0%) extends downward.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 8: SUMMARY ── -->
+<div id="summary" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">08</div><h2 class="sec-title">Summary — Complete Formula Reference</h2></div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell"><div class="og-icon">📈</div><div class="og-lbl">US equity risk premium</div><div class="og-val">8.5%</div><div class="og-sub">12.3% large stocks − 3.8% T-bills (1926–2005, Ibbotson)</div></div>
+    <div class="og-cell"><div class="og-icon">🔗</div><div class="og-lbl">Correlation range</div><div class="og-val">−1 to +1</div><div class="og-sub">Lower correlation = more diversification = lower portfolio risk</div></div>
+    <div class="og-cell"><div class="og-icon">📉</div><div class="og-lbl">Volatility drag</div><div class="og-val">r̄_G ≤ r̄_A</div><div class="og-sub">Always true when returns vary · Gap ≈ σ²/2</div></div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">r = (P₁ + D₁ − P₀) / P₀</strong> — total percentage return = dividend yield + capital gain</li>
+        <li><strong style="color:var(--white)">HPR = Π(1+rᵢ) − 1</strong> — holding period return; compounding over n periods</li>
+        <li><strong style="color:var(--white)">r̄_A = (1/n) Σrᵢ</strong> — arithmetic average; best single-period expected return estimate</li>
+        <li><strong style="color:var(--white)">r̄_G = [Π(1+rᵢ)]^(1/n) − 1</strong> — geometric average; measures wealth growth; ≤ r̄_A</li>
+        <li><strong style="color:var(--white)">xᵢ = Value_i / Total portfolio</strong> — portfolio weight; Σxᵢ = 1 (negative = short position)</li>
+        <li><strong style="color:var(--white)">R_p = Σxᵢ Rᵢ</strong> — portfolio return is weighted average of component returns</li>
+        <li><strong style="color:var(--white)">E[R_p] = Σxᵢ E[Rᵢ]</strong> — expected portfolio return is linear in weights</li>
+        <li><strong style="color:var(--white)">Cov(i,j) = (1/(T−1)) Σ(Rᵢ−R̄ᵢ)(Rⱼ−R̄ⱼ)</strong> — covariance from historical data</li>
+        <li><strong style="color:var(--white)">Corr(i,j) = Cov(i,j) / [SD(i)×SD(j)]</strong> — correlation; scale-free, always in [−1,+1]</li>
+        <li><strong style="color:var(--white)">Var(R_p) = x₁²σ₁² + x₂²σ₂² + 2x₁x₂ρσ₁σ₂</strong> — two-stock portfolio variance</li>
+        <li><strong style="color:var(--white)">Cov(i,j) = Corr(i,j) × SD(i) × SD(j)</strong> — recover covariance from correlation table</li>
+        <li><strong style="color:var(--white)">Risk premium = E[R_asset] − R_f</strong> — excess return above the risk-free rate</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Geometric avg ≠ arithmetic avg</strong> — even if arithmetic avg = 0%, you can still lose money (50%, −50% example: final wealth = 75%)</li>
+        <li><strong style="color:var(--white)">Portfolio variance is NOT a weighted average</strong> — unlike expected return, variance depends on covariances; you cannot just weight individual variances</li>
+        <li><strong style="color:var(--white)">Lower individual risk ≠ better diversifier</strong> — a riskier stock with lower correlation can reduce portfolio risk more than a safer stock with high correlation</li>
+        <li><strong style="color:var(--white)">Covariance and correlation are different</strong> — covariance has units (percentage²); correlation is dimensionless [−1,+1]. Use correlation to compare across pairs.</li>
+        <li><strong style="color:var(--white)">Short sale weights are negative but still sum to 1</strong> — e.g., 150% + (−50%) = 100%. Forget this and your portfolio return formula will be wrong.</li>
+        <li><strong style="color:var(--white)">Higher risk premium ≠ "invest only in stocks"</strong> — the premium exists because stocks are risky; bonds still serve important roles for risk-averse investors and those with short horizons</li>
+        <li><strong style="color:var(--white)">HPR order of returns doesn't matter</strong> — +50%,−50% gives the same final wealth as −50%,+50%. What matters is the set of returns, not their sequence.</li>
+        <li><strong style="color:var(--white)">100% Coke is inefficient</strong> — a portfolio of 40% Intel / 60% Coke has the same volatility (25%) but 8% higher expected return. Refusing to diversify has a real cost.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 1 — Compute returns correctly</div><div class="tl-card"><div class="tl-title">r = (P₁+D₁−P₀)/P₀ · HPR = Π(1+rᵢ)−1</div><div class="tl-text">Always include both price appreciation and dividend income. Use HPR for multi-period returns. Remember: compounding is multiplicative, not additive. A 50% gain followed by a 50% loss leaves you with only 75% of your initial wealth, not 100%.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 2 — Understand arithmetic vs geometric average</div><div class="tl-card"><div class="tl-title">r̄_G ≤ r̄_A — volatility drag is real and costs compound returns</div><div class="tl-text">Use arithmetic average for single-period expected returns (CAPM inputs). Use geometric average for measuring past wealth growth or projecting long-term compound returns. The gap between them is approximately σ²/2 — higher volatility means more drag.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 3 — Interpret historical data: risk-return trade-off is real</div><div class="tl-card"><div class="tl-title">Higher return requires bearing higher risk — quantified by σ</div><div class="tl-text">The US data (1926–2005) confirms the trade-off empirically. Large stocks: 12.3% avg, 20.2% σ. T-bills: 3.8% avg, 3.1% σ. The equity premium of 8.5% compensates investors for the higher volatility — it is not "free money" but compensation for risk.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 4 — Build portfolios; expected return is linear but variance is not</div><div class="tl-card"><div class="tl-title">Var(R_p) = x₁²σ₁² + x₂²σ₂² + 2x₁x₂Cov(1,2)</div><div class="tl-text">Expected return is simply a weighted average — easy. Variance involves the covariance term — this is where diversification lives. A negative or low covariance creates the diversification benefit. Compute covariance from correlation: Cov = ρ×σ₁×σ₂.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 5 — Identify efficient portfolios; reject the inefficient ones</div><div class="tl-card"><div class="tl-title">Efficient: no better portfolio exists with same risk or same return</div><div class="tl-text">Plot all portfolios in risk-return space. The efficient frontier is the upper-left boundary. Any portfolio below this line is dominated. Short selling extends the frontier but also increases both return and risk. Rational investors hold only efficient portfolios.</div></div></div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — Risk, Return &amp; Portfolio Theory</div>
+    <div class="verdict-text">The risk-return trade-off is an empirical law: assets that have delivered higher long-run returns have always done so by bearing more risk. But portfolio theory reveals that risk is not fixed — by combining assets with low or negative correlations, an investor can reduce risk without sacrificing return. The efficient frontier is the mathematical expression of this insight: it is the set of all portfolios that a rational, risk-averse investor should even consider holding.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    Risk, Return &amp; Portfolio Theory · Clara Martínez-Toledano · Corporate Finance Module 6<br>
+    Topics: Returns · HPR · Arithmetic vs Geometric Avg · Risk Premium · Covariance · Correlation · Efficient Frontier · Short Sales<br>
+    Data: Ibbotson Associates / CRSP · For educational purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── BOILERPLATE ── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
+});
+const sections=['returns','averages','historical','portfolio','covariance','efficient','shortsales','summary'];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;let cur=sections[0];
+  sections.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  document.querySelectorAll('.nl').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
+document.querySelectorAll('.fu,.tl-item').forEach(el=>io.observe(el));
+function switchTab(panelId,btn,tabsId,panelsId){
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+Chart.defaults.color='#888480';Chart.defaults.font.family="'IBM Plex Mono',monospace";Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.04)',tk={color:'#888480',font:{size:10}};
+
+/* ── CHART 1: HPR compounding ── */
+(()=>{
+  const returns=[0.10,-0.05,0.20,0.15];
+  const labels=['Start','Year 1','Year 2','Year 3','Year 4'];
+  const compound=[100];
+  const simple=[100];
+  let w=100,s=100;
+  returns.forEach((r,i)=>{w*=(1+r);s+=100*r;compound.push(+w.toFixed(2));simple.push(+s.toFixed(2));});
+  new Chart(document.getElementById('hprChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Compounded (HPR)',data:compound,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.08)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#f56a00'},
+      {label:'Simple sum',data:simple,borderColor:'rgba(61,142,240,0.6)',backgroundColor:'transparent',tension:0.2,borderWidth:2,borderDash:[5,4],pointRadius:4,pointBackgroundColor:'rgba(61,142,240,0.6)'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>'$'+v},title:{display:true,text:'Portfolio Value ($)',color:'#888480',font:{size:9}},min:85}}}
+  });
+})();
+
+/* ── CHART 2: Volatility drag ── */
+(()=>{
+  const sigmas=[],arith=[],geom=[];
+  const rA=0.10;
+  for(let s=0;s<=0.5;s+=0.01){
+    sigmas.push((s*100).toFixed(0)+'%');
+    arith.push((rA*100).toFixed(1));
+    geom.push(+((rA-s*s/2)*100).toFixed(2));
+  }
+  new Chart(document.getElementById('volDragChart'),{
+    type:'line',
+    data:{labels:sigmas,datasets:[
+      {label:'Arithmetic avg (r̄_A = 10%)',data:arith,borderColor:'rgba(240,180,41,0.7)',borderWidth:2,borderDash:[5,4],pointRadius:0},
+      {label:'Geometric avg (r̄_G ≈ r̄_A − σ²/2)',data:geom,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:12}},tooltip:{callbacks:{title:c=>`σ = ${c[0].label}`,label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Volatility σ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Average Return (%)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 3: Historical returns & risk ── */
+(()=>{
+  const labels=['Large Stocks','Small Stocks','LT Corp Bonds','LT Gov Bonds','T-Bills','Inflation'];
+  const ret=[12.3,17.4,6.2,5.8,3.8,3.1];
+  const std=[20.2,32.9,8.5,9.2,3.1,4.3];
+  new Chart(document.getElementById('historicalChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Avg Annual Return (%)',data:ret,backgroundColor:['rgba(245,106,0,0.8)','rgba(139,92,246,0.8)','rgba(0,200,117,0.7)','rgba(61,142,240,0.7)','rgba(240,180,41,0.7)','rgba(136,132,128,0.6)'],borderWidth:0,borderRadius:3},
+      {label:'Std Dev (%)',data:std,backgroundColor:['rgba(255,64,80,0.4)','rgba(255,64,80,0.4)','rgba(255,64,80,0.35)','rgba(255,64,80,0.35)','rgba(255,64,80,0.25)','rgba(255,64,80,0.25)'],borderWidth:0,borderRadius:3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'% per year',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 4: Normal distributions ── */
+(()=>{
+  function normal(x,mu,sig){return(1/(sig*Math.sqrt(2*Math.PI)))*Math.exp(-0.5*((x-mu)/sig)**2);}
+  const xs=[];for(let x=-80;x<=80;x+=1)xs.push(x);
+  const stockDist=xs.map(x=>normal(x,12.3,20.2));
+  const tbillDist=xs.map(x=>normal(x,3.8,3.1));
+  new Chart(document.getElementById('normalDistChart'),{
+    type:'line',
+    data:{labels:xs,datasets:[
+      {label:'Large-co. stocks μ=12.3%, σ=20.2%',data:stockDist,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.12)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0},
+      {label:'T-bills μ=3.8%, σ=3.1%',data:tbillDist,borderColor:'#3d8ef0',backgroundColor:'rgba(61,142,240,0.18)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:14}},tooltip:{callbacks:{title:c=>`Return: ${c[0].label}%`,label:c=>` ${c.dataset.label}: density=${c.parsed.y.toFixed(4)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:12,callback:v=>v+'%'},title:{display:true,text:'Annual Return (%)',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:tk,title:{display:true,text:'Probability Density',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 5: Cumulative growth (log scale) ── */
+(()=>{
+  const yrs=[];for(let y=0;y<=94;y++)yrs.push(1926+y);
+  const grow=(r)=>{const a=[1];for(let i=1;i<=94;i++)a.push(+(a[i-1]*(1+r)).toFixed(2));return a;};
+  new Chart(document.getElementById('cumulativeChart'),{
+    type:'line',
+    data:{labels:yrs,datasets:[
+      {label:'Large stocks (12.3%)',data:grow(0.123),borderColor:'#f56a00',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.2},
+      {label:'Small stocks (17.4%)',data:grow(0.174),borderColor:'#8b5cf6',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.2},
+      {label:'Corp bonds (6.2%)',data:grow(0.062),borderColor:'#00c875',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.2},
+      {label:'T-bills (3.8%)',data:grow(0.038),borderColor:'#3d8ef0',backgroundColor:'transparent',borderWidth:2,borderDash:[4,3],pointRadius:0,tension:0.2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(0)}`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10}},
+        y:{type:'logarithmic',grid:{color:gc},ticks:{...tk,callback:v=>['1','10','100','1000','10000','100000'].includes(String(v))?'$'+v:''},
+          title:{display:true,text:'Portfolio Value ($, log scale)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 6: Portfolio volatility vs correlation (equal weights, σ=20% both) ── */
+(()=>{
+  const corrs=[],vols=[];
+  for(let rho=-1;rho<=1;rho+=0.02){
+    corrs.push(rho.toFixed(2));
+    const v=Math.sqrt(0.25*0.04+0.25*0.04+2*0.25*rho*0.04);
+    vols.push(+(v*100).toFixed(2));
+  }
+  new Chart(document.getElementById('corrChart'),{
+    type:'line',
+    data:{labels:corrs,datasets:[
+      {label:'Portfolio volatility',data:vols,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.08)',fill:true,tension:0.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
+      {label:'Individual stock (20%)',data:corrs.map(()=>20),borderColor:'rgba(255,255,255,0.15)',borderWidth:1.5,borderDash:[5,4],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>`ρ = ${c[0].label}`,label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,maxTicksLimit:10},title:{display:true,text:'Correlation ρ',color:'#888480',font:{size:9}}},y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Portfolio Volatility (%)',color:'#888480',font:{size:9}},min:0,max:22}}}
+  });
+})();
+
+/* ── CHART 7: Efficient frontier Intel/Coke ── */
+(()=>{
+  // Intel: E=26%, σ=50%; Coke: E=6%, σ=25%; ρ=0 (illustrative)
+  const EI=26,EC=6,sI=50,sC=25,rho=0;
+  const effPts=[],ineffPts=[],keyPts=[];
+  for(let xi=0;xi<=1;xi+=0.02){
+    const xc=1-xi;
+    const er=xi*EI+xc*EC;
+    const vr=xi*xi*sI*sI+xc*xc*sC*sC+2*xi*xc*rho*sI*sC;
+    const sd=Math.sqrt(vr);
+    // minimum variance at about xi=0.20 → efficient above, inefficient below
+    const obj={x:+sd.toFixed(2),y:+er.toFixed(2)};
+    if(xi>=0.20) effPts.push(obj); else ineffPts.push(obj);
+  }
+  // Key points
+  keyPts.push({x:50,y:26,label:'Intel'},{x:25,y:6,label:'Coke'});
+  // Min var (approx xi=0.20)
+  const xiMin=0.20;
+  const sdMin=Math.sqrt(xiMin*xiMin*2500+(1-xiMin)*(1-xiMin)*625);
+  keyPts.push({x:+sdMin.toFixed(1),y:+(xiMin*26+(1-xiMin)*6).toFixed(1),label:'Min Var'});
+  new Chart(document.getElementById('efficientChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',label:'Efficient frontier',data:effPts,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.06)',fill:false,tension:0.3,borderWidth:2.5,pointRadius:0,showLine:true},
+      {type:'line',label:'Inefficient',data:ineffPts,borderColor:'rgba(255,64,80,0.5)',backgroundColor:'transparent',tension:0.3,borderWidth:2,borderDash:[5,4],pointRadius:0,showLine:true},
+      {type:'scatter',label:'Key portfolios',data:keyPts,backgroundColor:'#f0b429',borderColor:'#f0b429',pointRadius:8,pointHoverRadius:10}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===2&&c.raw.label)return` ${c.raw.label}: (${c.parsed.x}%, ${c.parsed.y}%)`;return` Risk: ${c.parsed.x}%, Return: ${c.parsed.y}%`;}}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Portfolio Volatility SD (% )',color:'#888480',font:{size:9}},min:0,max:55},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:0,max:30}}}
+  });
+})();
+
+/* ── CHART 8: Correlation effect on frontier ── */
+(()=>{
+  const EI=26,EC=6,sI=50,sC=25;
+  const rhos=[-1,-0.5,0,0.5,1];
+  const colors=['#3d8ef0','#00c875','#f56a00','#f0b429','#ff4050'];
+  const datasets=rhos.map((rho,idx)=>{
+    const pts=[];
+    for(let xi=0;xi<=1;xi+=0.025){
+      const xc=1-xi;
+      const er=xi*EI+xc*EC;
+      const sd=Math.sqrt(xi*xi*sI*sI+xc*xc*sC*sC+2*xi*xc*rho*sI*sC);
+      pts.push({x:+sd.toFixed(2),y:+er.toFixed(2)});
+    }
+    return{type:'line',label:`ρ = ${rho}`,data:pts,borderColor:colors[idx],backgroundColor:'transparent',tension:0.3,borderWidth:2,pointRadius:0,showLine:true};
+  });
+  new Chart(document.getElementById('corrEffectChart'),{
+    type:'scatter',
+    data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:18,padding:12}},tooltip:{callbacks:{label:c=>` ρ=${c.dataset.label.split('= ')[1]}: (${c.parsed.x}%,${c.parsed.y}%)`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Volatility (%)',color:'#888480',font:{size:9}},min:0,max:55},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:0,max:30}}}
+  });
+})();
+
+/* ── CHART 9: Short sales frontier ── */
+(()=>{
+  const EI=26,EC=6,sI=50,sC=25,rho=0;
+  const longOnly=[],withShort=[];
+  // Long only: xi from 0 to 1
+  for(let xi=0;xi<=1;xi+=0.025){
+    const xc=1-xi;
+    withShort.push({x:+Math.sqrt(xi*xi*sI*sI+xc*xc*sC*sC+2*xi*xc*rho*sI*sC).toFixed(2),y:+(xi*EI+xc*EC).toFixed(2)});
+  }
+  // With short: xi from -0.5 to 1.5
+  const ext=[];
+  for(let xi=-0.5;xi<=1.5;xi+=0.025){
+    const xc=1-xi;
+    const sd=Math.sqrt(xi*xi*sI*sI+xc*xc*sC*sC+2*xi*xc*rho*sI*sC);
+    ext.push({x:+sd.toFixed(2),y:+(xi*EI+xc*EC).toFixed(2)});
+  }
+  // Key points
+  const keyPts=[{x:50,y:26,label:'Intel (100%)'},{x:25,y:6,label:'Coke (100%)'},{x:76,y:36,label:'Short $10k Coke'}];
+  new Chart(document.getElementById('shortSaleChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',label:'With short sales',data:ext,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.06)',fill:false,tension:0.3,borderWidth:2.5,pointRadius:0,showLine:true},
+      {type:'line',label:'Long only',data:withShort,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,0.05)',fill:false,tension:0.3,borderWidth:2.5,pointRadius:0,showLine:true},
+      {type:'scatter',label:'Key points',data:keyPts,backgroundColor:'#f0b429',borderColor:'#f0b429',pointRadius:8}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===2&&c.raw.label)return` ${c.raw.label}: (${c.parsed.x.toFixed(0)}%,${c.parsed.y.toFixed(0)}%)`;return` Risk: ${c.parsed.x.toFixed(1)}%, Return: ${c.parsed.y.toFixed(1)}%`;}}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Portfolio Volatility (%)',color:'#888480',font:{size:9}},min:0,max:90},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:-10,max:45}}}
+  });
+})();
+</script>
+</body>
+</html>
