@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPM — Efficient Frontiers, Tangent Portfolio, Beta & the Security Market Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--off-black:#0f0f0f;--panel:#141414;--panel-2:#1a1a1a;--panel-3:#212121;
+  --border:#252525;--border-2:#2f2f2f;
+  --orange:#f56a00;--orange-dim:rgba(245,106,0,.13);--orange-line:rgba(245,106,0,.3);
+  --white:#f0ede8;--white-2:#c4c0b8;--white-3:#888480;--white-4:#4a4744;
+  --green:#00c875;--green-dim:rgba(0,200,117,.1);--green-b:rgba(0,200,117,.28);
+  --red:#ff4050;--red-dim:rgba(255,64,80,.1);--red-b:rgba(255,64,80,.28);
+  --blue:#3d8ef0;--blue-dim:rgba(61,142,240,.1);
+  --yellow:#f0b429;--yellow-dim:rgba(240,180,41,.1);
+  --purple:#8b5cf6;--teal:#00c8c8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo b{color:var(--orange);font-weight:900}
+.nav-pipe{width:1px;height:18px;background:var(--border-2)}
+.nav-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--white-3)}
+.nav-links{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
+.nl:hover{color:var(--white)}
+.nl.active{color:var(--orange);border-bottom-color:var(--orange)}
+.hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
+.kicker{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.kicker::before{content:'';width:28px;height:1px;background:var(--orange)}
+h1{font-family:var(--serif);font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:1.2rem}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-lead{font-size:15px;color:var(--white-2);line-height:1.8;max-width:520px;margin-bottom:1.75rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
+.meta-row span{display:flex;align-items:center;gap:5px}
+.meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
+.stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
+.sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
+.sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.sp-row:last-child{border-bottom:none}
+.sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
+.sp-right{text-align:right}
+.sp-val{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--orange);line-height:1}
+.sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
+.wrap{max-width:1120px;margin:0 auto}
+.sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec.alt{background:var(--off-black)}
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
+.body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
+.body strong{color:var(--white);font-weight:600}
+.body em{color:var(--orange);font-style:normal}
+.pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
+.pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
+.pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
+.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.re{border-top:2px solid var(--red)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
+.ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.re .ac-hd{color:var(--red)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}
+.ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
+.ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.ac.or .ac-stat{color:var(--orange)}.ac.gr .ac-stat{color:var(--green)}.ac.re .ac-stat{color:var(--red)}.ac.bl .ac-stat{color:var(--blue)}.ac.ye .ac-stat{color:var(--yellow)}.ac.pu .ac-stat{color:var(--purple)}.ac.te .ac-stat{color:var(--teal)}
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
+.blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
+.d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.d-row:last-child{border-bottom:none}
+.d-lbl{font-size:13px;color:var(--white-2)}
+.d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
+.tl{position:relative;padding-left:26px;margin-top:1.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
+.tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{position:absolute;left:-30px;top:7px;width:11px;height:11px;border-radius:50%;border:2px solid var(--orange);background:var(--black)}
+.tl-dot.fill{background:var(--orange)}
+.tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
+.tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
+.tl-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right}
+.chart-wrap{position:relative;width:100%}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+.outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
+.og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
+.og-icon{font-size:26px;margin-bottom:.65rem}
+.og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
+.verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
+.verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+.verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+/* Beta examples table */
+.bt{width:100%;border-collapse:collapse;font-size:12px;margin:.75rem 0}
+.bt th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .85rem;background:var(--panel-2);border-bottom:2px solid var(--orange-line);color:var(--orange);text-align:right}
+.bt th:first-child{text-align:left}
+.bt td{font-family:var(--mono);padding:.42rem .85rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2)}
+.bt td:first-child{text-align:left;color:var(--white-3)}
+.bt .hi{background:var(--orange-dim);color:var(--orange);font-weight:600}
+.bt .pos{color:var(--green)}.bt .neg{color:var(--red)}
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
+.foot-logo b{color:var(--orange)}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right;line-height:1.7}
+.fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+@media(max-width:860px){
+  .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
+  .stat-panel{display:none}
+  footer{flex-direction:column;text-align:center}
+  .foot-src{text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
+    <div class="nav-pipe"></div>
+    <span class="nav-label">Private Markets Intelligence</span>
+  </div>
+  <div class="nav-links">
+    <a class="nl active" href="#manystocks">Many Stocks</a>
+    <a class="nl" href="#riskfree">Risk-Free &amp; Leverage</a>
+    <a class="nl" href="#tangent">Tangent Portfolio</a>
+    <a class="nl" href="#capm">CAPM</a>
+    <a class="nl" href="#beta">Beta &amp; Risk Premium</a>
+    <a class="nl" href="#sml">Security Market Line</a>
+    <a class="nl" href="#summary">Summary</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Lecture Notes · Corporate Finance — Module 7</div>
+      <h1>CAPM: The <em>Capital Asset</em><br>Pricing Model</h1>
+      <p class="hero-lead">From expanding the efficient frontier with many stocks and risk-free borrowing, to identifying the tangent portfolio, deriving the Capital Market Line, computing beta, and plotting the Security Market Line — the complete theoretical and practical framework for pricing risk in financial markets.</p>
+      <div class="meta-row">
+        <span>CAPM · Portfolio Theory</span>
+        <span>Efficient Frontier · CML · Beta · SML · Sharpe Ratio</span>
+        <span>Clara Martínez-Toledano</span>
+      </div>
+    </div>
+    <div class="stat-panel">
+      <div class="sp-head">Core formulas at a glance</div>
+      <div class="sp-row"><div class="sp-lbl">CAPM expected return</div><div class="sp-right"><div class="sp-val">E[Rᵢ] = rƒ + βᵢ(E[Rmkt]−rƒ)</div><div class="sp-sub">Beta × market risk premium</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Beta definition</div><div class="sp-right"><div class="sp-val">βᵢ = Cov(Rᵢ,Rmkt)/Var(Rmkt)</div><div class="sp-sub">= SD(Rᵢ)×Corr(Rᵢ,Rmkt)/SD(Rmkt)</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Sharpe Ratio</div><div class="sp-right"><div class="sp-val">(E[Rₚ]−rƒ) / SD(Rₚ)</div><div class="sp-sub">Reward per unit of volatility</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">CML expected return</div><div class="sp-right"><div class="sp-val">rƒ + x(E[Rmkt]−rƒ)</div><div class="sp-sub">x = fraction in market portfolio</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Beta of market portfolio</div><div class="sp-right"><div class="sp-val">β = 1.0</div><div class="sp-sub">By definition · risk-free asset β = 0</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Portfolio beta</div><div class="sp-right"><div class="sp-val">βₚ = Σxᵢβᵢ</div><div class="sp-sub">Weighted average of component betas</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: MANY STOCKS ── -->
+<div id="manystocks" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">Efficient Portfolios with Many Stocks</h2></div>
+
+  <p class="body fu">With two stocks, the efficient frontier is a single curve in risk-return space. When we add more stocks, the frontier expands — every new asset, even one with an inferior standalone risk-return profile, <strong>potentially improves the frontier by offering additional diversification</strong>. This insight leads to a powerful conclusion: to achieve the best possible risk-return trade-off, we should hold every available risky asset. The efficient frontier ultimately encompasses all tradable investments.</p>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">Consider the three-stock universe of Intel, Coca-Cola, and Bore Industries. Bore Industries has a 2% expected return and 25% volatility — inferior to Coca-Cola in expected return, with the same risk. Should any rational investor hold Bore Industries? The initial intuition says no — but it is wrong.</p>
+      <div class="ac or">
+        <div class="ac-hd">Three-stock universe — assumptions</div>
+        <table class="bt">
+          <thead><tr><th style="text-align:left">Stock</th><th>E[R]</th><th>σ</th><th>ρ_Intel</th><th>ρ_Coke</th><th>ρ_Bore</th></tr></thead>
+          <tbody>
+            <tr><td>Intel</td><td class="pos">26%</td><td>50%</td><td>1.00</td><td>0.00</td><td>0.00</td></tr>
+            <tr><td>Coca-Cola</td><td>6%</td><td>25%</td><td>0.00</td><td>1.00</td><td>0.00</td></tr>
+            <tr class="hi"><td>Bore Industries</td><td class="neg">2%</td><td>25%</td><td>0.00</td><td>0.00</td><td>1.00</td></tr>
+          </tbody>
+        </table>
+        <div class="ac-body" style="margin-top:.5rem">Bore Industries has the same risk as Coca-Cola but far lower return. All three are uncorrelated with each other (ρ=0). Yet because Bore is <strong>uncorrelated with everything else</strong>, adding even a small allocation provides pure diversification benefit with no correlation drag.</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Why Bore Industries still improves the frontier</div>
+        <ul class="blist">
+          <li>Adding Bore to a Coca-Cola + Intel portfolio creates a <strong style="color:var(--white)">new set of feasible combinations</strong> — the frontier shifts left (lower volatility achievable)</li>
+          <li>Even though Bore's own return is only 2%, its zero correlation with both Intel and Coke means it adds <strong style="color:var(--white)">pure diversification</strong> — reducing portfolio variance without the constraint of correlated movements</li>
+          <li>A tiny allocation to Bore (e.g., 5%) can reduce portfolio variance noticeably while only slightly reducing expected return</li>
+          <li>The general principle: <strong style="color:var(--white)">every asset with imperfect correlation with the existing portfolio improves the frontier</strong>, regardless of its standalone Sharpe ratio</li>
+        </ul>
+        <div class="ac-stat">Key: the question is never "is this asset good in isolation?" but "does it improve the portfolio?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 1: 3-stock frontier -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Efficient frontier — expanding from 2 stocks to 3 stocks (Intel + Coke + Bore)</div>
+      <div class="chart-src">All correlations = 0 · Short sales allowed</div>
+    </div>
+    <div class="chart-wrap" style="height:300px"><canvas id="threeStockChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(61,142,240,0.5)"></span>Intel + Coke only</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>3-stock efficient frontier</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f0b429;border-radius:50%"></span>Individual stocks</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">The 3-stock frontier (green) lies to the left of the 2-stock frontier (blue) — adding Bore achieves lower volatility for the same expected return. The shaded region represents all feasible 3-stock portfolios including short sales.</div>
+  </div>
+
+  <div class="g3 fu">
+    <div class="ac or">
+      <div class="ac-hd">The expanding frontier principle</div>
+      <div class="ac-body">Each time we add a new stock (even an apparently inferior one), the efficient frontier either stays the same or improves. It can never worsen, because we can always assign zero weight to the new asset and recover the old frontier exactly.</div>
+      <div class="ac-stat">Adding N stocks creates a region of possibilities, not just a curve</div>
+    </div>
+    <div class="ac gr">
+      <div class="ac-hd">From 3 stocks to the whole market</div>
+      <div class="ac-body">With 10 stocks, the frontier improves significantly over 3 stocks. With 500 S&P stocks, it improves further. The logical endpoint: include <em>all</em> risky assets in the world. That frontier is the best possible risk-return combination achievable through diversification.</div>
+      <div class="ac-stat">Optimal diversification → include every available risky investment</div>
+    </div>
+    <div class="ac bl">
+      <div class="ac-hd">Practical implication</div>
+      <div class="ac-body">No single stock, on its own, is ever on the efficient frontier when many stocks are available. The relevant question for any asset is not "what is its Sharpe ratio?" but "what is its marginal contribution to portfolio risk?" — measured by its beta with the portfolio.</div>
+      <div class="ac-stat">Firm-specific risk can always be diversified away at no cost</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 2: RISK-FREE & LEVERAGE ── -->
+<div id="riskfree" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">Risk-Free Saving, Borrowing &amp; Margin Investing</h2></div>
+
+  <p class="body fu">The efficient frontier we have built considers only risky assets. But investors also have access to a <strong>risk-free asset</strong> (e.g., T-Bills) — one whose return is known with certainty, has zero volatility, and is uncorrelated with every risky asset. Including the risk-free asset changes the entire shape of the investment opportunity set: <em>the efficient frontier becomes a straight line</em>. This has profound implications for how all investors should structure their portfolios.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Expected Return — Risky + Risk-Free Blend</div>
+        <div class="f-eq">E[R_xP] = (1−x)rƒ + x·E[Rₚ] = rƒ + x(E[Rₚ]−rƒ)</div>
+        <div class="f-note">x = fraction invested in risky portfolio P · (1−x) = fraction in risk-free<br>Expected return = risk-free rate + x × portfolio risk premium<br>x > 1 means borrowing at rƒ to invest more than 100% in P (margin/leverage)</div>
+      </div>
+      <div class="formula" style="border-left-color:var(--blue)">
+        <div class="f-label" style="color:var(--blue)">Volatility — Risky + Risk-Free Blend</div>
+        <div class="f-eq">SD(R_xP) = x · SD(Rₚ)</div>
+        <div class="f-note">Because Var(rƒ) = 0 and Cov(rƒ, Rₚ) = 0:<br>SD = √(x²·Var(Rₚ)) = x·SD(Rₚ)<br>Risk scales linearly with fraction x invested in the risky portfolio</div>
+      </div>
+      <p class="body">Both expected return and volatility are <strong>linear functions of x</strong>. This means every combination of the risk-free asset and any risky portfolio traces a <em>straight line</em> in risk-return space — from the risk-free rate (when x=0) through the risky portfolio (when x=1) and beyond (when x>1, leveraged). The key insight: combining the risk-free rate with any risky portfolio traces a line, and we want the line with the steepest possible slope.</p>
+    </div>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Margin investing — Example 1</div>
+        <div class="ac-body" style="margin-bottom:.65rem">$10k cash + borrow $10k at 5% → invest $20k in portfolio Q (E[R]=10%, σ=20%). So x=200%.</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--orange)">
+          <div class="f-eq">E[R] = 5% + 2×(10%−5%) = 15%</div>
+          <div class="f-eq">SD = 2×20% = 40%</div>
+        </div>
+        <div class="d-row"><span class="d-lbl">If Q rises 30%:</span><span class="d-val" style="color:var(--green)">Return = +55%</span></div>
+        <div class="d-row"><span class="d-lbl">If Q falls 10%:</span><span class="d-val" style="color:var(--red)">Return = −25%</span></div>
+        <div class="ac-body" style="margin-top:.5rem">The range of outcomes doubles: 55%−(−25%) = 80% vs 30%−(−10%) = 40% for unlevered Q. Leverage doubles both expected return above rƒ <em>and</em> volatility. The risk-return trade-off is linear and symmetric.</div>
+        <div class="ac-stat">Margin investing: higher expected return but proportionally higher risk</div>
+      </div>
+      <div class="ac re" style="margin-top:1rem">
+        <div class="ac-hd">Why the volatility formula simplifies</div>
+        <ul class="blist">
+          <li>T-Bills have a <strong style="color:var(--white)">known, fixed return</strong> — their variance is literally zero</li>
+          <li>T-Bills are uncorrelated with risky assets — their covariance with any risky portfolio is zero</li>
+          <li>These two properties eliminate the last two terms of the two-asset variance formula: Var(R_xP) = x²·Var(Rₚ)</li>
+          <li>Taking the square root: SD = x·SD(Rₚ) — risk scales one-for-one with the fraction invested in risky assets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 2: Risk-free combinations -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Risk-return combinations — risk-free asset + risky portfolio P (straight line)</div>
+      <div class="chart-src">rƒ=5% · E[Rₚ]=15% · σₚ=25% · x ranges from 0 to 200%</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="riskFreeChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>x ∈ [0,1]: saving (lending at rƒ)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>x &gt; 1: borrowing (margin investing)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f0b429;border-radius:50%"></span>Portfolio P (x=100%)</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">The combination line is perfectly straight because both return and risk are linear in x. The slope of the line is the Sharpe Ratio of portfolio P: (E[Rₚ]−rƒ)/SD(Rₚ).</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 3: TANGENT PORTFOLIO ── -->
+<div id="tangent" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">The Tangent Portfolio &amp; Sharpe Ratio</h2></div>
+
+  <p class="body fu">Different risky portfolios on the efficient frontier, when combined with the risk-free asset, produce different straight lines. The steeper the line, the better — for any level of volatility, a steeper line means a higher expected return. The <strong>optimal risky portfolio</strong> is the one that maximises the slope of this line: the portfolio with the <strong>highest Sharpe Ratio</strong>. Geometrically, it is the point where a line from the risk-free rate is tangent to the efficient frontier.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="formula">
+        <div class="f-label">Sharpe Ratio — the Slope of the Capital Market Line</div>
+        <div class="f-eq">Sharpe Ratio = (E[Rₚ] − rƒ) / SD(Rₚ)</div>
+        <div class="f-note">= portfolio excess return / portfolio volatility<br>= reward per unit of risk taken<br>The tangent portfolio maximises the Sharpe Ratio over all risky portfolios</div>
+      </div>
+      <p class="body">The Sharpe Ratio answers: <em>how much excess return do I earn per unit of risk I bear?</em> Maximising it is equivalent to finding the steepest line from the risk-free rate to the efficient frontier — the tangent point. All investors should hold this portfolio of risky assets, regardless of their risk tolerance. Their risk preference determines only <em>how much</em> they invest in it versus the risk-free asset.</p>
+      <div class="ac or">
+        <div class="ac-hd">Universal portfolio choice — the separation theorem</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Conservative investor:</strong> invests fraction x &lt; 1 in the tangent portfolio + (1−x) in T-Bills → low volatility, moderate return (to the left of T on the CML)</li>
+          <li><strong style="color:var(--white)">Aggressive investor:</strong> invests fraction x &gt; 1 in the tangent portfolio (borrowing at rƒ) → high volatility, high return (to the right of T on the CML)</li>
+          <li><strong style="color:var(--white)">Both hold the same risky portfolio</strong> — they only differ in how much leverage they use</li>
+          <li>This is the <strong style="color:var(--white)">two-fund separation theorem</strong>: every efficient portfolio is a combination of the risk-free asset and the unique tangent portfolio T</li>
+        </ul>
+        <div class="ac-stat">Tangent portfolio T is the unique optimal portfolio of risky assets — valid for ALL investors</div>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Example 2 — Optimal portfolio choice</div>
+        <div class="ac-body" style="margin-bottom:.65rem">Uncle's current portfolio P: E[R]=10.5%, σ=8%, rƒ=5%. Tangent portfolio T: E[R]=18.5%, σ=13%.</div>
+        <div class="tl-yr" style="margin-top:.25rem">Goal 1: Maximise return, keep σ=8%</div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">x = 8%/13% = 61.5% in T</div>
+          <div class="f-note">→ $61,500 in T + $38,500 in T-Bills<br>→ E[R] = 5% + 0.615×(13.5%) = 13.3% (up from 10.5%)</div>
+        </div>
+        <div class="tl-yr" style="margin-top:.5rem">Goal 2: Minimise risk, keep E[R]=10.5%</div>
+        <div class="formula" style="margin:.3rem 0;border-left-color:var(--green)">
+          <div class="f-eq">5% + x×13.5% = 10.5% → x = 40.7%</div>
+          <div class="f-note">→ $40,700 in T + $59,300 in T-Bills<br>→ σ = 40.7%×13% = 5.29% (down from 8%)</div>
+        </div>
+        <div class="ac-body" style="margin-top:.4rem">In both cases, the optimal portfolio is a blend of T-Bills and the tangent portfolio. Portfolio P is <strong>dominated</strong> — it lies below the capital market line.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 3: Tangent portfolio & CML -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Identifying the tangent portfolio — multiple Sharpe ratio lines vs efficient frontier</div>
+      <div class="chart-src">rƒ=5% · Tangent point maximises the slope (highest Sharpe Ratio)</div>
+    </div>
+    <div class="chart-wrap" style="height:300px"><canvas id="tangentChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(61,142,240,0.4)"></span>Efficient frontier (risky only)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Capital Market Line (CML) — steepest line through rƒ</span>
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(255,255,255,0.2)"></span>Sub-optimal lines from rƒ through other portfolios</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f0b429;border-radius:50%"></span>Tangent portfolio T</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Every line from rƒ that passes through a portfolio on the efficient frontier has the same slope as that portfolio's Sharpe Ratio. The CML is the one tangent line that touches — and doesn't cross — the frontier. All other lines are less steep.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 4: CAPM ── -->
+<div id="capm" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">The Capital Asset Pricing Model</h2></div>
+
+  <p class="body fu">The tangent portfolio maximises the Sharpe Ratio — but to <em>identify</em> it, we need expected returns, volatilities, and correlations for every asset. These are nearly impossible to estimate precisely. The <strong>Capital Asset Pricing Model (CAPM)</strong> sidesteps this problem entirely: under three key assumptions, rational investors collectively drive the market to an equilibrium where the tangent portfolio equals the <em>market portfolio</em> — the value-weighted portfolio of every tradeable security.</p>
+
+  <div class="tabs fu" id="capmTabs">
+    <div class="tab on" onclick="switchTab('c1',this,'capmTabs','capmPanels')">Three Assumptions</div>
+    <div class="tab" onclick="switchTab('c2',this,'capmTabs','capmPanels')">The Market Portfolio</div>
+    <div class="tab" onclick="switchTab('c3',this,'capmTabs','capmPanels')">CAPM Derivation</div>
+  </div>
+  <div id="capmPanels">
+
+    <div class="tab-panel on" id="c1">
+      <div class="g3">
+        <div class="ac or">
+          <div class="ac-hd">Assumption 1 — Perfect markets</div>
+          <div class="ac-body">Investors can buy and sell all securities at competitive market prices without taxes or transaction costs. They can borrow and lend at the same risk-free rate rƒ. This means capital flows frictionlessly to wherever it earns the highest risk-adjusted return.</div>
+          <div class="ac-stat">No taxes · No transaction costs · Same borrowing/lending rate for all</div>
+        </div>
+        <div class="ac bl">
+          <div class="ac-hd">Assumption 2 — Efficient portfolios only</div>
+          <div class="ac-body">Every investor holds only efficient portfolios — the combination of the risk-free asset and the tangent portfolio that maximises their expected return for a given level of volatility. No investor knowingly holds an inefficient portfolio. This is what the previous section established as the rational choice.</div>
+          <div class="ac-stat">All investors are mean-variance optimisers · No irrationality</div>
+        </div>
+        <div class="ac gr">
+          <div class="ac-hd">Assumption 3 — Homogeneous expectations</div>
+          <div class="ac-body">All investors have the same estimates of expected returns, volatilities, and correlations for every security. Because everyone uses identical inputs, everyone computes the same efficient frontier and identifies the same tangent portfolio. There is no "agreeing to disagree."</div>
+          <div class="ac-stat">Same beliefs → same tangent portfolio → same market outcome</div>
+        </div>
+      </div>
+      <div class="pq" style="margin-top:1rem">
+        <div class="pq-text">These assumptions are strong and don't fully describe real investor behaviour. But the CAPM's qualitative insights — that market risk is the only priced risk, and beta is its measure — are so compelling that the model remains the most widely used risk-return framework in finance.</div>
+        <div class="pq-src">— Capital Asset Pricing Model · Foundations</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="c2">
+      <div class="g2">
+        <div>
+          <p class="body">Under CAPM assumptions, every investor holds the <strong>same risky portfolio</strong> — the tangent portfolio. But when we aggregate all investors' holdings, the total holdings of each security must equal its total outstanding supply (its market capitalisation). Therefore, the tangent portfolio <em>must</em> be the value-weighted market portfolio.</p>
+          <div class="ac or">
+            <div class="ac-hd">Example 3 — market cap implication</div>
+            <div class="ac-body" style="margin-bottom:.65rem">You hold $10k in Microsoft and $5k in Pfizer. Your friend holds $2k in Pfizer. Both hold efficient portfolios.</div>
+            <ul class="blist">
+              <li>Your ratio: Microsoft/Pfizer = $10k/$5k = 2:1</li>
+              <li>Your friend must also hold 2:1 → so $4k in Microsoft</li>
+              <li>If <em>all</em> investors hold the same proportions, then Microsoft's market cap must be 2× Pfizer's market cap</li>
+              <li>Generalising: the proportion of each stock in the tangent portfolio equals its <strong style="color:var(--white)">share of total market capitalisation</strong></li>
+            </ul>
+            <div class="ac-stat">Tangent portfolio = market portfolio (by aggregation of all investors' portfolios)</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac bl">
+            <div class="ac-hd">What the market portfolio contains</div>
+            <ul class="blist">
+              <li>In theory: <strong style="color:var(--white)">all tradeable risky assets</strong> — stocks, bonds, real estate, commodities, human capital</li>
+              <li>In practice: approximated by broad stock market indices (S&P 500, MSCI World, FTSE All-World)</li>
+              <li>Weight of each asset = market cap / total market cap</li>
+              <li>Large-cap stocks (Apple, Microsoft) have larger weights; micro-caps have tiny weights</li>
+              <li>The market portfolio is <strong style="color:var(--white)">always fully invested</strong> — no cash holding</li>
+            </ul>
+            <div class="ac-stat">β_market = 1.0 by definition · β_risk-free = 0 by definition</div>
+          </div>
+          <div class="ac ye" style="margin-top:1rem">
+            <div class="ac-hd">Why beta on the CML equals x (the fraction in market portfolio)</div>
+            <div class="ac-body">On the CML, a portfolio holds fraction x in the market (β=1) and (1−x) in T-Bills (β=0). The portfolio's beta = x×1 + (1−x)×0 = x. This is why beta and the CML fraction are interchangeable — investing x% in the market gives β=x. This is the bridge between the CML and the SML.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="c3">
+      <div class="g2">
+        <div>
+          <p class="body">With the market portfolio as the efficient portfolio, we can price any individual security. The CAPM says: the expected return of any security equals the risk-free rate plus a <strong>risk premium proportional to its beta</strong>. Beta measures how much market risk the security carries — the only risk investors need to be compensated for, since all firm-specific risk can be diversified away.</p>
+          <div class="formula">
+            <div class="f-label">CAPM Equation — Security Expected Return</div>
+            <div class="f-eq">E[Rᵢ] = rƒ + βᵢ × (E[Rmkt] − rƒ)</div>
+            <div class="f-note">rƒ = risk-free rate · βᵢ = security's beta with the market<br>E[Rmkt] − rƒ = market risk premium (historically ~5–8%)</div>
+          </div>
+          <div class="formula" style="border-left-color:var(--blue)">
+            <div class="f-label" style="color:var(--blue)">Beta Definition</div>
+            <div class="f-eq">βᵢ = Cov(Rᵢ, Rmkt) / Var(Rmkt)</div>
+            <div class="f-note">= SD(Rᵢ) × Corr(Rᵢ, Rmkt) / SD(Rmkt)<br>Measures the fraction of security i's volatility that is correlated with the market<br>Only this "systematic" portion is priced — firm-specific risk earns no premium</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac re">
+            <div class="ac-hd">Why only market (systematic) risk is priced</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">Systematic risk</strong> (market risk) — moves with the overall economy; cannot be diversified away no matter how many stocks you hold (e.g., recessions affect all firms)</li>
+              <li><strong style="color:var(--white)">Idiosyncratic risk</strong> (firm-specific) — affects only one company (e.g., a CEO scandal, a product recall); disappears as you hold more stocks</li>
+              <li>In a competitive market, investors are only rewarded for risks they <em>must</em> bear. Since idiosyncratic risk can be diversified at zero cost, no risk premium is paid for holding it</li>
+              <li>Beta measures the systematic component only — the correlation with the market weighted by relative volatility</li>
+            </ul>
+            <div class="ac-stat">Firm-specific risk → diversifiable → zero risk premium · Systematic risk → non-diversifiable → priced via beta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /capmPanels -->
+</div>
+</div>
+
+<!-- ── SECTION 5: BETA ── -->
+<div id="beta" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">Beta — Measuring Systematic Risk</h2></div>
+
+  <p class="body fu">Beta is the single most important number in the CAPM. It quantifies a security's <strong>sensitivity to market-wide movements</strong> — for every 1% the market moves, a stock with β=1.5 tends to move 1.5%, and one with β=0.5 tends to move only 0.5%. Beta determines the security's required return: high-beta stocks must offer higher expected returns to compensate investors for their amplified exposure to market risk.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Beta interpretation guide</div>
+        <table class="bt">
+          <thead><tr><th style="text-align:left">Beta (β)</th><th style="text-align:left">Interpretation</th><th>Example sectors</th></tr></thead>
+          <tbody>
+            <tr><td>β = 0</td><td style="text-align:left">Uncorrelated with market (risk-free)</td><td>T-Bills</td></tr>
+            <tr><td>0 &lt; β &lt; 1</td><td style="text-align:left">Less volatile than market</td><td>Utilities, Consumer staples</td></tr>
+            <tr class="hi"><td>β = 1</td><td style="text-align:left">Moves exactly with market</td><td>Market portfolio</td></tr>
+            <tr><td>β &gt; 1</td><td style="text-align:left">More volatile than market</td><td>Tech, Financials, Cyclicals</td></tr>
+            <tr class="neg"><td>β &lt; 0</td><td style="text-align:left">Moves opposite to market</td><td>Gold (sometimes), short positions</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">Example 4 — Campbell Soup beta &amp; CAPM return</div>
+        <div class="d-row"><span class="d-lbl">σ_Campbell</span><span class="d-val">26%</span></div>
+        <div class="d-row"><span class="d-lbl">Corr(Campbell, Mkt)</span><span class="d-val">0.33</span></div>
+        <div class="d-row"><span class="d-lbl">σ_Market</span><span class="d-val">16%</span></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">β = (26% × 0.33) / 16% = 0.54</div>
+        </div>
+        <div class="d-row"><span class="d-lbl">rƒ</span><span class="d-val">4%</span></div>
+        <div class="d-row"><span class="d-lbl">E[Rmkt]</span><span class="d-val">10%</span></div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">E[R_CPB] = 4% + 0.54×(10%−4%) = 7.24%</div>
+          <div class="f-note">Same as investing 54% in market + 46% in T-Bills = same β = 0.54</div>
+        </div>
+        <div class="ac-body">Campbell Soup moves only 54% as much as the market — it is a defensive stock. The required return (7.24%) reflects only this systematic exposure. Any additional firm-specific risk (food safety scares, management changes) earns no extra return because it can be diversified away.</div>
+      </div>
+    </div>
+    <div>
+      <!-- CHART 4: Beta illustration -->
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">Beta — stock return vs market return (scatter with regression line)</div><div class="chart-src">β = slope of regression line</div></div>
+        <div class="chart-wrap" style="height:280px"><canvas id="betaScatterChart"></canvas></div>
+        <div class="leg">
+          <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>β=1.5 (aggressive — amplifies market)</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>β=1.0 (market)</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>β=0.5 (defensive — dampens market)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 5: CAPM expected return vs beta -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">CAPM expected return vs beta (rƒ=4%, E[Rmkt]=10%)</div>
+      <div class="chart-src">E[R] = 4% + β×6% · Market risk premium = 6%</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="capmLineChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">This IS the Security Market Line (SML). Every security should plot on this line under CAPM. Securities above the line are underpriced (positive alpha); below are overpriced (negative alpha). The line passes through rƒ at β=0 and through the market return at β=1.</div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 6: SML ── -->
+<div id="sml" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">The Security Market Line &amp; Alpha</h2></div>
+
+  <p class="body fu">The <strong>Security Market Line (SML)</strong> is the graphical representation of the CAPM equation. It plots every security's expected return against its beta. Under the CAPM, all securities and portfolios must lie on this line — if they don't, an arbitrage opportunity exists. The SML is the second major diagram in portfolio theory (alongside the CML), and the two are fundamentally different: the CML uses volatility on the x-axis; the SML uses beta.</p>
+
+  <div class="g2 fu">
+    <div>
+      <p class="body">The CML shows the highest attainable expected return for each level of <em>total volatility</em> — it only applies to efficient portfolios (combinations of the market and risk-free asset). The SML applies to every individual security and portfolio: it shows the <em>required</em> expected return for a given level of <em>systematic risk</em> (beta). Individual stocks lie to the right of the CML (they carry diversifiable risk too), but they should all lie on the SML.</p>
+      <div class="ac or">
+        <div class="ac-hd">CML vs SML — key distinctions</div>
+        <table class="bt">
+          <thead><tr><th style="text-align:left">Feature</th><th>CML</th><th>SML</th></tr></thead>
+          <tbody>
+            <tr><td>X-axis</td><td>Total volatility σ</td><td>Beta β</td></tr>
+            <tr><td>Applies to</td><td>Efficient portfolios only</td><td>All securities &amp; portfolios</td></tr>
+            <tr><td>Intercept</td><td>rƒ at σ=0</td><td>rƒ at β=0</td></tr>
+            <tr><td>Slope</td><td>(E[Rmkt]−rƒ)/σ_mkt</td><td>E[Rmkt]−rƒ</td></tr>
+            <tr class="hi"><td>Market portfolio</td><td>On the line (tangent point)</td><td>On the line (β=1)</td></tr>
+            <tr><td>Individual stocks</td><td>Right of the line (extra risk)</td><td>On the line (by CAPM)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Alpha (α) — deviations from the SML</div>
+        <div class="ac-body" style="margin-bottom:.65rem">In practice, securities often deviate from the SML. The deviation is called <strong>alpha (α)</strong>:</div>
+        <div class="formula" style="margin:.4rem 0;border-left-color:var(--blue)">
+          <div class="f-eq">α = Actual return − CAPM expected return</div>
+          <div class="f-note">= E[Rᵢ] − [rƒ + βᵢ(E[Rmkt]−rƒ)]</div>
+        </div>
+        <div class="d-row"><span class="d-lbl">α &gt; 0 (above SML)</span><span class="d-val" style="color:var(--green)">Underpriced → buy</span></div>
+        <div class="d-row"><span class="d-lbl">α = 0 (on SML)</span><span class="d-val">Fairly priced</span></div>
+        <div class="d-row"><span class="d-lbl">α &lt; 0 (below SML)</span><span class="d-val" style="color:var(--red)">Overpriced → sell/avoid</span></div>
+        <div class="ac-body" style="margin-top:.5rem">Under the CAPM, in equilibrium no security can persistently have α≠0 — investors would immediately exploit the mispricing. In practice, finding securities with consistent positive alpha is the goal of active management (and extremely difficult).</div>
+        <div class="ac-stat">CAPM implies all α = 0 in equilibrium · Active managers seek α &gt; 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 6: Full SML with securities plotted -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Security Market Line — with individual securities, portfolio, and alpha examples</div>
+      <div class="chart-src">rƒ=4%, E[Rmkt]=10%, market risk premium=6%</div>
+    </div>
+    <div class="chart-wrap" style="height:300px"><canvas id="smlChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>Security Market Line (SML)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875;border-radius:50%"></span>Securities on SML (fairly priced)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0;border-radius:50%"></span>Above SML (positive α — underpriced)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#ff4050;border-radius:50%"></span>Below SML (negative α — overpriced)</span>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO BETA EXAMPLE -->
+  <div class="g2 fu">
+    <div class="ac or">
+      <div class="ac-hd">Example 5 — Portfolio beta &amp; expected return</div>
+      <div class="ac-body" style="margin-bottom:.65rem">Equal-weight portfolio: Pfizer (β=0.50) + Home Depot (β=1.25). rƒ=4%, E[Rmkt]=10%.</div>
+      <div class="tl-yr" style="margin-top:.25rem">Method 1: Via individual stock expected returns</div>
+      <div class="formula" style="margin:.3rem 0;border-left-color:var(--orange)">
+        <div class="f-eq">E[R_PFE] = 4%+0.50×6% = 7.0%</div>
+        <div class="f-eq">E[R_HD] = 4%+1.25×6% = 11.5%</div>
+        <div class="f-eq">E[R_P] = ½×7.0% + ½×11.5% = 9.25%</div>
+      </div>
+      <div class="tl-yr" style="margin-top:.5rem">Method 2: Via portfolio beta</div>
+      <div class="formula" style="margin:.3rem 0;border-left-color:var(--green)">
+        <div class="f-eq">β_P = ½×0.50 + ½×1.25 = 0.875</div>
+        <div class="f-eq">E[R_P] = 4% + 0.875×6% = 9.25% ✓</div>
+      </div>
+      <div class="ac-body">Both methods give exactly the same answer — this confirms that the SML applies to portfolios just as it does to individual securities. Portfolio beta is the weighted average of component betas.</div>
+    </div>
+    <div>
+      <!-- CHART 7: Portfolio beta chart -->
+      <div class="chart-box" style="align-self:start">
+        <div class="chart-hd"><div class="chart-title">CAPM expected return for key securities &amp; portfolio</div><div class="chart-src">rƒ=4%, market premium=6%</div></div>
+        <div class="chart-wrap" style="height:240px"><canvas id="portfolioBetaChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── SECTION 7: SUMMARY ── -->
+<div id="summary" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">07</div><h2 class="sec-title">Summary — Complete Formula Reference</h2></div>
+
+  <div class="outlook-grid fu">
+    <div class="og-cell"><div class="og-icon">📐</div><div class="og-lbl">CAPM equation</div><div class="og-val">E[R]=rƒ+β(E[Rm]−rƒ)</div><div class="og-sub">One equation to price any security's required return based on its systematic risk</div></div>
+    <div class="og-cell"><div class="og-icon">🎯</div><div class="og-lbl">Tangent = Market portfolio</div><div class="og-val">Under CAPM</div><div class="og-sub">Every investor holds the same risky portfolio — the value-weighted market portfolio</div></div>
+    <div class="og-cell"><div class="og-icon">📈</div><div class="og-lbl">Sharpe Ratio optimised</div><div class="og-val">(E[R]−rƒ)/σ</div><div class="og-sub">Tangent portfolio maximises this · All other portfolios have lower Sharpe Ratio</div></div>
+  </div>
+
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">All formulas — exam reference</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">E[R_xP] = rƒ + x(E[Rₚ]−rƒ)</strong> — expected return of x fraction in risky portfolio + (1−x) in T-Bills</li>
+        <li><strong style="color:var(--white)">SD(R_xP) = x·SD(Rₚ)</strong> — volatility scales linearly with fraction in risky portfolio (T-Bills add no risk)</li>
+        <li><strong style="color:var(--white)">Sharpe Ratio = (E[Rₚ]−rƒ)/SD(Rₚ)</strong> — reward per unit of volatility; tangent portfolio maximises this</li>
+        <li><strong style="color:var(--white)">CAPM: E[Rᵢ] = rƒ + βᵢ(E[Rmkt]−rƒ)</strong> — required return = rƒ + scaled market risk premium</li>
+        <li><strong style="color:var(--white)">βᵢ = Cov(Rᵢ,Rmkt)/Var(Rmkt)</strong> — beta = systematic risk relative to the market variance</li>
+        <li><strong style="color:var(--white)">βᵢ = SD(Rᵢ)×Corr(Rᵢ,Rmkt)/SD(Rmkt)</strong> — alternative beta formula using correlation</li>
+        <li><strong style="color:var(--white)">βₚ = Σxᵢβᵢ</strong> — portfolio beta is the weighted average of component betas</li>
+        <li><strong style="color:var(--white)">α = Actual return − CAPM return</strong> — deviation from SML; positive α = underpriced; negative α = overpriced</li>
+        <li><strong style="color:var(--white)">CML: E[R] = rƒ + (E[Rmkt]−rƒ)/σ_mkt × σ</strong> — the efficient frontier with risk-free asset; applies only to efficient portfolios</li>
+        <li><strong style="color:var(--white)">On CML: β = x (fraction in market portfolio)</strong> — because β_mkt=1 and β_rƒ=0, blending them gives β=x</li>
+      </ul>
+    </div>
+    <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common mistakes &amp; misconceptions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">CML ≠ SML</strong> — CML uses total volatility (σ) on x-axis and applies only to efficient portfolios; SML uses beta and applies to every security</li>
+        <li><strong style="color:var(--white)">High total volatility ≠ high required return</strong> — only systematic risk (beta) is priced; a stock with high σ but low β earns a low premium because its risk is diversifiable</li>
+        <li><strong style="color:var(--white)">Adding a low-return stock can still improve your portfolio</strong> — if it has low/negative correlation with existing holdings, it reduces portfolio variance without a proportional return cost</li>
+        <li><strong style="color:var(--white)">The market portfolio is NOT the S&P 500</strong> — theoretically it includes all risky assets worldwide; in practice the S&P 500 or MSCI World is used as an approximation</li>
+        <li><strong style="color:var(--white)">All investors hold the same risky portfolio (under CAPM)</strong> — not the same total portfolio; risk aversion determines how much goes in the risk-free asset, but everyone's risky component is the market portfolio</li>
+        <li><strong style="color:var(--white)">β = 1 does NOT mean 0% risk premium</strong> — β=1 earns the full market risk premium E[Rmkt]−rƒ; only β=0 earns zero risk premium (the risk-free rate)</li>
+        <li><strong style="color:var(--white)">CAPM gives a required return, not a guaranteed return</strong> — it says what investors must expect to hold the stock in equilibrium; actual realised returns will differ</li>
+        <li><strong style="color:var(--white)">Negative beta is possible</strong> — gold and volatility instruments sometimes have negative betas; they earn an expected return BELOW rƒ because they provide insurance against market downturns</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tl fu" style="margin-top:1.5rem">
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 1 — Expand the efficient frontier with all risky assets</div><div class="tl-card"><div class="tl-title">Adding any imperfectly correlated asset improves the frontier</div><div class="tl-text">No matter how inferior a stock looks in isolation, if its correlation with the existing portfolio is below 1, it can reduce volatility. The optimal set of risky investments is all available securities — not just the highest Sharpe Ratio stocks. This leads naturally to the concept of the market portfolio.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 2 — Include the risk-free asset; the efficient frontier becomes a line</div><div class="tl-card"><div class="tl-title">Every combination of T-Bills and a risky portfolio traces a straight line</div><div class="tl-text">Because T-Bills have zero variance and zero covariance with risky assets, SD scales linearly with x. The investor's problem reduces to: which risky portfolio gives the steepest line from rƒ? That portfolio is the tangent portfolio — unique for all investors.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 3 — Identify the tangent portfolio; it maximises the Sharpe Ratio</div><div class="tl-card"><div class="tl-title">All investors hold the same risky portfolio (separation theorem)</div><div class="tl-text">Risk aversion determines only the mix between T-Bills and the tangent portfolio, not which risky portfolio to hold. Under CAPM assumptions, collective market equilibrium forces the tangent portfolio to equal the value-weighted market portfolio.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 4 — Use CAPM to price any security's required return</div><div class="tl-card"><div class="tl-title">E[Rᵢ] = rƒ + βᵢ(E[Rmkt]−rƒ) — one formula for every security</div><div class="tl-text">Beta measures systematic risk. Only systematic risk earns a premium — firm-specific risk is diversifiable and freely eliminable. The CAPM gives a practical, single-number cost of equity for any company or project, making it indispensable for capital budgeting (WACC) and equity valuation.</div></div></div>
+    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">STEP 5 — Plot the SML; identify alpha to find mis-pricings</div><div class="tl-card"><div class="tl-title">Every security should lie on the SML in equilibrium · α = deviation</div><div class="tl-text">Under CAPM, α=0 for all securities in equilibrium. In practice, securities deviate: positive alpha stocks appear undervalued (buy), negative alpha stocks overvalued (avoid). Active management is the pursuit of positive alpha — and CAPM is the benchmark against which that alpha is measured.</div></div></div>
+  </div>
+
+  <div class="verdict fu">
+    <div class="verdict-lbl">One-line synthesis — CAPM</div>
+    <div class="verdict-text">The CAPM delivers one profound conclusion: in equilibrium, the only risk that earns a return is market risk — systematic, non-diversifiable exposure to the economy as a whole. Every other risk is idiosyncratic, eliminable at zero cost through diversification, and therefore unrewarded. Beta quantifies exactly how much market risk a security carries, and the Security Market Line translates that beta into a required return — the rate investors must expect to voluntarily hold the security in a well-diversified portfolio.</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
+  <div class="foot-src">
+    CAPM · Clara Martínez-Toledano · Corporate Finance Module 7<br>
+    Topics: Efficient Frontier · Tangent Portfolio · Sharpe Ratio · CML · CAPM · Beta · SML · Alpha<br>
+    For educational and study purposes only
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── BOILERPLATE ── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
+});
+const sections=['manystocks','riskfree','tangent','capm','beta','sml','summary'];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;let cur=sections[0];
+  sections.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  document.querySelectorAll('.nl').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
+document.querySelectorAll('.fu,.tl-item').forEach(el=>io.observe(el));
+function switchTab(panelId,btn,tabsId,panelsId){
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+Chart.defaults.color='#888480';Chart.defaults.font.family="'IBM Plex Mono',monospace";Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.04)',tk={color:'#888480',font:{size:10}};
+
+/* helpers */
+function frontier2stock(eA,sA,eB,sB,rho){
+  const pts=[];
+  for(let x=0;x<=1;x+=0.02){
+    const er=x*eA+(1-x)*eB;
+    const vr=x*x*sA*sA+(1-x)*(1-x)*sB*sB+2*x*(1-x)*rho*sA*sB;
+    pts.push({x:+Math.sqrt(vr).toFixed(2),y:+er.toFixed(2)});
+  }
+  return pts;
+}
+function frontierWithShort(eA,sA,eB,sB,rho,lo=-0.3,hi=1.3){
+  const pts=[];
+  for(let x=lo;x<=hi;x+=0.02){
+    const er=x*eA+(1-x)*eB;
+    const vr=x*x*sA*sA+(1-x)*(1-x)*sB*sB+2*x*(1-x)*rho*sA*sB;
+    if(vr>=0) pts.push({x:+Math.sqrt(vr).toFixed(2),y:+er.toFixed(2)});
+  }
+  return pts;
+}
+
+/* ── CHART 1: 3-stock frontier ── */
+(()=>{
+  // Intel: E=26, σ=50; Coke: E=6, σ=25; Bore: E=2, σ=25; all ρ=0
+  const intelCoke=frontierWithShort(26,50,6,25,0);
+  // 3-stock: sample grid of combinations (simplified as 2-asset blends with Coke+Bore first, then blend with Intel)
+  // We show: IntelCoke curve (2-stock), plus some 3-stock combinations
+  const boreCoke=frontierWithShort(2,25,6,25,0);
+  const boreIntel=frontierWithShort(2,25,26,50,0);
+  // 3-stock efficient: blend of Intel with optimal (Coke+Bore) sub-portfolio
+  const pts3=[];
+  for(let xCoke=0;xCoke<=1;xCoke+=0.05){
+    const xBore=1-xCoke;
+    const eSubP=xCoke*6+xBore*2;
+    const sdSubP=Math.sqrt(xCoke*xCoke*625+xBore*xBore*625); // ρ=0
+    for(let xI=0;xI<=1;xI+=0.05){
+      const xSub=1-xI;
+      const er=xI*26+xSub*eSubP;
+      const sd=Math.sqrt(xI*xI*2500+xSub*xSub*sdSubP*sdSubP);
+      pts3.push({x:+sd.toFixed(2),y:+er.toFixed(2)});
+    }
+  }
+  // Sort pts3 to get upper envelope (simplified: just plot all as a scatter)
+  const stocks=[{x:50,y:26,label:'Intel'},{x:25,y:6,label:'Coke'},{x:25,y:2,label:'Bore'}];
+  new Chart(document.getElementById('threeStockChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'scatter',label:'Feasible 3-stock portfolios',data:pts3,backgroundColor:'rgba(0,200,117,0.12)',borderColor:'transparent',pointRadius:2},
+      {type:'line',label:'Intel+Coke (2-stock)',data:intelCoke,borderColor:'rgba(61,142,240,0.5)',backgroundColor:'transparent',tension:0.3,borderWidth:2,borderDash:[4,3],pointRadius:0,showLine:true},
+      {type:'scatter',label:'Individual stocks',data:stocks,backgroundColor:'#f0b429',borderColor:'#f0b429',pointRadius:9}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===2&&c.raw.label)return` ${c.raw.label}: (${c.parsed.x}%,${c.parsed.y}%)`;return` (σ=${c.parsed.x}%, E[R]=${c.parsed.y}%)`;}}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Volatility σ (%)',color:'#888480',font:{size:9}},min:0,max:55},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:-2,max:30}}}
+  });
+})();
+
+/* ── CHART 2: Risk-free + risky portfolio ── */
+(()=>{
+  const rf=5,eP=15,sP=25;
+  const xs=[],ers=[],sds=[];
+  for(let x=0;x<=2;x+=0.05){xs.push(x);ers.push(rf+x*(eP-rf));sds.push(x*sP);}
+  const lendPts=xs.filter((_,i)=>xs[i]<=1.001).map((_,i)=>({x:sds[i],y:ers[i]}));
+  const borPts=xs.filter((_,i)=>xs[i]>=0.999).map((_,i)=>({x:sds[xs.findIndex(v=>v>=0.999)+i]||0,y:ers[xs.findIndex(v=>v>=0.999)+i]||0}));
+  // redo clean
+  const lend=[],borrow=[];
+  for(let x=0;x<=1;x+=0.05){lend.push({x:x*sP,y:rf+x*(eP-rf)});}
+  for(let x=1;x<=2;x+=0.05){borrow.push({x:x*sP,y:rf+x*(eP-rf)});}
+  const portP=[{x:sP,y:eP}];
+  new Chart(document.getElementById('riskFreeChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',label:'Lending (x≤1)',data:lend,borderColor:'#3d8ef0',backgroundColor:'rgba(61,142,240,0.07)',fill:true,tension:0,borderWidth:2.5,pointRadius:0,showLine:true},
+      {type:'line',label:'Borrowing (x>1)',data:borrow,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:true,tension:0,borderWidth:2.5,pointRadius:0,showLine:true},
+      {type:'scatter',label:'Portfolio P',data:portP,backgroundColor:'#f0b429',borderColor:'#f0b429',pointRadius:9},
+      {type:'scatter',label:'Risk-free',data:[{x:0,y:rf}],backgroundColor:'#888480',borderColor:'#888480',pointRadius:7}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` (σ=${c.parsed.x.toFixed(0)}%, E[R]=${c.parsed.y.toFixed(1)}%)`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Volatility σ (%)',color:'#888480',font:{size:9}},min:0,max:55},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:0,max:35}}}
+  });
+})();
+
+/* ── CHART 3: Tangent portfolio & CML ── */
+(()=>{
+  const rf=5;
+  // Efficient frontier: Intel+Coke, ρ=0, Intel E=26 σ=50, Coke E=6 σ=25
+  const frontPts=[];
+  for(let x=0;x<=1;x+=0.015){
+    const er=x*26+(1-x)*6;
+    const sd=Math.sqrt(x*x*2500+(1-x)*(1-x)*625);
+    frontPts.push({x:+sd.toFixed(2),y:+er.toFixed(2)});
+  }
+  // Tangent point: maximise Sharpe = (E[R]-rf)/sd
+  let bestSharpe=-Infinity,tX=0,tSd=0,tEr=0;
+  for(let x=0;x<=1;x+=0.001){
+    const er=x*26+(1-x)*6;
+    const sd=Math.sqrt(x*x*2500+(1-x)*(1-x)*625);
+    const sh=(er-rf)/sd;
+    if(sh>bestSharpe){bestSharpe=sh;tX=x;tSd=sd;tEr=er;}
+  }
+  // CML from rf through tangent
+  const cml=[];
+  for(let sig=0;sig<=55;sig+=1){const x=sig/tSd;cml.push({x:sig,y:+(rf+x*(tEr-rf)).toFixed(2)});}
+  // Sub-optimal lines from rf through two other portfolios
+  const sub1=[],sub2=[];
+  const p1x=0.2,p1sd=Math.sqrt(p1x*p1x*2500+(1-p1x)*(1-p1x)*625),p1er=p1x*26+(1-p1x)*6;
+  const p2x=0.8,p2sd=Math.sqrt(p2x*p2x*2500+(1-p2x)*(1-p2x)*625),p2er=p2x*26+(1-p2x)*6;
+  for(let sig=0;sig<=55;sig+=1){sub1.push({x:sig,y:+(rf+(sig/p1sd)*(p1er-rf)).toFixed(2)});sub2.push({x:sig,y:+(rf+(sig/p2sd)*(p2er-rf)).toFixed(2)});}
+  new Chart(document.getElementById('tangentChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',data:frontPts,borderColor:'rgba(61,142,240,0.4)',backgroundColor:'rgba(61,142,240,0.05)',fill:false,tension:0.3,borderWidth:2,pointRadius:0,showLine:true,label:'Efficient frontier'},
+      {type:'line',data:sub1,borderColor:'rgba(255,255,255,0.15)',backgroundColor:'transparent',tension:0,borderWidth:1.5,borderDash:[5,4],pointRadius:0,showLine:true,label:'Sub-optimal 1'},
+      {type:'line',data:sub2,borderColor:'rgba(255,255,255,0.15)',backgroundColor:'transparent',tension:0,borderWidth:1.5,borderDash:[5,4],pointRadius:0,showLine:true,label:'Sub-optimal 2'},
+      {type:'line',data:cml,borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.07)',fill:false,tension:0,borderWidth:3,pointRadius:0,showLine:true,label:'CML'},
+      {type:'scatter',data:[{x:+tSd.toFixed(1),y:+tEr.toFixed(1),label:'T'}],backgroundColor:'#f0b429',borderColor:'#f0b429',pointRadius:10,label:'Tangent T'},
+      {type:'scatter',data:[{x:0,y:rf}],backgroundColor:'#888480',borderColor:'#888480',pointRadius:7,label:'Risk-free'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` (σ=${c.parsed.x.toFixed(1)}%, E[R]=${c.parsed.y.toFixed(1)}%)`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Volatility σ (%)',color:'#888480',font:{size:9}},min:0,max:52},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:0,max:28}}}
+  });
+})();
+
+/* ── CHART 4: Beta scatter — stock return vs market return ── */
+(()=>{
+  // Simulated monthly data for 3 stocks with different betas
+  function sim(beta,n=36){
+    const mkt=[],stk=[];
+    for(let i=0;i<n;i++){const m=(Math.random()-0.5)*0.08;mkt.push(+(m*100).toFixed(2));stk.push(+(beta*m*100+(Math.random()-0.5)*0.04*100).toFixed(2));}
+    return{mkt,stk};
+  }
+  const s15=sim(1.5),s10=sim(1.0),s05=sim(0.5);
+  const pts15=s15.mkt.map((m,i)=>({x:m,y:s15.stk[i]}));
+  const pts10=s10.mkt.map((m,i)=>({x:m,y:s10.stk[i]}));
+  const pts05=s05.mkt.map((m,i)=>({x:m,y:s05.stk[i]}));
+  const line=[-6,-4,-2,0,2,4,6];
+  new Chart(document.getElementById('betaScatterChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {label:'β=1.5',data:pts15,backgroundColor:'rgba(245,106,0,0.45)',borderColor:'transparent',pointRadius:4},
+      {label:'β=1.0',data:pts10,backgroundColor:'rgba(61,142,240,0.45)',borderColor:'transparent',pointRadius:4},
+      {label:'β=0.5',data:pts05,backgroundColor:'rgba(0,200,117,0.45)',borderColor:'transparent',pointRadius:4},
+      {type:'line',label:'β=1.5 line',data:line.map(m=>({x:m,y:1.5*m})),borderColor:'rgba(245,106,0,0.8)',backgroundColor:'transparent',tension:0,borderWidth:2,pointRadius:0,showLine:true},
+      {type:'line',label:'β=1.0 line',data:line.map(m=>({x:m,y:m})),borderColor:'rgba(61,142,240,0.8)',backgroundColor:'transparent',tension:0,borderWidth:2,pointRadius:0,showLine:true},
+      {type:'line',label:'β=0.5 line',data:line.map(m=>({x:m,y:0.5*m})),borderColor:'rgba(0,200,117,0.8)',backgroundColor:'transparent',tension:0,borderWidth:2,pointRadius:0,showLine:true}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` Mkt: ${c.parsed.x.toFixed(1)}%, Stock: ${c.parsed.y.toFixed(1)}%`}}},
+      scales:{x:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Market Return (%)',color:'#888480',font:{size:9}}},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Stock Return (%)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 5: CAPM expected return vs beta ── */
+(()=>{
+  const rf=4,mktPrem=6;
+  const betas=[],rets=[];
+  for(let b=-0.25;b<=2.25;b+=0.05){betas.push(+b.toFixed(2));rets.push(+(rf+b*mktPrem).toFixed(2));}
+  const securities=[
+    {x:0,y:4,label:'T-Bill (β=0)'},{x:1,y:10,label:'Market (β=1)'},
+    {x:0.54,y:7.24,label:'Campbell (β=0.54)'},{x:0.5,y:7.0,label:'Pfizer (β=0.50)'},
+    {x:1.25,y:11.5,label:'Home Depot (β=1.25)'},{x:0.875,y:9.25,label:'50/50 Port (β=0.875)'}
+  ];
+  new Chart(document.getElementById('capmLineChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',data:betas.map((b,i)=>({x:b,y:rets[i]})),borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.06)',fill:true,tension:0,borderWidth:3,pointRadius:0,showLine:true,label:'SML'},
+      {type:'scatter',data:securities,backgroundColor:'#00c875',borderColor:'#00c875',pointRadius:8,label:'Securities'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===1&&c.raw.label)return` ${c.raw.label}: E[R]=${c.parsed.y.toFixed(2)}%`;return` β=${c.parsed.x.toFixed(2)}, E[R]=${c.parsed.y.toFixed(2)}%`;}}}},
+      scales:{x:{grid:{color:gc},ticks:tk,title:{display:true,text:'Beta (β)',color:'#888480',font:{size:9}},min:-0.3,max:2.3},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:-0,max:18}}}
+  });
+})();
+
+/* ── CHART 6: SML with alpha examples ── */
+(()=>{
+  const rf=4,mktPrem=6;
+  const betas=[],rets=[];
+  for(let b=0;b<=2;b+=0.05){betas.push(+b.toFixed(2));rets.push(+(rf+b*mktPrem).toFixed(2));}
+  const onSML=[{x:0.5,y:7,label:'Stock A (on SML)'},{x:1.0,y:10,label:'Market'},{x:1.5,y:13,label:'Stock B (on SML)'}];
+  const aboveSML=[{x:0.7,y:11,label:'Stock C (α=+2.8%)'},{x:1.3,y:14,label:'Stock D (α=+2.2%)'}];
+  const belowSML=[{x:0.8,y:6.5,label:'Stock E (α=−2.3%)'},{x:1.6,y:12,label:'Stock F (α=−1.6%)'}];
+  new Chart(document.getElementById('smlChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {type:'line',data:betas.map((b,i)=>({x:b,y:rets[i]})),borderColor:'#f56a00',backgroundColor:'rgba(245,106,0,0.05)',fill:false,tension:0,borderWidth:3,pointRadius:0,showLine:true,label:'SML'},
+      {type:'scatter',data:onSML,backgroundColor:'#00c875',borderColor:'#00c875',pointRadius:9,label:'On SML'},
+      {type:'scatter',data:aboveSML,backgroundColor:'#3d8ef0',borderColor:'#3d8ef0',pointRadius:9,label:'Above SML (+α)'},
+      {type:'scatter',data:belowSML,backgroundColor:'#ff4050',borderColor:'#ff4050',pointRadius:9,label:'Below SML (−α)'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.raw&&c.raw.label)return` ${c.raw.label}`;return` β=${c.parsed.x.toFixed(2)}, E[R]=${c.parsed.y.toFixed(1)}%`;}}}},
+      scales:{x:{grid:{color:gc},ticks:tk,title:{display:true,text:'Beta (β)',color:'#888480',font:{size:9}},min:0,max:2.1},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}},min:2,max:16}}}
+  });
+})();
+
+/* ── CHART 7: Portfolio beta bar chart ── */
+(()=>{
+  const labels=['T-Bill\n(β=0)','Campbell\n(β=0.54)','Pfizer\n(β=0.5)','50/50 Pfizer\n+Home Depot\n(β=0.875)','Market\n(β=1.0)','Home Depot\n(β=1.25)'];
+  const betas=[0,0.54,0.5,0.875,1.0,1.25];
+  const colors=betas.map(b=>b===0?'rgba(136,132,128,0.7)':b<1?'rgba(0,200,117,0.75)':b===1?'rgba(245,106,0,0.85)':'rgba(255,64,80,0.75)');
+  const rets=betas.map(b=>+(4+b*6).toFixed(2));
+  new Chart(document.getElementById('portfolioBetaChart'),{
+    type:'bar',
+    data:{labels,datasets:[{label:'E[R] (CAPM)',data:rets,backgroundColor:colors,borderColor:colors.map(c=>c.replace('0.75','1').replace('0.85','1').replace('0.7','1')),borderWidth:0,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` E[R] = ${c.parsed.y.toFixed(2)}%, β=${betas[c.dataIndex]}`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},min:0,max:14,title:{display:true,text:'Expected Return (%)',color:'#888480',font:{size:9}}}}}
+  });
+})();
+</script>
+</body>
+</html>
