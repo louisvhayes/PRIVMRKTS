@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Importance of LBOs in Private Equity — A Briefing</title>
+<title>Leveraged Buyouts — The Engine of Private Equity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
 <style>
@@ -22,11 +22,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
-
-/* PROGRESS */
 #prog{position:fixed;top:0;left:0;height:2px;background:var(--orange);z-index:999;width:0%;transition:width .1s linear}
-
-/* NAV */
 .nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:50px;display:flex;align-items:stretch;justify-content:space-between;padding:0 2rem}
 .nav-brand{display:flex;align-items:center;gap:14px}
 .nav-logo{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
@@ -38,8 +34,6 @@ body{background:var(--black);color:var(--white);font-family:var(--sans);font-siz
 .nl{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--white-3);padding:0 13px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;text-decoration:none;transition:color .15s;white-space:nowrap}
 .nl:hover{color:var(--white)}
 .nl.active{color:var(--orange);border-bottom-color:var(--orange)}
-
-/* HERO */
 .hero{padding:4.5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--off-black)}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 45%,rgba(245,106,0,.07) 0%,transparent 65%);pointer-events:none}
 .hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:start}
@@ -51,81 +45,74 @@ h1 em{font-style:italic;color:var(--orange)}
 .meta-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--white-3);letter-spacing:.05em}
 .meta-row span{display:flex;align-items:center;gap:5px}
 .meta-row span::before{content:'◆';font-size:5px;color:var(--orange)}
-
-/* HERO STATS PANEL */
 .stat-panel{background:var(--panel);border:1px solid var(--border-2);border-top:2px solid var(--orange)}
 .sp-head{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white-3);padding:.85rem 1.4rem;border-bottom:1px solid var(--border)}
 .sp-row{padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
 .sp-row:last-child{border-bottom:none}
 .sp-lbl{font-size:12px;color:var(--white-3);padding-top:2px}
 .sp-right{text-align:right}
-.sp-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--orange);line-height:1}
+.sp-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--orange);line-height:1}
 .sp-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:3px}
-
-/* SECTION WRAPPERS */
 .wrap{max-width:1120px;margin:0 auto}
 .sec{padding:3.5rem 2.5rem;border-bottom:1px solid var(--border)}
 .sec.alt{background:var(--off-black)}
 .sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:2.25rem}
-.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-dim);border:1px solid var(--orange-line);width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sec-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em}
-
-/* BODY TEXT */
 .body{font-size:14px;color:var(--white-2);line-height:1.82;margin-bottom:1.2rem}
 .body strong{color:var(--white);font-weight:600}
 .body em{color:var(--orange);font-style:normal}
-
-/* PULL QUOTE */
 .pq{border-left:3px solid var(--orange);padding:1.4rem 1.75rem;background:var(--panel);margin:1.75rem 0;position:relative}
 .pq::before{content:'"';font-family:var(--serif);font-size:68px;color:var(--orange);opacity:.14;position:absolute;top:-6px;left:14px;line-height:1;pointer-events:none}
 .pq-text{font-family:var(--serif);font-size:16.5px;font-style:italic;font-weight:700;color:var(--white);line-height:1.55;position:relative}
 .pq-src{font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.7rem;letter-spacing:.04em}
-
-/* GRID LAYOUTS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
-
-/* ACCENT CARDS */
 .ac{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem}
-.ac.or{border-top:2px solid var(--orange)}
-.ac.gr{border-top:2px solid var(--green)}
-.ac.re{border-top:2px solid var(--red)}
-.ac.bl{border-top:2px solid var(--blue)}
-.ac.ye{border-top:2px solid var(--yellow)}
-.ac.pu{border-top:2px solid var(--purple)}
-.ac.te{border-top:2px solid var(--teal)}
+.ac.or{border-top:2px solid var(--orange)}.ac.gr{border-top:2px solid var(--green)}.ac.re{border-top:2px solid var(--red)}.ac.bl{border-top:2px solid var(--blue)}.ac.ye{border-top:2px solid var(--yellow)}.ac.pu{border-top:2px solid var(--purple)}.ac.te{border-top:2px solid var(--teal)}
 .ac-hd{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-.ac.or .ac-hd{color:var(--orange)}
-.ac.gr .ac-hd{color:var(--green)}
-.ac.re .ac-hd{color:var(--red)}
-.ac.bl .ac-hd{color:var(--blue)}
-.ac.ye .ac-hd{color:var(--yellow)}
-.ac.pu .ac-hd{color:var(--purple)}
-.ac.te .ac-hd{color:var(--teal)}
+.ac.or .ac-hd{color:var(--orange)}.ac.gr .ac-hd{color:var(--green)}.ac.re .ac-hd{color:var(--red)}.ac.bl .ac-hd{color:var(--blue)}.ac.ye .ac-hd{color:var(--yellow)}.ac.pu .ac-hd{color:var(--purple)}.ac.te .ac-hd{color:var(--teal)}
 .ac-body{font-size:12.5px;color:var(--white-2);line-height:1.7}
 .ac-stat{font-family:var(--mono);font-size:11px;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--border)}
-.ac.or .ac-stat{color:var(--orange)}
-.ac.gr .ac-stat{color:var(--green)}
-.ac.re .ac-stat{color:var(--red)}
-.ac.bl .ac-stat{color:var(--blue)}
-.ac.ye .ac-stat{color:var(--yellow)}
-.ac.pu .ac-stat{color:var(--purple)}
-.ac.te .ac-stat{color:var(--teal)}
-
-/* BULLET LIST */
-.blist{list-style:none;font-size:13px;color:var(--white-2);line-height:1}
+.ac.or .ac-stat{color:var(--orange)}.ac.gr .ac-stat{color:var(--green)}.ac.re .ac-stat{color:var(--red)}.ac.bl .ac-stat{color:var(--blue)}.ac.ye .ac-stat{color:var(--yellow)}.ac.pu .ac-stat{color:var(--purple)}.ac.te .ac-stat{color:var(--teal)}
+.blist{list-style:none;font-size:13px;color:var(--white-2)}
 .blist li{padding:6px 0;border-bottom:1px solid var(--border);line-height:1.55;display:flex;gap:9px}
 .blist li:last-child{border-bottom:none}
 .blist li::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--orange);flex-shrink:0;margin-top:2px}
-
-/* DATA ROW */
 .d-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
 .d-row:last-child{border-bottom:none}
 .d-lbl{font-size:13px;color:var(--white-2)}
 .d-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white)}
-.d-sub{font-family:var(--mono);font-size:10px;color:var(--green);text-align:right}
-
-/* TIMELINE */
+.formula{background:var(--panel-2);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1rem 1.5rem;margin:1rem 0;font-family:var(--mono)}
+.formula .f-label{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+.formula .f-eq{font-size:15px;color:var(--white);line-height:1.6}
+.formula .f-note{font-size:11px;color:var(--white-3);margin-top:.4rem;line-height:1.5}
+.ss-wrap{overflow-x:auto;margin:1rem 0}
+.ss-table{width:100%;border-collapse:collapse;font-size:11.5px}
+.ss-table th{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .9rem;background:var(--panel-2);border-bottom:2px solid var(--orange-line);color:var(--orange);text-align:right;white-space:nowrap}
+.ss-table th:nth-child(1),.ss-table th:nth-child(2){text-align:left}
+.ss-table td{font-family:var(--mono);padding:.4rem .9rem;border-bottom:1px solid var(--border);text-align:right;color:var(--white-2);white-space:nowrap}
+.ss-table td:nth-child(1){text-align:center;color:var(--orange);font-weight:600;width:32px}
+.ss-table td:nth-child(2){text-align:left;color:var(--white-3)}
+.ss-table .ss-neg{color:var(--red)}
+.ss-table .ss-pos{color:var(--green)}
+.ss-table .ss-total{font-weight:600;color:var(--white);border-top:1px solid var(--border-2);background:var(--panel)}
+.ss-table .ss-grand{font-family:var(--mono);font-weight:700;color:var(--orange);border-top:2px solid var(--orange-line);background:var(--panel)}
+.ss-table .ss-section{background:var(--panel-2);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);font-weight:600}
+.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
+.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
+.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right}
+.chart-wrap{position:relative;width:100%}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--white-3)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
 .tl{position:relative;padding-left:26px;margin-top:1.25rem}
 .tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--border-2)}
 .tl-item{position:relative;margin-bottom:1.5rem;opacity:0;transform:translateX(-10px);transition:opacity .5s ease,transform .5s ease}
@@ -134,478 +121,857 @@ h1 em{font-style:italic;color:var(--orange)}
 .tl-dot.fill{background:var(--orange)}
 .tl-yr{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.08em;margin-bottom:3px}
 .tl-card{background:var(--panel);border:1px solid var(--border-2);padding:.9rem 1.2rem}
-.tl-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
 .tl-text{font-size:12px;color:var(--white-3);line-height:1.55}
-.tl-vol{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--green);float:right;margin-left:12px}
-
-/* CHART CONTAINER */
-.chart-box{background:var(--panel);border:1px solid var(--border-2);padding:1.5rem;margin-bottom:1.5rem}
-.chart-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
-.chart-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3)}
-.chart-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.04em;text-align:right}
-.chart-wrap{position:relative;width:100%}
-
-/* LEGEND */
-.leg{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--white-3)}
-.leg-item{display:flex;align-items:center;gap:5px}
-.leg-sq{width:10px;height:10px;border-radius:1px;flex-shrink:0}
-
-/* BAR METER */
-.bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
-.bar-lbl{font-size:12px;color:var(--white-2);width:230px;flex-shrink:0}
-.bar-wrap{flex:1;height:5px;background:var(--panel-2);border-radius:0;overflow:hidden}
-.bar-fill{height:100%;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
-.bar-val{font-family:var(--mono);font-size:10px;font-weight:600;width:52px;text-align:right;flex-shrink:0}
-
-/* FLOW DIAGRAM */
-.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;margin-bottom:1.5rem;background:var(--panel);border:1px solid var(--border-2);padding:1.5rem}
-.flow-node{flex:1;min-width:130px;background:var(--panel-2);border:1px solid var(--border-2);padding:1.1rem;position:relative;cursor:default;transition:border-color .2s,background .2s}
-.flow-node:hover{background:var(--panel-3);border-color:var(--orange)}
-.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;color:var(--orange);font-size:18px}
-.fn-num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);margin-bottom:6px;line-height:1}
-.fn-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:6px}
-.fn-body{font-size:11px;color:var(--white-3);line-height:1.5}
-
-/* OUTLOOK GRID */
 .outlook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1.5rem}
 .og-cell{background:var(--off-black);padding:1.75rem;text-align:center}
 .og-icon{font-size:26px;margin-bottom:.65rem}
 .og-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white-3);margin-bottom:.4rem}
-.og-val{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
+.og-val{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:.4rem}
 .og-sub{font-size:11.5px;color:var(--white-3);line-height:1.5}
-
-/* TABS */
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--border-2);margin-bottom:1.75rem}
-.tab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-3);padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap}
-.tab:hover{color:var(--white)}
-.tab.on{color:var(--orange);border-bottom-color:var(--orange)}
-.tab-panel{display:none}
-.tab-panel.on{display:block}
-
-/* REGULATORY TIMELINE */
-.reg-item{display:flex;gap:1.25rem;padding:1rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
-.reg-item:last-child{border-bottom:none}
-.reg-yr{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);width:60px;flex-shrink:0;padding-top:2px}
-.reg-body{flex:1}
-.reg-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
-.reg-text{font-size:12px;color:var(--white-3);line-height:1.6}
-.reg-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;margin-bottom:5px}
-.badge-warn{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(240,180,41,.3)}
-.badge-change{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-line)}
-.badge-risk{background:var(--red-dim);color:var(--red);border:1px solid var(--red-b)}
-.badge-ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
-
-/* VERDICT */
 .verdict{background:var(--panel);border:1px solid var(--border-2);border-left:3px solid var(--orange);padding:1.5rem 2rem;margin-top:1.5rem}
 .verdict-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
 .verdict-text{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.6}
-
-/* FOOTER */
 footer{background:var(--off-black);border-top:1px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .foot-logo{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--white-3)}
 .foot-logo b{color:var(--orange)}
-.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);letter-spacing:.05em;text-align:right;line-height:1.7}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.foot-src{font-family:var(--mono);font-size:9px;color:var(--white-4);text-align:right;line-height:1.7}
 .fu{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
 .fu.vis{opacity:1;transform:none}
 
-/* RESPONSIVE */
+/* Capital structure waterfall bar */
+.cap-stack{display:flex;flex-direction:column;gap:2px;margin:1rem 0}
+.cap-bar{display:flex;align-items:center;height:38px;padding:0 14px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;border-radius:1px;justify-content:space-between}
+.cap-bar .cb-pct{font-size:10px;opacity:.7}
+
+/* Returns bridge */
+.bridge{background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem;margin:1rem 0}
+.bridge-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+.bridge-row:last-child{border-bottom:none}
+.bridge-label{font-size:12.5px;color:var(--white-2);flex:1}
+.bridge-bar-wrap{flex:0 0 160px;height:14px;background:var(--panel-2);border-radius:1px;overflow:hidden}
+.bridge-bar{height:100%;border-radius:1px}
+.bridge-val{font-family:var(--mono);font-size:12px;font-weight:600;width:60px;text-align:right}
+
 @media(max-width:860px){
   .hero-inner,.g2,.g3,.outlook-grid{grid-template-columns:1fr}
   .stat-panel{display:none}
-  .bar-lbl{width:140px}
-  .flow{flex-direction:column}
-  .flow-arrow{transform:rotate(90deg)}
   footer{flex-direction:column;text-align:center}
   .foot-src{text-align:center}
 }
 </style>
 </head>
 <body>
-
 <div id="prog"></div>
 
+<!-- NAV -->
 <nav class="nav">
   <div class="nav-brand">
     <span class="nav-logo">PRIV<b>●</b>MRKTS</span>
     <div class="nav-pipe"></div>
-    <span class="nav-label">Research Intelligence</span>
+    <span class="nav-label">Private Markets Intelligence</span>
   </div>
   <div class="nav-links">
-    <a class="nl active" href="#drivers">Role</a>
-    <a class="nl" href="#market">Mechanics</a>
-    <a class="nl" href="#macro">Returns</a>
-    <a class="nl" href="#structure">Credit Cycle</a>
-    <a class="nl" href="#regulatory">Risks</a>
-    <a class="nl" href="#outlook">Takeaway</a>
+    <a class="nl active" href="#what-is-lbo">What Is an LBO?</a>
+    <a class="nl" href="#capital-structure">Capital Structure</a>
+    <a class="nl" href="#lbo-model">The LBO Model</a>
+    <a class="nl" href="#value-creation">Value Creation</a>
+    <a class="nl" href="#returns">Returns &amp; Exit</a>
+    <a class="nl" href="#lbo-candidates">Target Criteria</a>
+    <a class="nl" href="#real-world">Real-World Deals</a>
   </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
     <div>
-      <div class="kicker">Special Briefing · Private Equity Fundamentals</div>
-      <h1>Why Leveraged Buyouts<br>Are <em>So Important</em> in Private Equity</h1>
-      <p class="hero-lead">A compact primer on why the LBO is the core engine of private equity: it lets sponsors buy larger companies, amplify equity returns, enforce cash-flow discipline, and translate operational improvement into outsized value creation — while also making PE highly sensitive to interest rates and credit conditions.</p>
+      <div class="kicker">Private Equity · Module 2 — Deal Mechanics</div>
+      <h1>Leveraged Buyouts &amp;<br><em>How PE Firms</em><br>Create Returns</h1>
+      <p class="hero-lead">From the anatomy of a debt-funded acquisition to building a full LBO model, understanding capital structures, the three levers of value creation, and how sponsors engineer 20–30% IRRs — everything you need to talk fluently about the engine that drives private equity.</p>
       <div class="meta-row">
-        <span>March 2026</span>
-        <span>Private Equity · LBOs</span>
-        <span>Educational explainer in the style of the original file</span>
+        <span>LBO Mechanics · Capital Structure</span>
+        <span>IRR · MOIC · Entry &amp; Exit Multiples</span>
+        <span>Debt Paydown · EBITDA Growth · Multiple Expansion</span>
       </div>
     </div>
     <div class="stat-panel">
-      <div class="sp-head">LBO importance — at a glance</div>
-      <div class="sp-row"><div class="sp-lbl">Core PE deal structure</div><div class="sp-right"><div class="sp-val">Debt + Equity</div><div class="sp-sub">sponsor funds + external lenders</div></div></div>
-      <div class="sp-row"><div class="sp-lbl">Why it matters</div><div class="sp-right"><div class="sp-val">Return Amplifier</div><div class="sp-sub">smaller equity base, larger upside</div></div></div>
-      <div class="sp-row"><div class="sp-lbl">Main value levers</div><div class="sp-right"><div class="sp-val">4</div><div class="sp-sub">growth, margin, deleveraging, exit multiple</div></div></div>
-      <div class="sp-row"><div class="sp-lbl">Key dependency</div><div class="sp-right"><div class="sp-val">Credit Markets</div><div class="sp-sub">availability, pricing, covenants</div></div></div>
-      <div class="sp-row"><div class="sp-lbl">Main risk</div><div class="sp-right"><div class="sp-val">Overleverage</div><div class="sp-sub">debt magnifies downside too</div></div></div>
-      <div class="sp-row"><div class="sp-lbl">Industry implication</div><div class="sp-right"><div class="sp-val">Cycle Sensitive</div><div class="sp-sub">rate hikes can slow deals and exits</div></div></div>
+      <div class="sp-head">LBO quick-reference</div>
+      <div class="sp-row"><div class="sp-lbl">Typical debt/equity split</div><div class="sp-right"><div class="sp-val">60/40 → 50/50</div><div class="sp-sub">Senior + sub debt layered over equity</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Sponsor equity target IRR</div><div class="sp-right"><div class="sp-val">20 – 30%</div><div class="sp-sub">Minimum hurdle typically ≥20%</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Typical hold period</div><div class="sp-right"><div class="sp-val">3 – 7 years</div><div class="sp-sub">5 years most common</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Target MOIC</div><div class="sp-right"><div class="sp-val">2.0× – 3.5×</div><div class="sp-sub">Money-on-invested-capital</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Entry leverage (Debt/EBITDA)</div><div class="sp-right"><div class="sp-val">4× – 7×</div><div class="sp-sub">Higher in benign credit markets</div></div></div>
+      <div class="sp-row"><div class="sp-lbl">Three value-creation levers</div><div class="sp-right"><div class="sp-val">EBITDA · Debt · Multiple</div><div class="sp-sub">Growth, paydown, re-rating</div></div></div>
     </div>
   </div>
 </div>
 
-<div id="drivers" class="sec alt">
+<!-- ══ SECTION 1: WHAT IS AN LBO ══ -->
+<div id="what-is-lbo" class="sec alt">
 <div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">The Four Reasons LBOs Matter So Much</h2></div>
-  <p class="body fu">The leveraged buyout is not just one transaction type inside private equity. It is the <strong>basic architecture</strong> of the asset class. By combining sponsor equity with debt raised from banks or credit funds, PE firms can buy larger businesses, concentrate returns on a smaller equity cheque, and use disciplined ownership to convert cash flow into rapid equity value creation.</p>
+  <div class="sec-hd fu"><div class="sec-num">01</div><h2 class="sec-title">What Is a Leveraged Buyout?</h2></div>
 
-  <div class="flow fu" id="flowDiag">
-    <div class="flow-node"><div class="fn-num">01</div><div class="fn-title">Scale</div><div class="fn-body">Debt allows PE firms to acquire larger companies than equity alone would permit.</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-node"><div class="fn-num">02</div><div class="fn-title">Amplification</div><div class="fn-body">If value rises, the gain accrues to a much smaller equity base, boosting returns.</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-node"><div class="fn-num">03</div><div class="fn-title">Discipline</div><div class="fn-body">Debt service forces management to focus on cash generation, efficiency, and execution.</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-node"><div class="fn-num">04</div><div class="fn-title">Exit Value</div><div class="fn-body">As debt is repaid and EBITDA grows, more of the enterprise value belongs to equity on exit.</div></div>
-  </div>
+  <p class="body fu">A <strong>leveraged buyout (LBO)</strong> is the acquisition of a company using a significant amount of borrowed money — typically 50–70% of the purchase price — alongside a smaller equity contribution from the private equity sponsor. The acquired company's own assets and future cash flows serve as collateral for the debt. The result: the PE firm controls a large asset while committing relatively little of its own capital, dramatically amplifying potential returns on equity.</p>
 
-  <div class="g2 fu">
-    <div>
-      <p class="body">The most intuitive reason LBOs matter is <strong>equity efficiency</strong>. A private equity firm that had to buy every business with 100% equity would deploy capital far more slowly and earn lower returns on successful deals. Leverage changes that equation by letting the sponsor put up only part of the purchase price.</p>
-      <p class="body">The second reason is <strong>managerial pressure</strong>. Debt has to be serviced. That means weak working-capital management, sloppy capital allocation, or poor pricing discipline become much harder to tolerate. In practice, LBO-backed companies are usually run with tighter KPIs, faster reporting, and more explicit value-creation plans.</p>
-      <div class="pq">
-        <div class="pq-text">In private equity, debt is not only a financing tool. It is a return lever and a behavioural constraint. It magnifies what goes right — and exposes what goes wrong.</div>
-        <div class="pq-src">— Educational summary</div>
-      </div>
-    </div>
-    <div>
-      <div class="ac or">
-        <div class="ac-hd">Why LBOs sit at the center of PE</div>
-        <ul class="blist">
-          <li><strong style="color:var(--white)">Capital efficiency</strong> — sponsor equity stretches further across multiple deals</li>
-          <li><strong style="color:var(--white)">Return enhancement</strong> — gains are concentrated on a smaller equity investment</li>
-          <li><strong style="color:var(--white)">Cash-flow discipline</strong> — debt repayment creates urgency around operational performance</li>
-          <li><strong style="color:var(--white)">Clear value bridge</strong> — EBITDA growth + deleveraging can both raise equity value</li>
-          <li><strong style="color:var(--white)">Institutional repeatability</strong> — the LBO framework gives PE a scalable, teachable underwriting model</li>
-        </ul>
-      </div>
-      <div class="ac gr" style="margin-top:1rem">
-        <div class="ac-hd">What has to go right</div>
-        <div class="d-row"><span class="d-lbl">Stable cash generation</span><span class="d-val" style="color:var(--green)">Essential</span></div>
-        <div class="d-row"><span class="d-lbl">Prudent leverage sizing</span><span class="d-val" style="color:var(--green)">Critical</span></div>
-        <div class="d-row"><span class="d-lbl">Operational improvement</span><span class="d-val" style="color:var(--green)">Core</span></div>
-        <div class="d-row"><span class="d-lbl">Financing flexibility</span><span class="d-val" style="color:var(--green)">Helpful</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+  <p class="body fu">The core insight is simple but powerful: <em>if the business generates more in operating returns than it costs to service the debt, the equity holder captures the entire surplus.</em> Leverage is the financial equivalent of buying a house with a mortgage — you put in 20%, borrow 80%, and if the asset appreciates, your equity return is multiplied. The PE firm's job is to buy the right house, improve it, and sell it at a higher price before the mortgage becomes a burden.</p>
 
-<div id="market" class="sec">
-<div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">How the LBO Actually Works</h2></div>
-  <div class="g2 fu">
-    <div>
-      <p class="body">A classic LBO uses <strong>two layers of capital</strong>: sponsor equity and external debt. The PE fund contributes the equity cheque, while lenders supply senior and sometimes junior debt. The acquired company then uses its future cash flows to service and repay that debt over time.</p>
-      <p class="body">That is why LBOs are fundamentally different from passive investing. The sponsor is not just hoping the market rerates the asset. It is underwriting a specific operational plan: improve margins, increase revenue, execute acquisitions, reduce debt, and exit at a stronger earnings base.</p>
-    </div>
-    <div class="chart-box">
-      <div class="chart-hd"><div class="chart-title">Illustrative LBO capital structure</div><div class="chart-src">Conceptual example</div></div>
-      <div class="chart-wrap" style="height:240px"><canvas id="capChart"></canvas></div>
-    </div>
-  </div>
-
-  <div class="g3 fu">
-    <div class="ac bl">
-      <div class="ac-hd">Step 1 — Acquire</div>
-      <div class="ac-body">The PE firm buys the company using a mix of equity and debt. The company’s enterprise value is funded, but the sponsor only contributes part of the cash.</div>
-      <div class="ac-stat">Purchase price funded by multiple capital sources</div>
-    </div>
-    <div class="ac pu">
-      <div class="ac-hd">Step 2 — Improve</div>
-      <div class="ac-body">Management and sponsor work to grow EBITDA through pricing, sales execution, margin improvement, or buy-and-build acquisitions.</div>
-      <div class="ac-stat">Operational value creation matters more when debt is expensive</div>
-    </div>
-    <div class="ac te">
-      <div class="ac-hd">Step 3 — Deleverage</div>
-      <div class="ac-body">As the company repays debt, the equity portion of enterprise value grows. Even if the exit multiple is unchanged, equity value can rise materially.</div>
-      <div class="ac-stat">Debt paydown is itself a return driver</div>
-    </div>
-  </div>
-
-  <div class="ac or fu" style="margin-bottom:1.5rem">
-    <div class="ac-hd">LBO value creation bridge</div>
-    <div id="driverBars">
-      <div class="bar-row"><div class="bar-lbl">EBITDA growth</div><div class="bar-wrap"><div class="bar-fill" data-w="90" style="background:#f56a00"></div></div><div class="bar-val" style="color:#f56a00">CORE</div></div>
-      <div class="bar-row"><div class="bar-lbl">Debt repayment</div><div class="bar-wrap"><div class="bar-fill" data-w="78" style="background:#00c875"></div></div><div class="bar-val" style="color:#00c875">MAJOR</div></div>
-      <div class="bar-row"><div class="bar-lbl">Margin improvement</div><div class="bar-wrap"><div class="bar-fill" data-w="70" style="background:#3d8ef0"></div></div><div class="bar-val" style="color:#3d8ef0">IMPORTANT</div></div>
-      <div class="bar-row"><div class="bar-lbl">Multiple expansion</div><div class="bar-wrap"><div class="bar-fill" data-w="48" style="background:#8b5cf6"></div></div><div class="bar-val" style="color:#8b5cf6">VARIABLE</div></div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div id="macro" class="sec alt">
-<div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Why LBOs Can Produce Outsized Equity Returns</h2></div>
-  <div class="g2 fu">
-    <div>
-      <p class="body">The reason LBOs are so important to PE is simple: <strong>if the company performs, leverage can materially increase the return on the sponsor’s equity</strong>. The sponsor controls a larger enterprise with a smaller upfront cheque. When the business grows and debt falls, the residual value for equity can rise quickly.</p>
-      <p class="body">This is why PE discussions focus so heavily on <strong>IRR, MOIC, leverage multiples, interest coverage, and exit value</strong>. The LBO turns a company into a structured equity return machine — but only if the sponsor underwrites the debt burden correctly and can execute the operating plan.</p>
-      <div class="pq">
-        <div class="pq-text">An LBO works best when the business is resilient enough to carry debt, but still has enough room for genuine improvement. Leverage alone is never the whole thesis.</div>
-        <div class="pq-src">— Educational summary</div>
-      </div>
-    </div>
-    <div class="chart-box">
-      <div class="chart-hd"><div class="chart-title">Illustrative exit bridge: enterprise value to equity value</div><div class="chart-src">Conceptual example</div></div>
-      <div class="chart-wrap" style="height:260px"><canvas id="bridgeChart"></canvas></div>
-    </div>
+  <div class="pq fu">
+    <div class="pq-text">Private equity firms don't just buy companies — they engineer returns. The LBO is the instrument that allows a disciplined operator to transform a good business into an exceptional investment by combining financial leverage with genuine operational improvement.</div>
+    <div class="pq-src">Private Markets Intelligence — LBO Mechanics</div>
   </div>
 
   <div class="g3 fu">
     <div class="ac or">
-      <div class="ac-hd">Without leverage</div>
-      <div class="d-row"><span class="d-lbl">Purchase price</span><span class="d-val">100% equity</span></div>
-      <div class="d-row"><span class="d-lbl">Upside source</span><span class="d-val">Mostly growth</span></div>
-      <div class="d-row"><span class="d-lbl">Return profile</span><span class="d-val">Less amplified</span></div>
+      <div class="ac-hd">Why debt amplifies equity returns</div>
+      <ul class="blist">
+        <li>Consider buying a £100m business: all-equity at 2× exit = £100m profit (100% return). With 60% debt (£60m): equity in = £40m, exit equity = £140m → <strong style="color:var(--white)">250% return on equity</strong> at the same 2× asset return</li>
+        <li>Debt is cheaper than equity (interest is tax-deductible; lenders accept lower returns for seniority in the capital structure)</li>
+        <li>By substituting cheap debt for expensive equity, the sponsor reduces the equity required and boosts equity IRR — as long as the business earns more than the interest rate on debt</li>
+        <li>The interest <strong style="color:var(--white)">tax shield</strong> adds further value: interest payments reduce taxable income, so the government effectively subsidises part of the cost of debt</li>
+      </ul>
+      <div class="ac-stat">Rule: leverage amplifies both gains AND losses — works brilliantly for stable cash flows, catastrophically for volatile ones</div>
     </div>
-    <div class="ac gr">
-      <div class="ac-hd">With prudent leverage</div>
-      <div class="d-row"><span class="d-lbl">Purchase price</span><span class="d-val">Debt + equity</span></div>
-      <div class="d-row"><span class="d-lbl">Upside source</span><span class="d-val">Growth + deleveraging</span></div>
-      <div class="d-row"><span class="d-lbl">Return profile</span><span class="d-val" style="color:var(--green)">Potentially much stronger</span></div>
+    <div class="ac bl">
+      <div class="ac-hd">The LBO transaction in four steps</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">1. Identify target:</strong> PE firm sources a company meeting LBO criteria (stable cash flows, strong market position, identifiable operational improvements)</li>
+        <li><strong style="color:var(--white)">2. Structure financing:</strong> Arrange a debt package (senior secured, TLB, mezzanine) alongside the equity cheque. Debt is sized based on target leverage ratios and the company's EBITDA</li>
+        <li><strong style="color:var(--white)">3. Acquire &amp; operate:</strong> Complete the acquisition, implement the 100-day plan and strategic value creation agenda over the hold period. Cash flows service debt, reducing leverage over time</li>
+        <li><strong style="color:var(--white)">4. Exit:</strong> Sell the company (IPO, trade sale, secondary buyout) — ideally at a higher multiple than entry — and return capital to LPs</li>
+      </ul>
+      <div class="ac-stat">Typical hold: 3–7 years. Target: 2.0–3.5× MOIC, 20–30% IRR</div>
     </div>
-    <div class="ac re">
-      <div class="ac-hd">With excessive leverage</div>
-      <div class="d-row"><span class="d-lbl">Interest burden</span><span class="d-val">High</span></div>
-      <div class="d-row"><span class="d-lbl">Flexibility</span><span class="d-val">Low</span></div>
-      <div class="d-row"><span class="d-lbl">Return profile</span><span class="d-val" style="color:var(--red)">Downside magnified</span></div>
+    <div class="ac ye">
+      <div class="ac-hd">Brief history — from raiders to institutions</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">1980s:</strong> KKR's $31.1bn buyout of RJR Nabisco (1988) defined the decade — junk bonds financed aggressive takeovers, often hostile. Michael Milken and Drexel Burnham pioneered high-yield debt markets that made large LBOs possible</li>
+        <li><strong style="color:var(--white)">1990s–2000s:</strong> Industry matures. Focus shifts from pure financial engineering to operational improvement. Mega-buyouts of the 2005–07 vintage (Hilton Hotels, Harrah's, TXU) reached $40bn+</li>
+        <li><strong style="color:var(--white)">Post-GFC:</strong> Tighter credit markets reduced leverage multiples. Operational value creation, add-on acquisitions, and buy-and-build strategies became essential — not optional. ESG enters underwriting conversations</li>
+        <li><strong style="color:var(--white)">Today:</strong> $1.1T+ in annual PE deal volume. Technology, healthcare, and software LBOs dominate. Continuation funds and NAV lending reshape the exit landscape</li>
+      </ul>
     </div>
   </div>
 </div>
 </div>
 
-<div id="structure" class="sec">
+<!-- ══ SECTION 2: CAPITAL STRUCTURE ══ -->
+<div id="capital-structure" class="sec">
 <div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">Why Rates and Credit Conditions Matter So Much</h2></div>
+  <div class="sec-hd fu"><div class="sec-num">02</div><h2 class="sec-title">The LBO Capital Structure</h2></div>
+
+  <p class="body fu">The capital structure of an LBO is a layered stack of financing, each layer carrying a different risk profile, seniority in repayment, and cost of capital. Think of it as a waterfall: in a liquidation, senior lenders get paid first, mezzanine second, and equity holders receive whatever remains. This seniority hierarchy is what allows senior lenders to accept lower interest rates and equity holders to demand much higher returns for bearing first-loss risk.</p>
+
   <div class="g2 fu">
     <div>
-      <p class="body">Because LBOs depend on debt, private equity is highly sensitive to the <strong>availability, price, and terms</strong> of financing. When debt is cheap and plentiful, PE firms can support higher purchase prices and still target attractive returns. When rates rise and lenders become cautious, the exact same business may no longer work economically at the same valuation.</p>
-      <p class="body">That is why private equity deal volume often moves with the credit cycle. <strong>Rate hikes compress affordability</strong>, covenant packages tighten, and leverage multiples fall. Exit activity can also slow, because the next buyer faces the same more expensive financing conditions.</p>
+      <!-- Capital stack visual -->
+      <div style="background:var(--panel);border:1px solid var(--border-2);padding:1.25rem 1.5rem;margin-bottom:1rem">
+        <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--white-3);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)">ILLUSTRATIVE LBO CAPITAL STRUCTURE — £500M DEAL</div>
+        <div class="cap-stack">
+          <div class="cap-bar" style="background:rgba(61,142,240,0.18);color:#3d8ef0;height:44px"><span>Senior Secured (TLA / TLB)</span><span class="cb-pct">£200m · 40% · SOFR+350–450bps</span></div>
+          <div class="cap-bar" style="background:rgba(61,142,240,0.10);color:#6aabf7;height:38px"><span>Second Lien / Senior Notes</span><span class="cb-pct">£75m · 15% · 7–9% fixed</span></div>
+          <div class="cap-bar" style="background:rgba(240,180,41,0.15);color:#f0b429;height:34px"><span>High-Yield Bonds / Mezzanine</span><span class="cb-pct">£50m · 10% · 10–13% PIK/cash</span></div>
+          <div class="cap-bar" style="background:rgba(139,92,246,0.15);color:#a78bfa;height:30px"><span>Vendor / Rollover Equity</span><span class="cb-pct">£25m · 5%</span></div>
+          <div class="cap-bar" style="background:rgba(245,106,0,0.25);color:#f56a00;height:52px"><span>Sponsor Equity</span><span class="cb-pct">£150m · 30% · target 20–30% IRR</span></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+          Total: £500m · Debt/EBITDA = ~5.5× (assuming £50m EBITDA) · Entry multiple = 10× EV/EBITDA
+        </div>
+      </div>
     </div>
-    <div class="chart-box">
-      <div class="chart-hd"><div class="chart-title">Illustrative relationship: borrowing cost vs LBO attractiveness</div><div class="chart-src">Conceptual example</div></div>
-      <div class="chart-wrap" style="height:220px"><canvas id="rateChart"></canvas></div>
+    <div>
+      <div class="ac bl" style="margin-bottom:1rem">
+        <div class="ac-hd">Senior secured debt — the backbone</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Term Loan A (TLA):</strong> bank-held, amortises (repaid in instalments) over 5–7 years. Lower cost, quarterly cash interest</li>
+          <li><strong style="color:var(--white)">Term Loan B (TLB):</strong> sold to institutional investors (CLOs, hedge funds). Minimal amortisation (1%/yr bullet), 7-year maturity. Most LBOs use TLB as primary vehicle — flexibility is key</li>
+          <li><strong style="color:var(--white)">Revolving Credit Facility (RCF):</strong> undrawn backstop for working capital needs; not drawn at close but available. Commitment fee on the undrawn portion</li>
+          <li>Secured against company assets: property, receivables, IP. Carries financial covenants (leverage ratio, interest coverage)</li>
+        </ul>
+        <div class="ac-stat">Senior secured: cheapest debt, first claim on assets. Typical cost: SOFR/SONIA + 350–500bps</div>
+      </div>
+      <div class="ac ye">
+        <div class="ac-hd">Mezzanine &amp; high-yield — the subordinated layer</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">High-Yield Bonds:</strong> publicly traded, fixed-rate. Longer maturities (8–10yrs). No amortisation. Covenants are "incurrence-based" (looser than bank debt). Callable after 4–5 years</li>
+          <li><strong style="color:var(--white)">Mezzanine:</strong> privately placed, subordinated. May include PIK (Payment-in-Kind) interest — rolled up rather than paid in cash, preserving FCF for senior debt service</li>
+          <li><strong style="color:var(--white)">Second Lien:</strong> similar economics to mezzanine but secured on the same collateral as senior debt — with a second-priority claim</li>
+          <li>These layers exist because they allow PE sponsors to increase total leverage beyond what senior lenders will provide alone, stretching the total debt quantum and reducing the equity cheque</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2 fu">
+    <div class="ac or">
+      <div class="ac-hd">Leverage ratios — how debt is sized</div>
+      <div class="ac-body" style="margin-bottom:.75rem">All debt is sized as a multiple of the company's <strong>EBITDA</strong> (Earnings Before Interest, Tax, Depreciation &amp; Amortisation). EBITDA is the proxy for operating cash generation before financing and accounting effects.</div>
+      <div class="d-row"><span class="d-lbl">Senior leverage (Senior Debt / EBITDA)</span><span class="d-val" style="color:var(--blue)">3.0× – 4.5×</span></div>
+      <div class="d-row"><span class="d-lbl">Total leverage (Total Debt / EBITDA)</span><span class="d-val" style="color:var(--yellow)">4.0× – 7.0×</span></div>
+      <div class="d-row"><span class="d-lbl">Interest coverage (EBITDA / Interest)</span><span class="d-val" style="color:var(--green)">≥ 2.0×</span></div>
+      <div class="d-row"><span class="d-lbl">Debt-to-equity ratio</span><span class="d-val">60:40 typical</span></div>
+      <div style="font-size:12px;color:var(--white-2);margin-top:.65rem">Leverage multiples expand in benign credit conditions (low rates, tight spreads) and compress in stressed markets. The 2021–22 vintage saw 7–8× leverage; post-2023 tightening brought multiples back to 4–5.5×.</div>
+    </div>
+    <div class="ac re">
+      <div class="ac-hd">Debt covenants — the guardrails</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Financial covenants (maintenance):</strong> tested quarterly. Company must stay within agreed leverage and coverage ratios at all times (e.g., Debt/EBITDA &lt; 6×, Interest cover &gt; 2×). Breach triggers renegotiation or default. Bank loans are covenant-heavy; TLBs often "cov-lite"</li>
+        <li><strong style="color:var(--white)">Incurrence covenants:</strong> only tested when the company takes a specific action (additional debt, restricted payments, asset sales). Less restrictive — used in HY bonds and cov-lite TLBs</li>
+        <li><strong style="color:var(--white)">Restricted payment baskets:</strong> limit how much cash can flow up to the sponsor (dividends, management fees) versus staying in the business to service debt</li>
+        <li><strong style="color:var(--white)">EBITDA add-backs:</strong> banks and borrowers negotiate what counts as EBITDA — synergies, one-offs, run-rate cost savings. A contentious battleground in deal negotiations</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ SECTION 3: THE LBO MODEL ══ -->
+<div id="lbo-model" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">03</div><h2 class="sec-title">Building the LBO Model</h2></div>
+
+  <p class="body fu">The LBO model is the analytical heart of every private equity deal. It is a financial model that answers one question: <strong>given this entry price, this capital structure, and these operating assumptions, what returns will the equity investor earn at exit?</strong> It works backwards from a target IRR to determine whether a given price is supportable, or forwards from a given price to determine what IRR the investment will generate.</p>
+
+  <div class="tabs fu" id="modelTabs">
+    <div class="tab on" onclick="switchTab('m1',this,'modelTabs','modelPanels')">Step 1: Entry &amp; Assumptions</div>
+    <div class="tab" onclick="switchTab('m2',this,'modelTabs','modelPanels')">Step 2: Operating Projections</div>
+    <div class="tab" onclick="switchTab('m3',this,'modelTabs','modelPanels')">Step 3: Debt Schedule</div>
+    <div class="tab" onclick="switchTab('m4',this,'modelTabs','modelPanels')">Step 4: Exit &amp; Returns</div>
+  </div>
+  <div id="modelPanels">
+
+    <!-- STEP 1 -->
+    <div class="tab-panel on" id="m1">
+      <div class="g2">
+        <div>
+          <p class="body">The model begins with the <strong>Sources &amp; Uses</strong> — a simple table accounting for every pound in and out at deal close. Sources = where the money comes from (debt tranches + sponsor equity). Uses = where it goes (equity purchase price, existing debt refinanced, transaction fees).</p>
+          <div class="formula">
+            <div class="f-label">Entry Enterprise Value</div>
+            <div class="f-eq">EV = Entry Multiple × LTM EBITDA</div>
+            <div class="f-note">LTM = Last Twelve Months. Entry multiple reflects the negotiated price vs comparable transactions and trading multiples. A 10× EV/EBITDA entry on a £50m EBITDA business = £500m EV.</div>
+          </div>
+          <div class="formula" style="border-left-color:var(--blue)">
+            <div class="f-label" style="color:var(--blue)">Equity Purchase Price</div>
+            <div class="f-eq">Equity Value = EV − Net Debt</div>
+            <div class="f-note">Net Debt = gross debt minus cash on the balance sheet. The equity cheque buys the equity value of the business.</div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-box" style="margin-bottom:0">
+            <div class="chart-hd"><div class="chart-title">Sources &amp; Uses — £500m illustrative LBO</div></div>
+            <div class="ss-wrap" style="margin:0">
+              <table class="ss-table">
+                <thead><tr><th></th><th>SOURCES</th><th>£m</th><th>%</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Term Loan B (5.5× EBITDA)</td><td class="ss-pos">275</td><td class="ss-pos">55%</td></tr>
+                  <tr><td>2</td><td>High-Yield Notes</td><td class="ss-pos">50</td><td class="ss-pos">10%</td></tr>
+                  <tr><td>3</td><td>Sponsor Equity</td><td class="ss-pos">150</td><td class="ss-pos">30%</td></tr>
+                  <tr><td>4</td><td>Rollover / Management Equity</td><td class="ss-pos">25</td><td class="ss-pos">5%</td></tr>
+                  <tr><td></td><td class="ss-section">TOTAL SOURCES</td><td class="ss-grand">500</td><td class="ss-grand">100%</td></tr>
+                </tbody>
+              </table>
+              <table class="ss-table" style="margin-top:6px">
+                <thead><tr><th></th><th>USES</th><th>£m</th><th>%</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Equity Purchase Price (10× EBITDA)</td><td class="ss-neg">480</td><td>96%</td></tr>
+                  <tr><td>2</td><td>Transaction Fees (banking, legal)</td><td class="ss-neg">12</td><td>2.4%</td></tr>
+                  <tr><td>3</td><td>Financing Fees (OID, arrangement)</td><td class="ss-neg">8</td><td>1.6%</td></tr>
+                  <tr><td></td><td class="ss-section">TOTAL USES</td><td class="ss-grand">500</td><td class="ss-grand">100%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="tab-panel" id="m2">
+      <p class="body">Operating projections form the spine of the model. The PE firm builds a 5-year income statement, cash flow, and balance sheet for the target company, incorporating its operational improvement thesis. These projections feed directly into the debt repayment schedule and exit valuation.</p>
+      <div class="chart-box fu">
+        <div class="chart-hd"><div class="chart-title">Illustrative operating projections — £50m EBITDA base business (£m)</div><div class="chart-src">10% EBITDA CAGR · 20% → 23% margin expansion thesis</div></div>
+        <div class="ss-wrap">
+          <table class="ss-table">
+            <thead><tr><th>#</th><th>Line Item</th><th>Entry (Y0)</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+            <tbody>
+              <tr><td colspan="8" class="ss-section">Income Statement</td></tr>
+              <tr><td>1</td><td>Revenue</td><td>250</td><td class="ss-pos">268</td><td class="ss-pos">287</td><td class="ss-pos">307</td><td class="ss-pos">329</td><td class="ss-pos">352</td></tr>
+              <tr><td>2</td><td>Revenue Growth</td><td>—</td><td>7%</td><td>7%</td><td>7%</td><td>7%</td><td>7%</td></tr>
+              <tr><td>3</td><td>EBITDA</td><td class="ss-pos">50</td><td class="ss-pos">56</td><td class="ss-pos">63</td><td class="ss-pos">70</td><td class="ss-pos">76</td><td class="ss-pos">81</td></tr>
+              <tr><td>4</td><td>EBITDA Margin</td><td>20.0%</td><td>20.9%</td><td>21.9%</td><td>22.8%</td><td>23.1%</td><td class="ss-pos">23.0%</td></tr>
+              <tr><td>5</td><td>D&amp;A</td><td class="ss-neg">(8)</td><td class="ss-neg">(8)</td><td class="ss-neg">(9)</td><td class="ss-neg">(9)</td><td class="ss-neg">(10)</td><td class="ss-neg">(10)</td></tr>
+              <tr><td>6</td><td>EBIT</td><td>42</td><td class="ss-total">48</td><td class="ss-total">54</td><td class="ss-total">61</td><td class="ss-total">66</td><td class="ss-total">71</td></tr>
+              <tr><td colspan="8" class="ss-section">Cash Flow Bridge</td></tr>
+              <tr><td>7</td><td>Cash Interest (on debt)</td><td>—</td><td class="ss-neg">(19)</td><td class="ss-neg">(17)</td><td class="ss-neg">(15)</td><td class="ss-neg">(13)</td><td class="ss-neg">(11)</td></tr>
+              <tr><td>8</td><td>Cash Taxes (25%)</td><td>—</td><td class="ss-neg">(7)</td><td class="ss-neg">(9)</td><td class="ss-neg">(11)</td><td class="ss-neg">(13)</td><td class="ss-neg">(15)</td></tr>
+              <tr><td>9</td><td>CapEx</td><td>—</td><td class="ss-neg">(7)</td><td class="ss-neg">(7)</td><td class="ss-neg">(8)</td><td class="ss-neg">(8)</td><td class="ss-neg">(9)</td></tr>
+              <tr><td>10</td><td>Change in Working Capital</td><td>—</td><td class="ss-neg">(2)</td><td class="ss-neg">(2)</td><td class="ss-neg">(2)</td><td class="ss-neg">(2)</td><td class="ss-neg">(2)</td></tr>
+              <tr><td>11</td><td>Free Cash Flow (for debt repayment)</td><td>—</td><td class="ss-grand">23</td><td class="ss-grand">28</td><td class="ss-grand">31</td><td class="ss-grand">30</td><td class="ss-grand">34</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">FCF is swept to mandatory debt repayment each year ("cash sweep"). Rising FCF reflects operating improvements and declining interest burden as debt is paid down.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="tab-panel" id="m3">
+      <p class="body">The debt schedule tracks the outstanding balance on each debt tranche year by year. Each year's FCF reduces the principal outstanding — this "deleveraging" is one of the three key value creation levers. Lower debt at exit means more of the enterprise value flows to equity holders.</p>
+      <div class="chart-box fu">
+        <div class="chart-hd"><div class="chart-title">Debt paydown schedule — illustrative LBO (£m)</div><div class="chart-src">Opening debt £325m → Closing debt ~£179m after 5yrs</div></div>
+        <div class="ss-wrap">
+          <table class="ss-table">
+            <thead><tr><th>#</th><th>Item</th><th>Year 0</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+            <tbody>
+              <tr><td colspan="8" class="ss-section">Term Loan B (opening balance £275m)</td></tr>
+              <tr><td>1</td><td>Opening Balance</td><td>275</td><td>253</td><td>226</td><td>196</td><td>167</td><td>138</td></tr>
+              <tr><td>2</td><td>Mandatory Amortisation (1%/yr)</td><td>—</td><td class="ss-neg">(3)</td><td class="ss-neg">(3)</td><td class="ss-neg">(3)</td><td class="ss-neg">(3)</td><td class="ss-neg">(3)</td></tr>
+              <tr><td>3</td><td>Cash Sweep (excess FCF)</td><td>—</td><td class="ss-neg">(19)</td><td class="ss-neg">(24)</td><td class="ss-neg">(27)</td><td class="ss-neg">(26)</td><td class="ss-neg">(31)</td></tr>
+              <tr><td>4</td><td>Closing Balance</td><td>275</td><td class="ss-total">231</td><td class="ss-total">199</td><td class="ss-total">166</td><td class="ss-total">138</td><td class="ss-total ss-pos">104</td></tr>
+              <tr><td colspan="8" class="ss-section">High-Yield Notes (£50m — bullet at maturity)</td></tr>
+              <tr><td>5</td><td>HY Notes Balance</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td></tr>
+              <tr><td colspan="8" class="ss-section">Summary</td></tr>
+              <tr><td>6</td><td>Total Debt</td><td class="ss-neg">325</td><td class="ss-neg">281</td><td class="ss-neg">249</td><td class="ss-neg">216</td><td class="ss-neg">188</td><td class="ss-neg">154</td></tr>
+              <tr><td>7</td><td>Total Debt / EBITDA</td><td>6.5×</td><td>5.0×</td><td>4.0×</td><td>3.1×</td><td>2.5×</td><td class="ss-pos">1.9×</td></tr>
+              <tr><td>8</td><td>Interest Cost (approx.)</td><td>—</td><td class="ss-neg">(19)</td><td class="ss-neg">(17)</td><td class="ss-neg">(15)</td><td class="ss-neg">(13)</td><td class="ss-neg">(11)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.5rem">Leverage falls from 6.5× EBITDA at entry to 1.9× at Year 5 exit. This deleveraging from ~£325m to ~£154m of debt means an extra £171m flows to equity at exit — a core driver of equity returns even before considering EBITDA growth or multiple expansion.</div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="tab-panel" id="m4">
+      <div class="g2">
+        <div>
+          <p class="body">At exit, the PE firm sells the business (or IPOs it) and the proceeds flow: first to debt repayment, then to equity holders. The exit equity value is simply the exit enterprise value minus remaining net debt.</p>
+          <div class="formula">
+            <div class="f-label">Exit Enterprise Value</div>
+            <div class="f-eq">Exit EV = Exit Multiple × Exit Year EBITDA</div>
+            <div class="f-note">Exit multiple may be higher, lower, or the same as entry. "Multiple expansion" (exit > entry) is one of the three value creation levers — but models are typically built assuming flat multiples to be conservative.</div>
+          </div>
+          <div class="formula" style="border-left-color:var(--green)">
+            <div class="f-label" style="color:var(--green)">Returns Calculation</div>
+            <div class="f-eq">Equity Proceeds = Exit EV − Net Debt at Exit</div>
+            <div class="f-eq" style="margin-top:.4rem">MOIC = Equity Proceeds / Equity Invested</div>
+            <div class="f-eq" style="margin-top:.4rem">IRR: solve 0 = −Equity_0 + Equity_Exit/(1+IRR)⁵</div>
+            <div class="f-note">MOIC = Money-on-Invested-Capital. IRR accounts for the time value of money — the same MOIC achieved in 3 years vs 7 years generates a very different IRR.</div>
+          </div>
+        </div>
+        <div>
+          <div class="ac or">
+            <div class="ac-hd">Exit returns — illustrative (flat 10× exit multiple)</div>
+            <div class="d-row"><span class="d-lbl">Exit Year EBITDA</span><span class="d-val" style="color:var(--green)">£81m</span></div>
+            <div class="d-row"><span class="d-lbl">Exit Multiple (same as entry)</span><span class="d-val">10.0×</span></div>
+            <div class="d-row"><span class="d-lbl">Exit Enterprise Value</span><span class="d-val" style="color:var(--green)">£810m</span></div>
+            <div class="d-row"><span class="d-lbl">Less: Net Debt at Exit</span><span class="d-val" style="color:var(--red)">(£154m)</span></div>
+            <div class="d-row"><span class="d-lbl">Exit Equity Value</span><span class="d-val" style="color:var(--green)">£656m</span></div>
+            <div class="d-row"><span class="d-lbl">Sponsor Equity In (Year 0)</span><span class="d-val" style="color:var(--red)">(£150m)</span></div>
+            <div class="d-row" style="border-top:2px solid var(--orange)"><span class="d-lbl" style="color:var(--orange);font-weight:600">Sponsor MOIC</span><span class="d-val" style="color:var(--orange);font-size:16px">~3.7×</span></div>
+            <div class="d-row"><span class="d-lbl" style="color:var(--orange);font-weight:600">Sponsor IRR (5yr)</span><span class="d-val" style="color:var(--green);font-size:16px">~30%</span></div>
+            <div style="font-size:12px;color:var(--white-2);margin-top:.6rem">Even with NO multiple expansion (entry = exit = 10×), strong FCF generation and EBITDA growth drive a ~30% IRR. This is the "base case" discipline — returns don't depend on re-rating.</div>
+          </div>
+          <div class="ac gr" style="margin-top:1rem">
+            <div class="ac-hd">MOIC vs IRR — why both matter</div>
+            <ul class="blist">
+              <li><strong style="color:var(--white)">MOIC</strong> tells you how many times you multiplied your money — but ignores time. 3× in 3 years is better than 3× in 10 years</li>
+              <li><strong style="color:var(--white)">IRR</strong> accounts for time — the annualised return. Preferred by LPs and used for fund benchmarking. Sensitive to hold period: the same exit value generates a much higher IRR if achieved in year 3 vs year 6</li>
+              <li>Best used together: a 2.5× / 25% IRR deal is better than 3.0× / 18% IRR for most institutions given capital deployment cycles</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end modelPanels -->
+
+  <!-- CHART: Debt paydown + EBITDA -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">LBO deleveraging profile — debt vs EBITDA growth over hold period</div>
+      <div class="chart-src">Illustrative 5-year hold · Entry 10× · Exit 10×</div>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="debtEbitdaChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#ff4050"></span>Total Debt (£m)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>EBITDA (£m)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Debt/EBITDA (×, right axis)</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ SECTION 4: VALUE CREATION ══ -->
+<div id="value-creation" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">04</div><h2 class="sec-title">The Three Levers of Value Creation</h2></div>
+
+  <p class="body fu">Every pound of equity value created in an LBO comes from exactly one of three sources — and the best PE firms use all three simultaneously. Understanding which lever contributes most to a given deal's returns reveals a lot about the quality of the investment thesis and the skill of the sponsor.</p>
+
+  <!-- RETURNS BRIDGE CHART -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Value creation bridge — decomposing equity returns (illustrative £m)</div>
+      <div class="chart-src">Entry equity £150m → Exit equity £656m · 3.7× MOIC</div>
+    </div>
+    <div class="chart-wrap" style="height:300px"><canvas id="bridgeChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:#ff4050"></span>Entry equity</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#3d8ef0"></span>Debt paydown</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#f56a00"></span>EBITDA growth</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#8b5cf6"></span>Multiple expansion</span>
+      <span class="leg-item"><span class="leg-sq" style="background:#00c875"></span>Exit equity</span>
     </div>
   </div>
 
   <div class="g3 fu">
-    <div class="ac ye">
-      <div class="ac-hd">Debt availability</div>
-      <div class="ac-body">If lenders are willing to underwrite more leverage, PE buyers can pay more and still target acceptable returns.</div>
-      <div class="ac-stat">Loose markets support more aggressive pricing</div>
-    </div>
     <div class="ac bl">
-      <div class="ac-hd">Debt pricing</div>
-      <div class="ac-body">Higher interest expense consumes cash flow, weakens coverage ratios, and reduces the equity return available to the sponsor.</div>
-      <div class="ac-stat">Rate hikes directly pressure LBO math</div>
+      <div class="ac-hd">Lever 1 — EBITDA growth</div>
+      <div class="ac-body" style="margin-bottom:.6rem">Growing EBITDA directly increases enterprise value at exit (since EV = Multiple × EBITDA). This is the most sustainable and valued source of return — it reflects genuine business improvement, not financial engineering.</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Revenue growth:</strong> organic expansion, pricing power, new geographies, new products. Often the hardest to execute but creates durable competitive moats</li>
+        <li><strong style="color:var(--white)">Margin improvement:</strong> procurement savings, operational efficiencies, headcount rationalisation, overhead reduction, insourcing. PE firms bring operating partners, specialist consultants, and cross-portfolio benchmarking</li>
+        <li><strong style="color:var(--white)">Buy-and-build:</strong> using the platform company as a base to acquire smaller competitors ("add-ons"), achieving scale, eliminating duplication, and buying at lower multiples than the exit valuation. A 5× add-on absorbed into a 10× platform creates instant value</li>
+        <li><strong style="color:var(--white)">EBITDA add-backs:</strong> restructuring one-off costs before the exit P&amp;L to present the cleanest possible "run-rate" EBITDA to buyers</li>
+      </ul>
+      <div class="ac-stat">Historically ~35–50% of LBO equity returns globally from EBITDA growth</div>
+    </div>
+    <div class="ac or">
+      <div class="ac-hd">Lever 2 — debt paydown</div>
+      <div class="ac-body" style="margin-bottom:.6rem">As the company generates FCF and services debt, the outstanding principal falls. At exit, lower debt = higher equity value from the same EV. This is the "mechanical" component of LBO returns — it occurs automatically if the business hits its FCF projections.</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Cash sweep:</strong> excess FCF above mandatory amortisation is automatically swept to voluntary debt repayment. The healthier the business, the faster debt falls</li>
+        <li><strong style="color:var(--white)">Working capital optimisation:</strong> releasing cash trapped in receivables and inventory (faster collection, extended payables) accelerates deleveraging. PE firms often conduct intensive NWC reviews in the first 100 days</li>
+        <li><strong style="color:var(--white)">Asset disposals:</strong> selling non-core assets or real estate (sale-and-leaseback) generates one-off cash that reduces debt ahead of schedule</li>
+        <li><strong style="color:var(--white)">Dividend recaps:</strong> once leverage has fallen sufficiently, the company takes on new debt specifically to return capital to the sponsor mid-hold — monetising part of the gain before exit. Common in robust credit markets</li>
+      </ul>
+      <div class="ac-stat">Pure financial engineering contribution: historically ~25–35% of LBO returns</div>
     </div>
     <div class="ac pu">
-      <div class="ac-hd">Covenant structure</div>
-      <div class="ac-body">Tighter covenants reduce flexibility when trading weakens. Covenant-lite markets give sponsors more room, but can also encourage excess leverage.</div>
-      <div class="ac-stat">Terms matter as much as headline rates</div>
+      <div class="ac-hd">Lever 3 — multiple expansion</div>
+      <div class="ac-body" style="margin-bottom:.6rem">If the company is sold at a higher EV/EBITDA multiple than it was bought, the equity holder benefits from this re-rating independently of any operational improvement. Multiple expansion is the least reliable lever — it depends on market conditions, buyer appetite, and timing — but historically it has contributed meaningfully to PE returns in bull markets.</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Why multiples expand:</strong> improved quality of earnings, reduced risk profile, enlarged scale attracting a wider buyer universe, sector tailwinds, or simply a better credit/M&amp;A market at exit vs entry</li>
+        <li><strong style="color:var(--white)">Software premium:</strong> PE firms have aggressively pivoted portfolios toward SaaS and tech-enabled businesses — recurring revenues command 15–25× EBITDA vs 8–12× for industrial businesses</li>
+        <li><strong style="color:var(--white)">The risk:</strong> PE firms that rely on multiple expansion are making an implicit market bet. When markets contract (2022–23), expected multiple expansion becomes multiple compression, destroying projected returns. Good sponsors build cases that work at flat or compressed multiples</li>
+        <li><strong style="color:var(--white)">Arbitrage:</strong> buy-and-build explicitly exploits multiple arbitrage — small add-ons bought at 4–6× are valued at the platform multiple of 10–12× at exit</li>
+      </ul>
+      <div class="ac-stat">Highly cycle-dependent: drove 30–40% of returns in 2010–21 bull run; negligible/negative post-2022</div>
     </div>
   </div>
 
-  <div class="tl" id="structureTl">
-    <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">Loose credit</div><div class="tl-card"><div class="tl-title">Higher leverage, stronger purchase-price support</div><div class="tl-text">When financing is abundant, PE firms can underwrite more debt and compete aggressively in auctions.</div></div></div>
-    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">Tight credit</div><div class="tl-card"><div class="tl-title">Lower leverage, lower valuation tolerance</div><div class="tl-text">As rates rise and lenders retrench, deals require more equity and deliver weaker target returns at the same entry price.</div></div></div>
-    <div class="tl-item"><div class="tl-dot fill"></div><div class="tl-yr">Exit effect</div><div class="tl-card"><div class="tl-title">Slower sponsor-to-sponsor exits</div><div class="tl-text">If the next buyer also faces expensive debt, secondary buyouts become harder and exit timing stretches.</div></div></div>
+  <!-- CHART: Value creation waterfall by lever -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">Historical decomposition of PE equity returns by source — industry average</div>
+      <div class="chart-src">BCG / McKinsey analysis of global LBO returns · illustrative proportions</div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="leverBreakdownChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">The mix of value creation sources shifts materially by vintage. Post-GFC funds (2010–19) benefited enormously from multiple expansion as rates fell and sentiment improved. Post-2022, EBITDA growth and deleveraging must carry more of the load.</div>
   </div>
 </div>
 </div>
 
-<div id="regulatory" class="sec alt">
+<!-- ══ SECTION 5: RETURNS & EXIT ══ -->
+<div id="returns" class="sec alt">
 <div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">The Main Risks and Misunderstandings</h2></div>
+  <div class="sec-hd fu"><div class="sec-num">05</div><h2 class="sec-title">Exit Routes &amp; Return Dynamics</h2></div>
+
+  <p class="body fu">Exit is where PE returns are crystallised. The choice of exit route — and the timing — significantly affects realised returns. In theory, exit simply involves selling the equity to a new buyer at an agreed enterprise value. In practice, it involves years of preparation, positioning the business for the specific buyer universe, and navigating credit markets and valuation cycles.</p>
+
   <div class="g2 fu">
-    <div class="ac re">
-      <div class="ac-hd">What people often get wrong about LBOs</div>
-      <ul class="blist">
-        <li><strong style="color:var(--white)">"Leverage alone creates returns"</strong> — false; without EBITDA growth or debt paydown, the result can disappoint</li>
-        <li><strong style="color:var(--white)">"More debt is always better"</strong> — false; too much leverage destroys flexibility and raises default risk</li>
-        <li><strong style="color:var(--white)">"LBOs are only financial engineering"</strong> — incomplete; modern PE depends heavily on operational execution</li>
-        <li><strong style="color:var(--white)">"Every good business suits an LBO"</strong> — false; cash-flow stability matters enormously</li>
-      </ul>
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Exit route 1 — trade sale / strategic sale</div>
+        <ul class="blist">
+          <li>Selling to a corporate acquirer (competitor, adjacent business, conglomerate seeking diversification). Typically achieves the <strong style="color:var(--white)">highest valuation</strong> because strategic buyers can justify paying for synergies that a financial buyer cannot</li>
+          <li>Synergy value: the acquirer expects cost savings or revenue uplift post-acquisition, so pays a "control premium" above standalone value. A trade buyer might pay 12–14× for a business worth 10× to a financial buyer</li>
+          <li>Downside: management team may not have the same autonomy post-close; cultural integration risk; buyers conduct extensive due diligence; negotiations can be protracted</li>
+          <li>Common in mid-market PE where businesses achieve scale sufficient to interest large strategics but remain sub-IPO size</li>
+        </ul>
+        <div class="ac-stat">~40–45% of PE exits · typically highest realised multiples</div>
+      </div>
+      <div class="ac bl" style="margin-top:1rem">
+        <div class="ac-hd">Exit route 2 — secondary buyout (SBO)</div>
+        <ul class="blist">
+          <li>Selling to another PE firm. Has become the <strong style="color:var(--white)">most common exit route</strong> by volume in recent years as PE dry powder grew</li>
+          <li>Works best when the incoming sponsor has a differentiated value creation plan (e.g., buy-and-build opportunity the existing sponsor was too small to pursue, or geographic expansion requiring different relationships)</li>
+          <li>Sceptics argue SBOs are financial recycling without genuine value creation — each successive sponsor must find growth to justify the increasing leverage load</li>
+          <li>Tertiary (third) and quaternary buyouts exist. Businesses like Watchfinder have been through multiple PE owners successively</li>
+        </ul>
+        <div class="ac-stat">~45–50% of exits by count · valuation limited to financial buyer logic (no synergies)</div>
+      </div>
     </div>
-    <div class="ac gr">
-      <div class="ac-hd">Where LBOs work best</div>
-      <ul class="blist">
-        <li>Businesses with recurring or visible cash flows</li>
-        <li>Companies where margins can improve under tighter ownership</li>
-        <li>Sectors with room for bolt-on acquisitions and scale benefits</li>
-        <li>Management teams willing to operate with disciplined reporting and execution</li>
-      </ul>
+    <div>
+      <div class="ac gr">
+        <div class="ac-hd">Exit route 3 — IPO</div>
+        <ul class="blist">
+          <li>Taking the business public via listing on a stock exchange. Historically the most prestigious exit and often associated with the largest deals</li>
+          <li>PE firm typically doesn't exit fully at IPO — retains a stake and sells down over 12–24 months subject to lock-up periods. Returns are therefore not fully crystallised at listing</li>
+          <li>Requires scale (typically £200m+ EV), a compelling growth narrative, robust governance and reporting infrastructure, and receptive equity capital markets</li>
+          <li>IPO markets are volatile — window-dependent. The 2022–23 ECM drought forced many PE-backed IPOs to be delayed or shelved. When markets are open, IPO can achieve the highest theoretical valuation (no control discount)</li>
+          <li>Post-IPO lock-up periods mean IRR calculation becomes complex — partial exits over time</li>
+        </ul>
+        <div class="ac-stat">~10–15% of exits · window-dependent · enables gradual monetisation</div>
+      </div>
+      <div class="ac ye" style="margin-top:1rem">
+        <div class="ac-hd">Exit route 4 — continuation funds &amp; NAV loans</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Continuation fund:</strong> the GP transfers the best portfolio companies into a new vehicle ("continuation fund"), giving existing LPs the option to cash out while new investors buy in. Allows the sponsor to hold assets longer without forcing a sub-optimal exit — the fastest-growing part of the secondaries market</li>
+          <li><strong style="color:var(--white)">NAV-based lending:</strong> borrowing against the net asset value of the whole portfolio to return capital to LPs or fund new investments, without selling individual assets. Creates liquidity without realising gains (and triggering tax events)</li>
+          <li>Both structures have drawn regulatory scrutiny as conflicts of interest (sponsor valuing assets they retain) are inherent</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="g2 fu" style="margin-top:1.5rem">
-    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
-      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">What makes an LBO powerful</div>
+  <!-- CHART: IRR sensitivity to hold period & multiple -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">IRR sensitivity — exit multiple × hold period (illustrative LBO)</div>
+      <div class="chart-src">£150m equity in · same operating case · exits at years 3, 4, 5, 6, 7</div>
+    </div>
+    <div class="chart-wrap" style="height:300px"><canvas id="irrSensChart"></canvas></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-3);margin-top:.6rem">
+      <span style="color:#00c875">■</span> 12× exit multiple &nbsp;|&nbsp;
+      <span style="color:#f56a00">■</span> 10× (base) &nbsp;|&nbsp;
+      <span style="color:#ff4050">■</span> 8× exit multiple &nbsp;|&nbsp;
+      The 20% IRR hurdle line marks minimum acceptable return. Time is the enemy of IRR — a great deal held too long slides below the hurdle.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ SECTION 6: LBO CANDIDATES ══ -->
+<div id="lbo-candidates" class="sec">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">What Makes an Ideal LBO Target?</h2></div>
+
+  <p class="body fu">Not every business can support an LBO. The debt-heavy capital structure demands specific financial and operational characteristics. PE firms have refined their screening criteria over decades — learning painfully which businesses can carry leverage and which collapse under it. Understanding these criteria is the fastest way to think like a PE investor.</p>
+
+  <div class="g2 fu">
+    <div>
+      <div class="ac or">
+        <div class="ac-hd">Financial characteristics — non-negotiable</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Strong, predictable FCF:</strong> the business must generate consistent cash flow to service debt. Cyclical or lumpy revenue models make lenders nervous. Subscription businesses, long-term contracts, and recurring revenues are the gold standard</li>
+          <li><strong style="color:var(--white)">High EBITDA margins:</strong> a 25%+ EBITDA margin provides a buffer between operating profits and interest obligations. Low-margin businesses (retail, distribution) require very low leverage to be viable LBOs</li>
+          <li><strong style="color:var(--white)">Low CapEx requirements:</strong> a business that requires heavy reinvestment to maintain its competitive position generates less FCF available for debt service. Asset-light business models (software, business services) are structurally better LBO candidates than capital-intensive ones (manufacturing, infrastructure)</li>
+          <li><strong style="color:var(--white)">Moderate existing leverage:</strong> a clean, unleveraged (or lightly leveraged) balance sheet allows the acquirer to add debt without immediately breaching covenants. Companies with complex existing debt structures are harder and more expensive to refinance</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ac bl">
+        <div class="ac-hd">Operational characteristics — value creation enablers</div>
+        <ul class="blist">
+          <li><strong style="color:var(--white)">Strong market position:</strong> pricing power and defensible margins require market leadership or a genuine niche. A #3 player in a fragmented commodity market cannot pass cost inflation to customers; a #1 niche player often can</li>
+          <li><strong style="color:var(--white)">Identifiable operational improvements:</strong> PE doesn't want a business running at peak efficiency — it wants one with clear, underexploited levers (bloated corporate overhead, unprofessional procurement, sub-optimal pricing, fragmented back-office). The opportunity for improvement is the investment thesis</li>
+          <li><strong style="color:var(--white)">Non-cyclical or counter-cyclical demand:</strong> debt is a fixed obligation; revenues shouldn't be. Healthcare, education, B2B software, and business process outsourcing show low revenue volatility relative to GDP</li>
+          <li><strong style="color:var(--white)">Fragmented market (buy-and-build):</strong> if the sector is populated by dozens of small owner-managed businesses, a PE firm can use a platform acquisition to consolidate, achieving scale and multiple arbitrage simultaneously</li>
+          <li><strong style="color:var(--white)">Management team or succession opportunity:</strong> either a strong existing management team that will continue under PE ownership, or a leadership gap that PE can fill with an operating partner or hired CEO — removing a key-person risk that suppresses valuation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART: LBO Candidate Screening Radar -->
+  <div class="chart-box fu">
+    <div class="chart-hd">
+      <div class="chart-title">LBO candidate scoring — ideal profile vs common pitfalls</div>
+      <div class="chart-src">Illustrative scores (0–10) across key LBO criteria</div>
+    </div>
+    <div class="chart-wrap" style="height:320px"><canvas id="radarChart"></canvas></div>
+    <div class="leg">
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(245,106,0,0.7)"></span>Ideal LBO target</span>
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(255,64,80,0.5)"></span>High-cyclicality business (typical pitfall)</span>
+      <span class="leg-item"><span class="leg-sq" style="background:rgba(61,142,240,0.5)"></span>High-CapEx / low-margin business</span>
+    </div>
+  </div>
+
+  <!-- Sectors table -->
+  <div class="g2 fu">
+    <div class="ac gr">
+      <div class="ac-hd">Sectors typically suited to LBOs</div>
       <ul class="blist">
-        <li>Turns stable cash generation into a mechanism for compounding equity value</li>
-        <li>Creates a disciplined ownership model with explicit performance milestones</li>
-        <li>Lets PE firms deploy capital efficiently across a portfolio of deals</li>
-        <li>Combines financing structure with operational improvement, not just market timing</li>
+        <li><strong style="color:var(--white)">Software &amp; SaaS:</strong> high margins (60%+), recurring ARR, low churn, asset-light. The darling of 2015–22 PE. High entry multiples (15–25×) demand strong growth; rate sensitivity compressed multiples post-2022</li>
+        <li><strong style="color:var(--white)">Business services &amp; outsourcing:</strong> sticky contracts, high switching costs, fragmented (buy-and-build), moderate margins. Classic PE territory (Capita, Serco in early years; now more specialist BPO)</li>
+        <li><strong style="color:var(--white)">Healthcare services:</strong> non-discretionary demand, government-backed revenue in many cases, fragmented physician groups / dental chains / care homes ripe for consolidation</li>
+        <li><strong style="color:var(--white)">Consumer &amp; retail (select):</strong> only where brand equity is strong, margins are high, and the model is not exposed to physical retail capex. Premium consumer goods, branded food &amp; beverage</li>
+        <li><strong style="color:var(--white)">Industrials (niche):</strong> highly specialised components or services with dominant market share, long-term customer relationships, and high switching costs. Not commodity manufacturing</li>
+      </ul>
+    </div>
+    <div class="ac re">
+      <div class="ac-hd">Sectors that make poor LBO candidates</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Capital-intensive industrials:</strong> steel, mining, chemicals, aerospace manufacturing. Heavy CapEx requirements absorb FCF needed for debt service. High fixed costs create leverage to downturns — operational leverage compounds financial leverage catastrophically</li>
+        <li><strong style="color:var(--white)">Cyclical businesses:</strong> commodity trading, housebuilding, automotive. Revenue volatility means EBITDA can halve in a downturn while debt is fixed. The 2008 LBO failures were concentrated here</li>
+        <li><strong style="color:var(--white)">Regulated utilities:</strong> stable cash flows but regulated returns cap EBITDA growth; covenants and regulatory change create compliance risk; capital structure constrained by regulatory capital requirements</li>
+        <li><strong style="color:var(--white)">Financial services (generally):</strong> leverage ratios and capital requirements complicate the traditional LBO structure. Banks and insurers cannot simply have their balance sheets laden with additional acquisition debt</li>
+        <li><strong style="color:var(--white)">Early-stage / loss-making businesses:</strong> no EBITDA to size debt against; no FCF to service it. These are venture / growth equity situations — not LBOs</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ SECTION 7: REAL-WORLD DEALS ══ -->
+<div id="real-world" class="sec alt">
+<div class="wrap">
+  <div class="sec-hd fu"><div class="sec-num">07</div><h2 class="sec-title">Landmark LBOs — Learning from Real Deals</h2></div>
+
+  <p class="body fu">The best way to internalise LBO mechanics is through real deals — understanding what the sponsor's thesis was, how they structured the financing, and whether the returns lived up to expectations. The full spectrum from legendary successes to catastrophic failures illustrates exactly where LBO analysis succeeds and fails in practice.</p>
+
+  <div class="tl fu">
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">KKR — RJR Nabisco (1988) · $31.1bn · The deal that defined an era</div>
+      <div class="tl-card">
+        <div class="tl-title">The Barbarians at the Gate</div>
+        <div class="tl-text">KKR's hostile takeover of RJR Nabisco remains the most famous LBO in history. Financed with $29bn of junk bonds and bank debt against $2bn of equity, it exemplified the excesses of 1980s financial engineering. The thesis: strip out the tobacco division's cash flows to service debt while restructuring the food business. In practice, the debt load was so punishing that KKR earned only a modest return — a cautionary tale that leverage alone is not a strategy. The deal introduced "LBO" to the public lexicon and triggered congressional scrutiny of junk-bond financing.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">Blackstone — Hilton Hotels (2007) · $26bn · The greatest LBO return ever?</div>
+      <div class="tl-card">
+        <div class="tl-title">Thesis: operational transformation of an underperforming iconic brand</div>
+        <div class="tl-text">Blackstone acquired Hilton for $26bn at the peak of the 2007 credit bubble — $20.5bn of debt against $5.5bn equity. Timing looked disastrous: the GFC hit immediately, hospitality revenues collapsed, and Hilton's debt-to-EBITDA spiked above 10×. But Blackstone did not panic. They worked constructively with lenders, installed a new CEO (Chris Nassetta), transformed the franchising model, and launched the Homewood Suites and Hampton Inn growth strategy. When Hilton IPO'd in 2013, Blackstone had turned $5.5bn equity into $14bn — a 2.6× MOIC and estimated 25% IRR. The lesson: operational transformation can overcome terrible timing if you have the staying power and management talent.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">Apollo — ADT / Protection One (2010s) · Buy-and-build in security services</div>
+      <div class="tl-card">
+        <div class="tl-title">Thesis: fragmented market consolidation + recurring revenue</div>
+        <div class="tl-text">Apollo's security services consolidation is a textbook example of buy-and-build LBO execution. The home security monitoring business generates highly predictable recurring monthly revenue (RMR) — the perfect LBO cash flow profile. Apollo acquired multiple platforms, drove procurement savings, standardised operations, and cross-sold services, creating scale that justified premium exit multiples. The recurring revenue model meant EBITDA was visible and bankable even at high leverage multiples. This deal type — fragmented B2C/B2B service with contractual revenue — has been replicated across dental chains, care homes, and specialist outsourcing.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">KKR + TPG — TXU Energy (2007) · $45bn · The largest LBO ever; the largest PE bankruptcy</div>
+      <div class="tl-card">
+        <div class="tl-title">The cautionary tale of regulatory and commodity risk</div>
+        <div class="tl-text">KKR and TPG acquired TXU (a Texas utility) for $45bn — $37bn in debt — betting that natural gas prices would stay high, keeping TXU's coal-fired generation economics advantaged. The thesis collapsed spectacularly: US shale gas revolution crashed natural gas prices, destroying TXU's (renamed Energy Future Holdings) competitive economics. The debt was never supportable and EFH filed for Chapter 11 in 2014 — the largest PE-backed bankruptcy in history, with KKR writing off its equity in full. The deal illustrates that LBO models are only as good as their macroeconomic assumptions — commodity price sensitivity is a fundamental risk that leverage cannot hedge.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot fill"></div>
+      <div class="tl-yr">Vista Equity — software consolidation (2010s–present) · Repeatable excellence</div>
+      <div class="tl-card">
+        <div class="tl-title">Building the playbook for enterprise software LBOs</div>
+        <div class="tl-text">Vista Equity Partners built a systematic approach to mid-market enterprise software LBOs: acquire founder-built or corporate-orphaned software businesses with sticky B2B customer bases, apply the "Vista Consulting Group" playbook (standardised operational improvements, cross-selling, pricing optimisation), grow organically and via tuck-in acquisitions, then exit at a significant multiple expansion. By applying the same playbook repeatedly across 80+ companies, Vista created a machine — demonstrating that operational repeatability is as valuable as financial creativity in modern PE. Returns consistently in the top quartile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary stats grid -->
+  <div class="outlook-grid fu" style="margin-top:2rem">
+    <div class="og-cell"><div class="og-icon">⚖️</div><div class="og-lbl">Typical debt/equity at entry</div><div class="og-val">60/40</div><div class="og-sub">Ranges from 50/50 (conservative) to 70/30 (aggressive credit conditions)</div></div>
+    <div class="og-cell"><div class="og-icon">📈</div><div class="og-lbl">Target sponsor equity IRR</div><div class="og-val">20–30%</div><div class="og-sub">LP minimum hurdle typically 8–10%; sponsor earns 20% carry above this</div></div>
+    <div class="og-cell"><div class="og-icon">🏗️</div><div class="og-lbl">Typical hold period</div><div class="og-val">5 years</div><div class="og-sub">Ranges 3–7yrs. Longer holds erode IRR; shorter holds require higher MOIC</div></div>
+  </div>
+
+  <!-- Formula reference -->
+  <div class="g2 fu">
+    <div style="background:var(--green-dim);border:1px solid var(--green-b);padding:1.25rem 1.5rem">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,200,117,.2)">LBO formula reference — key equations</div>
+      <ul class="blist">
+        <li><strong style="color:var(--white)">Entry EV = Entry Multiple × LTM EBITDA</strong> — enterprise value at acquisition</li>
+        <li><strong style="color:var(--white)">Equity Cheque = Entry EV − Debt Raised − Target Cash</strong> — PE firm's capital commitment</li>
+        <li><strong style="color:var(--white)">Exit EV = Exit Multiple × Exit Year EBITDA</strong> — enterprise value at realisation</li>
+        <li><strong style="color:var(--white)">Exit Equity = Exit EV − Net Debt at Exit</strong> — proceeds to equity holders</li>
+        <li><strong style="color:var(--white)">MOIC = Exit Equity / Equity Invested</strong> — total return multiple (ignores time)</li>
+        <li><strong style="color:var(--white)">IRR: 0 = −E₀ + E_exit/(1+IRR)ᴺ</strong> — annualised return (accounts for time)</li>
+        <li><strong style="color:var(--white)">Leverage = Total Debt / EBITDA</strong> — key sizing ratio for lenders</li>
+        <li><strong style="color:var(--white)">Interest Cover = EBITDA / Cash Interest</strong> — debt service capacity (must be ≥2×)</li>
+        <li><strong style="color:var(--white)">FCF = EBITDA − Cash Interest − Cash Taxes − CapEx − ΔNWC</strong> — cash available for debt repayment</li>
+        <li><strong style="color:var(--white)">Tax Shield = τ × Interest Expense</strong> — annual tax saving from interest deductibility</li>
       </ul>
     </div>
     <div style="background:var(--red-dim);border:1px solid var(--red-b);padding:1.25rem 1.5rem">
-      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">What can make it fail</div>
+      <div style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid rgba(255,64,80,.2)">Common LBO analysis mistakes &amp; interview traps</div>
       <ul class="blist">
-        <li>Earnings miss or cyclical downturn soon after acquisition</li>
-        <li>Too much leverage relative to cash conversion</li>
-        <li>Floating-rate debt in a sharp hiking cycle</li>
-        <li>Overpaying at entry and hoping multiple expansion rescues returns</li>
+        <li><strong style="color:var(--white)">Confusing MOIC and IRR:</strong> a 3× MOIC in year 2 vs year 7 are completely different IRRs. Always state both, and understand the hold period assumption</li>
+        <li><strong style="color:var(--white)">Forgetting the debt paydown contribution:</strong> EBITDA growth alone doesn't explain returns — deleveraging from 6.5× to 1.9× adds enormous equity value at the same exit multiple</li>
+        <li><strong style="color:var(--white)">Relying on multiple expansion:</strong> a robust LBO thesis must work at the same or lower exit multiple. Interviewers will always ask "what if markets compress?"</li>
+        <li><strong style="color:var(--white)">Ignoring interest coverage:</strong> it's not enough that leverage ratios look acceptable — the company must generate sufficient EBITDA to cover interest cash payments at all times during the hold</li>
+        <li><strong style="color:var(--white)">EBITDA ≠ FCF:</strong> a 25% EBITDA margin business with heavy CapEx and working capital growth can generate minimal FCF — leaving little for debt service. Always bridge from EBITDA to free cash flow</li>
+        <li><strong style="color:var(--white)">Assuming the exit is guaranteed:</strong> LBO models assume a clean exit at year 5. In practice, exits can be delayed, valuations can disappoint, and buyers can be scarce. The model is a base case, not a certainty</li>
+        <li><strong style="color:var(--white)">Management incentive alignment:</strong> PE firms almost always reserve a management equity pool (typically 10–15% of equity). Forgetting this dilutes sponsor returns — include it in your model</li>
       </ul>
     </div>
   </div>
-</div>
-</div>
-
-<div id="outlook" class="sec">
-<div class="wrap">
-  <div class="sec-hd fu"><div class="sec-num">06</div><h2 class="sec-title">The Core Takeaway</h2></div>
-
-  <div class="outlook-grid fu">
-    <div class="og-cell"><div class="og-icon">🏗️</div><div class="og-lbl">Strategic importance</div><div class="og-val">Core</div><div class="og-sub">LBOs are the central transaction model through which buyout PE operates.</div></div>
-    <div class="og-cell"><div class="og-icon">⚙️</div><div class="og-lbl">Return engine</div><div class="og-val">Growth + Debt Paydown</div><div class="og-sub">Operational improvement and deleveraging together drive equity value creation.</div></div>
-    <div class="og-cell"><div class="og-icon">📉</div><div class="og-lbl">Main sensitivity</div><div class="og-val">Rates &amp; Credit</div><div class="og-sub">The cost and availability of debt shape pricing, activity, and exits across PE markets.</div></div>
-  </div>
 
   <div class="verdict fu">
-    <div class="verdict-lbl">Editorial view — Private Markets Intelligence</div>
-    <div class="verdict-text">Leveraged buyouts matter because they are the mechanism that makes private equity economically distinctive. Leverage allows sponsors to control larger assets with less equity, but the real magic only appears when disciplined financing is paired with real operational improvement. That is why LBOs are both powerful and fragile: in supportive credit markets they can generate exceptional equity returns, while in tighter markets they quickly expose weak underwriting, overpaying, or shallow value-creation plans.</div>
+    <div class="verdict-lbl">One-line synthesis — the LBO</div>
+    <div class="verdict-text">A leveraged buyout is not financial wizardry — it is a disciplined framework for buying a good business cheaply enough, improving it operationally, and selling it expensively enough, with debt amplifying equity returns throughout. The art lies in choosing businesses with cash flows robust enough to carry the leverage, identifying the specific operational improvements that justify control, and timing the exit to realise the full value of what has been built. When all three levers align — growing EBITDA, deleveraging balance sheet, and expanding exit multiple — the LBO generates the extraordinary equity returns that have attracted capital to private markets for four decades.</div>
   </div>
 </div>
 </div>
 
 <footer>
-  <div class="foot-logo">PRIV<b>●</b>MRKTS Research Intelligence</div>
+  <div class="foot-logo">PRIV<b>●</b>MRKTS Private Markets Intelligence</div>
   <div class="foot-src">
-    Style adapted from the user's continuation funds HTML reference · Content written as an educational explainer on LBOs<br>
-    Illustrative charts and examples only · Data labels in charts are conceptual, not market estimates<br>
-    For research and educational purposes only
+    Leveraged Buyouts — The Engine of Private Equity · Research Journal Entry<br>
+    Topics: LBO Mechanics · Capital Structure · LBO Model · Value Creation · Returns · Exit Routes · Deal Analysis<br>
+    For educational and research purposes only
   </div>
 </footer>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-window.addEventListener('scroll', () => {
-  const s = document.documentElement.scrollTop;
-  const h = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('prog').style.width = (s / h * 100) + '%';
+/* ── BOILERPLATE ── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(s/h*100)+'%';
 });
-
-const sections = ['drivers','market','macro','structure','regulatory','outlook'];
-window.addEventListener('scroll', () => {
-  const y = window.scrollY + 80;
-  let cur = sections[0];
-  sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
-  document.querySelectorAll('.nl').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+const sections=['what-is-lbo','capital-structure','lbo-model','value-creation','returns','lbo-candidates','real-world'];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;let cur=sections[0];
+  sections.forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id;});
+  document.querySelectorAll('.nl').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
 });
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
+document.querySelectorAll('.fu,.tl-item').forEach(el=>io.observe(el));
+function switchTab(panelId,btn,tabsId,panelsId){
+  document.getElementById(tabsId).querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.getElementById(panelsId).querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+Chart.defaults.color='#888480';
+Chart.defaults.font.family="'IBM Plex Mono',monospace";
+Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.04)',tk={color:'#888480',font:{size:10}};
 
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.fu, .tl-item').forEach(el => io.observe(el));
-
-const barIO = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
-      barIO.unobserve(e.target);
-    }
+/* ── CHART 1: Debt + EBITDA over hold period ── */
+(()=>{
+  const yrs=['Y0','Y1','Y2','Y3','Y4','Y5'];
+  const debt=[325,281,249,216,188,154];
+  const ebitda=[50,56,63,70,76,81];
+  const leverage=debt.map((d,i)=>+(d/ebitda[i]).toFixed(1));
+  new Chart(document.getElementById('debtEbitdaChart'),{
+    type:'bar',
+    data:{labels:yrs,datasets:[
+      {type:'bar',label:'Total Debt (£m)',data:debt,backgroundColor:'rgba(255,64,80,0.65)',borderColor:'#ff4050',borderWidth:0,borderRadius:2,yAxisID:'y'},
+      {type:'bar',label:'EBITDA (£m)',data:ebitda,backgroundColor:'rgba(245,106,0,0.75)',borderColor:'#f56a00',borderWidth:0,borderRadius:2,yAxisID:'y'},
+      {type:'line',label:'Debt/EBITDA (×)',data:leverage,borderColor:'#3d8ef0',backgroundColor:'transparent',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#3d8ef0',tension:0.2,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>{if(c.datasetIndex===2)return` D/E: ${c.parsed.y}×`;return` ${c.dataset.label}: £${c.parsed.y}m`;}}}},
+      scales:{x:{grid:{color:gc},ticks:tk},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>'£'+v+'m'},title:{display:true,text:'£m',color:'#888480',font:{size:9}}},
+        y2:{grid:{drawOnChartArea:false},ticks:{...tk,callback:v=>v+'×',color:'#3d8ef0'},title:{display:true,text:'Leverage (×)',color:'#3d8ef0',font:{size:9}},position:'right',min:0,max:8}}}
   });
-}, { threshold: 0.3 });
-const barSection = document.getElementById('driverBars');
-if (barSection) barIO.observe(barSection);
+})();
 
-new Chart(document.getElementById('capChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Sponsor equity','Senior debt','Junior / other debt'],
-    datasets: [{
-      data: [40,45,15],
-      backgroundColor: ['rgba(245,106,0,.85)','rgba(61,142,240,.75)','rgba(139,92,246,.75)'],
-      borderColor: '#141414', borderWidth: 3
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { labels: { color:'#888', font:{size:11}, padding:14 } },
-      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } }
-    },
-    cutout: '62%'
-  }
-});
+/* ── CHART 2: Value creation bridge ── */
+(()=>{
+  // Waterfall: Entry equity 150 → debt paydown 171 → EBITDA growth 310 → multiple expansion 25 → exit 656
+  // Using floating bar trick for waterfall
+  const labels=['Entry Equity','Debt Paydown','EBITDA Growth','Multiple Expansion','Exit Equity'];
+  // [start, end] for each bar
+  const starts=[0, 150, 321, 631, 0];
+  const ends  =[150, 321, 631, 656, 656];
+  const colors=['rgba(255,64,80,0.8)','rgba(61,142,240,0.8)','rgba(245,106,0,0.8)','rgba(139,92,246,0.8)','rgba(0,200,117,0.85)'];
 
-new Chart(document.getElementById('bridgeChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Entry EV','Entry debt','Entry equity','Exit EV','Exit debt','Exit equity'],
-    datasets: [{
-      data: [100,60,40,130,30,100],
-      backgroundColor: ['rgba(136,132,128,.55)','rgba(255,64,80,.65)','rgba(245,106,0,.78)','rgba(136,132,128,.55)','rgba(255,64,80,.65)','rgba(0,200,117,.78)'],
-      borderWidth:0, borderRadius:1
-    }]
-  },
-  options: {
-    responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => ` ${c.parsed.y} units` } } },
-    scales:{
-      x:{ grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#888', font:{size:10} } },
-      y:{ grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#888', font:{size:10} } }
-    }
-  }
-});
+  new Chart(document.getElementById('bridgeChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Base',data:starts.map((s,i)=>i===4?0:s),backgroundColor:'transparent',borderColor:'transparent',borderWidth:0},
+      {label:'Value',data:ends.map((e,i)=>e-starts[i]),backgroundColor:colors,borderColor:colors.map(c=>c.replace('0.8','1').replace('0.85','1')),borderWidth:0,borderRadius:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===0)return null;const deltas=[150,171,310,25,656];return` £${deltas[c.dataIndex]}m`;}}}},
+      scales:{x:{grid:{color:gc},ticks:tk,stacked:true},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>'£'+v+'m'},title:{display:true,text:'£m',color:'#888480',font:{size:9}},stacked:true}}}
+  });
+})();
 
-new Chart(document.getElementById('rateChart'), {
-  type: 'line',
-  data: {
-    labels: ['Very cheap debt','Cheap debt','Normal','Tighter','Expensive'],
-    datasets: [{
-      label:'Illustrative LBO attractiveness',
-      data:[92,84,68,44,25],
-      borderColor:'#f56a00', backgroundColor:'rgba(245,106,0,.08)', fill:true,
-      borderWidth:2.5, tension:0.3, pointRadius:3, pointBackgroundColor:'#f56a00'
-    }]
-  },
-  options: {
-    responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => ` score ${c.parsed.y}/100` } } },
-    scales:{
-      x:{ grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#888', font:{size:10} } },
-      y:{ min:0, max:100, grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#888', font:{size:10} } }
-    }
-  }
-});
+/* ── CHART 3: Lever breakdown — historical proportions ── */
+(()=>{
+  const vintages=['2005–08','2009–12','2013–16','2017–20','2021–23'];
+  const ebitdaGrowth=[38,42,40,35,45];
+  const debtPaydown=[32,36,30,28,35];
+  const multipleExp=[30,22,30,37,20];
+
+  new Chart(document.getElementById('leverBreakdownChart'),{
+    type:'bar',
+    data:{labels:vintages,datasets:[
+      {label:'EBITDA Growth',data:ebitdaGrowth,backgroundColor:'rgba(61,142,240,0.8)',borderWidth:0,borderRadius:1},
+      {label:'Debt Paydown',data:debtPaydown,backgroundColor:'rgba(245,106,0,0.8)',borderWidth:0,borderRadius:1},
+      {label:'Multiple Expansion',data:multipleExp,backgroundColor:'rgba(139,92,246,0.75)',borderWidth:0,borderRadius:1}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{
+      legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:16,padding:12}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}},
+      scales:{x:{grid:{color:gc},ticks:tk,stacked:true},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},max:110,stacked:true,
+          title:{display:true,text:'% of total equity return',color:'#888480',font:{size:9}}}}}
+  });
+})();
+
+/* ── CHART 4: IRR sensitivity — hold period × exit multiple ── */
+(()=>{
+  // Equity in = £150m at Y0. Model exit equity at each year.
+  // Exit equity = Exit EV - Debt remaining
+  // Debt: [325,281,249,216,188,154,130] approx
+  // EBITDA: [50,56,63,70,76,81,86]
+  const debtByYear=[325,281,249,216,188,154,130];
+  const ebitdaByYear=[50,56,63,70,76,81,86];
+  const equityIn=150;
+  const holdYears=[3,4,5,6,7];
+  const multiples=[8,10,12];
+  const colors=['#ff4050','#f56a00','#00c875'];
+
+  const datasets=multiples.map((mult,mi)=>({
+    label:`${mult}× exit multiple`,
+    data:holdYears.map(yr=>{
+      const exitEV=mult*ebitdaByYear[yr];
+      const exitEquity=exitEV-debtByYear[yr];
+      // IRR: equityIn → exitEquity in yr years
+      const irr=(Math.pow(exitEquity/equityIn,1/yr)-1)*100;
+      return +irr.toFixed(1);
+    }),
+    borderColor:colors[mi],backgroundColor:'transparent',borderWidth:2.5,
+    pointRadius:6,pointBackgroundColor:colors[mi],tension:0.2
+  }));
+
+  // Add 20% hurdle line
+  datasets.push({
+    label:'20% IRR hurdle',
+    data:holdYears.map(()=>20),
+    borderColor:'rgba(255,255,255,0.2)',borderWidth:1.5,borderDash:[5,4],
+    pointRadius:0,backgroundColor:'transparent'
+  });
+
+  new Chart(document.getElementById('irrSensChart'),{
+    type:'line',
+    data:{labels:holdYears.map(y=>`Year ${y}`),datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:'#888480',font:{size:10},boxWidth:16,padding:12}},
+        tooltip:{mode:'index',callbacks:{label:c=>c.dataset.label.includes('hurdle')?` Hurdle: 20%`:` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}% IRR`}}},
+      scales:{x:{grid:{color:gc},ticks:tk},
+        y:{grid:{color:gc},ticks:{...tk,callback:v=>v+'%'},
+          title:{display:true,text:'Equity IRR (%)',color:'#888480',font:{size:9}},min:0,max:65}}}
+  });
+})();
+
+/* ── CHART 5: Radar — LBO candidate profile ── */
+(()=>{
+  const labels=['FCF Predictability','EBITDA Margin','Low CapEx','Market Position','Buy-&-Build Opp.','Non-Cyclical','Clean Balance Sheet'];
+  new Chart(document.getElementById('radarChart'),{
+    type:'radar',
+    data:{labels,datasets:[
+      {label:'Ideal LBO target',data:[9,8,9,9,8,8,9],borderColor:'rgba(245,106,0,0.9)',backgroundColor:'rgba(245,106,0,0.12)',borderWidth:2,pointBackgroundColor:'#f56a00',pointRadius:4},
+      {label:'High-cyclicality business',data:[3,5,5,6,5,2,6],borderColor:'rgba(255,64,80,0.7)',backgroundColor:'rgba(255,64,80,0.08)',borderWidth:2,pointBackgroundColor:'#ff4050',pointRadius:4},
+      {label:'High-CapEx / low-margin',data:[6,3,2,6,4,7,6],borderColor:'rgba(61,142,240,0.7)',backgroundColor:'rgba(61,142,240,0.08)',borderWidth:2,pointBackgroundColor:'#3d8ef0',pointRadius:4}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.r}/10`}}},
+      scales:{r:{grid:{color:'rgba(255,255,255,0.06)'},angleLines:{color:'rgba(255,255,255,0.06)'},ticks:{display:false},pointLabels:{color:'#888480',font:{size:10}},min:0,max:10,suggestedMin:0,suggestedMax:10}}}
+  });
+})();
 </script>
-
 </body>
 </html>
